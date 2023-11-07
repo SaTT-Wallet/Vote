@@ -166,17 +166,10 @@
 
         <li
           class="li-menu"
-          [ngClass]="{ 'is-visited': menuWallet }"
-          id="introo"
-        >
-          <a class="wallet" href="https://dapp.satt.com/wallet">Wallet</a>
-        </li>
-        <li
-          class="li-menu"
           [ngClass]="{ 'is-visited': menuAdpool }"
           id="intro2"
         >
-          <a class="adpools" href="https://dapp.satt.com/ad-pools">
+          <a class="adpools" >
             <span>Ad Pools</span>
           </a>
         </li>
@@ -189,44 +182,16 @@
           <a
             *ngIf="!isConnected"
             class="farmPost"
-            href="https://dapp.satt.com/farm-posts"
             ><span>Post Farming</span></a
           >
         </li>
 
-        <li
-          class="li-menu"
-          [ngClass]="{ 'is-visited': menuBuyToken }"
-          id="intro6"
-        >
-          <a class="farmPost" href="https://dapp.satt.com/wallet/buy-token"
-            >Buy Crypto</a
-          >
 
-          <!-- <a
-            *ngIf="!isConnected"
-            class="farmPost"
-            [routerLink]="['/wallet/buy-token']"
-            ><span>{{ 'menu_buyToken' | translate }}</span></a
-          > -->
-        </li>
-        <li
-          class="li-menu"
-          [ngClass]="{ 'is-visited': menuTokenInfo }"
-          id="intro7"
-        >
-          <a style="cursor: pointer" href="https://dapp.satt.com/wallet/token-info?crypto=SATT">Token Info</a>
-        </li>
 
-        <li class="li-menu" [ngClass]="{ 'is-visited': menuHelp }" id="intro5">
-          <a class="help" href="https://dapp.satt.com/FAQ"><span>Help</span> </a>
-        </li>
-        <li class="li-menu" [ngClass]="{ 'is-visited': menuAbout }" id="intro9">
-          <a class="about" href="https://satt-token.com/"><span>About</span> </a>
-        </li>
-        <li class="li-menu" [ngClass]="{ 'is-visited': menuBlog }" id="intro10">
-          <a class="about" href="https://satt-token.com/blog/" ><span>Blog</span> </a>
-        </li>
+
+
+
+ 
         <!-- <li class="li-menu" id="intro11">
           <a class="vote" (click)="goToVote()"><span>Vote</span> </a>
         </li> -->
