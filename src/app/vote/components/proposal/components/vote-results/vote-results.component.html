@@ -1,0 +1,74 @@
+<div class="box-container">
+  <div class="title">
+    <p>Current Results</p>
+  </div>
+  <div class="box-main">
+    <ul>
+      <li *ngFor="let choice of choices">
+        <!-- <p>{{ choice.choic }} - {{ choice.vp }} VP ({{ choice.vp/total | percent }})</p> -->
+        <p class="choice">{{ choice.choic }}</p>
+        <div
+          class="progress-bar"
+          style="--vp: {{ choice.vp }}; --total: {{ total }};"
+        ></div>
+        <p class="votes">
+          <span class="left"> {{ choice.vp }} Votes </span>
+          <span class="right"> {{ choice.vp/total | percent }} </span>
+        </p>
+      </li>
+      <!-- <li>
+        <p class="choice">test</p>
+        <div
+          class="progress-bar"
+          style="--vp: 20; --total: 100;"
+        ></div>
+        <p class="votes">50 Votes</p>
+      </li>
+      <li>
+        <p class="choice">test</p>
+        <div
+          class="progress-bar"
+          style="--vp: 20; --total: 100;"
+        ></div>
+        <p class="votes">50 Votes</p>
+      </li>
+      <li>
+        <p class="choice">test</p>
+        <div
+          class="progress-bar"
+          style="--vp: 20; --total: 100;"
+        ></div>
+        <p class="votes">50 Votes</p>
+      </li>
+      <li>
+        <p class="choice">test</p>
+        <div
+          class="progress-bar"
+          style="--vp: 20; --total: 100;"
+        ></div>
+        <p class="votes">50 Votes</p>
+      </li>
+      <li>
+        <p class="choice">test</p>
+        <div
+          class="progress-bar"
+          style="--vp: 20; --total: 100;"
+        ></div>
+        <p class="votes">50 Votes</p>
+      </li> -->
+    </ul>
+  </div>
+</div>
+
+<!-- <div class="box-container">
+    <div class="box-topbar">
+      Vote Results
+    </div>
+    <div class="box-main">
+      <ul>
+        <li *ngFor="let choice of getObjectKeys()">
+          {{ choice }}: {{ voteCounts[choice].voteCount }} votes ({{ voteCounts[choice].percentage }})
+        </li>
+      </ul>
+    </div>
+  </div> -->

@@ -1,0 +1,158 @@
+@media (max-width: 768px) {
+  .votes-list-row {
+    // display: block;
+    // text-align: left;
+    display: block !important;
+    align-items: center;
+    // display: block;
+    width: 100%;
+    padding-top: 13px;
+    padding-bottom: 13px;
+  }
+  .votes-list-col1 {
+    text-align: left !important;
+    width: 100% !important;
+    display: block;
+  }
+  .votes-list-col2 {
+    text-align: left !important;
+    margin-left: 0 !important;
+    padding-left: 5px;
+  }
+}
+
+.box-container {
+  display: flex;
+  flex-direction: column;
+  // gap: 24px;
+  // width: 746px;
+  // min-height: 332px;
+  background: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 35px;
+}
+.votes-list-row {
+  // display: block;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  // display: block;
+  width: 100%;
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+.votes-list-row span {
+  width: calc(100% / 3);
+}
+
+.votes-list2 {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  // display: block;
+  width: 100%;
+  // padding-top: 13px;
+  // padding-bottom: 13px;
+}
+
+.box-main {
+  // margin: 0;
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.no-votes {
+  margin: 0;
+  margin-top: 10px;
+}
+.box-topbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  // width: 746px;
+  height: 73px;
+  background-color: #f6f6ff;
+  border-top-left-radius: 35px;
+  border-top-right-radius: 35px;
+}
+.box-topbar h1 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 25px;
+  color: #4048ff;
+}
+
+.votes-list-col2 {
+  margin-right: auto;
+  margin-left: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+  // text-align: center;
+  width: 30%;
+}
+
+.votes-list-col1 a {
+  color: #4048ff;
+}
+.no-votes {
+  text-align: center;
+}
+.no-votes img {
+  display: block;
+  margin: 0 auto;
+  height: 164.01593017578125px;
+  width: 166px;
+}
+.no-votes p {
+  margin-top: 28px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 33px;
+  letter-spacing: 0.01em;
+  color: #75758f;
+}
+hr {
+  height: 0.25px !important;
+  // border: none;
+  // background-color: black;
+  transform: scaleY(0.5);
+  border-color: #d6d6e8 !important;
+  border-width: 0.1px !important;
+  margin: 0 !important;
+}
+
+.votes-list-col1 {
+  text-align: start;
+  padding-left: 5px;
+}
+.votes-list-col2 {
+  text-align: center;
+}
+.votes-list-col3 {
+  text-align: end;
+  padding-right: 5px;
+}
+.arrow-btn {
+  border: none;
+  background: transparent;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 5px;
+}
+.btn-class {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

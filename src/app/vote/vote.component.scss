@@ -1,0 +1,179 @@
+@media (max-width: 768px) {
+  /* CSS styles for screens smaller than 768px */
+  .box-conatiner {
+    padding-top: 100px !important;
+  }
+  .image {
+    display: none !important;
+  }
+  .image img {
+    display: none;
+  }
+  .mainTitle {
+    font-size: 32px !important;
+    text-align: center !important;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 16px;
+  }
+  .intro {
+    font-size: 16px !important;
+    text-align: center !important;
+  }
+  .header-container {
+    gap: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+  .header {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .header-box {
+    padding-top: 15px !important;
+    // margin-bottom: 45px !important;
+    // margin: 0;
+    // padding: 0;
+  }
+  .createProButton {
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 8px 16px !important;
+    gap: 8px !important;
+    width: 203px !important;
+    height: 40px !important;
+    font-size: 15px !important;
+    line-height: 130% !important;
+    margin-bottom: 45px !important;
+  }
+  .header-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+@media (min-width: 769px) and (max-width: 990px) {
+  // .header{
+  //   display: flex;
+  //   justify-content: center;
+  //   flex-direction: row;
+  // }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  /* CSS styles for screens between 769px and 1200px */
+}
+
+// @media (min-width: 1201px) {
+//   /* CSS styles for screens larger than 1200px */
+// }
+
+// .container {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+
+// }
+.box-conatiner {
+  padding-bottom: 30px;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 80px;
+  padding-right: 20%;
+  padding-left: 20%;
+  // width: 100vw;
+  height: 37%;
+  background: #f6f6ffb7;
+  align-items: center;
+  gap: 50px;
+}
+
+.header-box {
+  display: flex;
+  flex-direction: column;
+  // padding-top: 7%;
+  // padding-bottom: 5%;
+}
+.mainPage {
+  margin-top: 30px;
+  padding-bottom: 30px;
+}
+.image {
+  display: flex;
+  justify-content: start;
+  width: 250px;
+  height: 250px;
+}
+
+.mainTitle {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 110%;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+// .header {
+//   // width: 410px;
+// }
+.intro {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.03em;
+  color: #000000;
+  width: 100%;
+}
+
+.createProButton {
+  // display: flex;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  // border-color: transparent;
+  background: #4048ff;
+  border-radius: 30px;
+  width: 246px;
+  height: 48px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+}
+
+button.createProButton:hover {
+  background: linear-gradient(84.45deg, #f52079 -28.09%, #4048ff 78.5%);
+  // border-color: transparent;
+  //   box-shadow: 0px 0px 4px #7f84ff;
+  //   border-radius: 30px;
+}
+// .create-btn {
+//   border: none;
+//   background: #4048ff;
+//   width: 246px;
+//   height: 48px;
+//   border-radius: 30px;
+//   font-family: 'Poppins';
+//   font-style: normal;
+//   font-weight: 600;
+//   font-size: 18px;
+//   line-height: 27px;
+//   letter-spacing: 0.01em;
+//   color: #ffffff;
+// }
+
+// .create-btn:hover{
+//   background: linear-gradient(84.45deg, #f52079 -28.09%, #4048ff 78.5%);
+// }

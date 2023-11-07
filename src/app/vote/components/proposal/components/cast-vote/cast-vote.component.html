@@ -1,0 +1,400 @@
+<div class="vote-container">
+  <table class="vote-table">
+    <div class="details-header">
+      <thead>
+        <tr>
+          <th>Cast Your Vote</th>
+        </tr>
+      </thead>
+    </div>
+
+    <tbody>
+      <tr>
+        <td>
+          <!-- <div class="radio-group"> -->
+          <!-- <label
+              *ngFor="let choice of choices; let i = index"
+              class="vote-label"
+            > -->
+          <!-- <span *ngFor="let choice of choices; let i = index">
+              <input
+                class="vote-input"
+                type="radio"
+                name="vote"
+                [(ngModel)]="selectedChoice"
+                [value]="i + 1"
+              />
+              <label class="vote-label">
+                <span class="checkmark"></span>
+                {{ choice }}
+              </label>
+            </span> -->
+          <!-- </label> -->
+          <!-- </div> -->
+
+          <div class="radio-group">
+            <span *ngFor="let choice of choices; let i = index">
+              <input
+                class="vote-input"
+                type="radio"
+                [disabled]="!externalWalletService.connect"
+                name="vote"
+                [(ngModel)]="selectedChoice"
+                [value]="i + 1"
+                id="choice{{ i + 1 }}"
+                (change)="updateSelectedChoiceText(choice)"
+              />
+              <label class="vote-label" for="choice{{ i + 1 }}">
+                <span class="checkmark"></span>
+                {{ choice }}
+              </label>
+            </span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="inner-box">
+    <div *ngIf="!externalWalletService.connect">
+      <button class="btn btn-connect" (click)="showConnectDialog()">
+        Connect Wallet
+      </button>
+    </div>
+    <div
+      *ngIf="
+        externalWalletService.isWalletConnected && externalWalletService.connect
+      "
+    >
+      <button
+        class="vote-button"
+        [disabled]="selectedChoice === undefined || selectedChoice === null"
+        (click)="showConfirmVote()"
+      >
+        Cast vote
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="modal"
+    tabindex="-1"
+    role="dialog"
+    [ngClass]="{ show: isConnectDialog }"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="hideConnectDialog()"
+        >
+          <!-- <span aria-hidden="true">&times;</span> -->
+          <img src="assets/closeModal.svg" />
+        </button>
+        <div class="container">
+          <div class="modal-header">
+            <h5 class="modal-title">Connect Wallet</h5>
+          </div>
+          <div class="modal-body">
+            <p class="description">
+              Before proceeding, make sure to connect with your Metamask wallets
+              and ensure that you have securely stored your private keys or seed
+              phrase, without sharing them with anyone.
+            </p>
+            <br />
+            <div class="wallet-buttons">
+              <button class="metamask-btn" (click)="connectWallet('metamask')">
+                <img src="../../../../assets/metamask.png" />
+                <p class="description">Metamask</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal"
+    tabindex="-1"
+    role="dialog"
+    [ngClass]="{ show: isConfirmVote }"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="hideConfirmVote()"
+        >
+          <!-- <span aria-hidden="true">&times;</span> -->
+          <img src="assets/closeModal.svg" />
+        </button>
+        <div class="container">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Vote</h5>
+          </div>
+          <div class="modal-body">
+            <h3>Voting for</h3>
+            <p id="selectedChoiceText">{{ selectedChoiceText }}</p>
+            <h3>Your voting power</h3>
+            <button class="vp-btn" (click)="showVPDialog()">
+              <span class="left">{{ externalWalletService.vp?.vp }}</span
+              ><span class="right"
+                ><img src="../../../../../../assets/arrow.png"
+              /></span>
+            </button>
+            <div class="vp-info">
+              <span class="vp-info-icon"
+                ><img src="../../../../../../assets/info-icon.png"
+              /></span>
+              <p>YOU NEED AT LEAST 10 000 VOTING POWER TO PUBLISH A PROPOSAL</p>
+            </div>
+            <br />
+            <div class="btns">
+              <button
+                class="confirm-btn"
+                [disabled]="externalWalletService.vp?.vp &lt; 10000"
+                (click)="submitVote()"
+              >
+                Confirm vote
+              </button>
+
+              <button class="cancel-btn" (click)="hideConfirmVote()">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+      class="modal"
+      tabindex="-1"
+      role="dialog"
+      [ngClass]="{ show: isNotInstalled }"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="hideInstall()"
+          >
+            <img src="assets/closeModal.svg" />
+          </button>
+          <div class="container">
+            <div class="modal-header">
+              <h5 class="modal-title">Install MetaMask</h5>
+            </div>
+            <div class="modal-body">
+              <p class="install">
+                <img src="assets/icon_alert_info.png" /> Metamask is not
+                installed
+              </p>
+              <img class="qr" src="assets/metamask-qr.png" />
+              <br />
+
+              <button class="install-btn">
+                <a
+                  href="https://metamask.io/download/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="install-button"
+                  >Install MetaMask</a
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div
+    class="modal"
+    tabindex="-1"
+    role="dialog"
+    [ngClass]="{ show: externalWalletService.networkHasChanged }"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="container">
+          <div class="modal-header">
+            <h5 class="modal-title">Switch Network</h5>
+          </div>
+          <div class="modal-body">
+            <img src="../../../../../../assets/switch_modal_satt.png" />
+            <p class="description">
+              SATT token, a BNB Smart Chain token, is essential for voting,
+              requiring users to switch networks. This integration enables
+              seamless participation, empowering stakeholders to utilize SATT
+              for effective decision-making.
+            </p>
+            <br />
+
+            <div class="btns-switch">
+              <button class="confirm-btn" (click)="changeNetwork()">
+                Switch to BNB Smart Chain
+              </button>
+
+              <button class="cancel-btn" (click)="Disconnect()">
+                Disconnect Wallet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div
+      class="modal"
+      tabindex="-1"
+      role="dialog"
+      [ngClass]="{ show: isNotInstalled }"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              (click)="hideInstall()"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h5 class="modal-title">Install MetaMask</h5>
+          </div>
+          <div class="modal-body">
+            <p class="description">Install MetaMask to proceed.</p>
+            <br />
+
+            <button class="install-btn" >
+              <a
+                href="https://metamask.io/download/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="install-button"
+                >Install MetaMask</a
+              >
+            </button>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+  <div
+    class="modal"
+    tabindex="-1"
+    role="dialog"
+    [ngClass]="{ show: isVPDialog }"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="hideVPDialog()"
+        >
+          <!-- <span aria-hidden="true">&times;</span> -->
+          <img src="assets/closeModal.svg" />
+        </button>
+        <div class="container">
+          <div class="modal-header">
+            <h5 class="modal-title">Voting Power</h5>
+          </div>
+          <div class="modal-body">
+            <p class="description">
+              Your voting power is determined by the amount of SATT you held.
+              SATT held in other places does not contribute to your voting
+              power.
+            </p>
+            <br />
+            <div class="overview">
+              <div class="header">
+                <h3 class="ov">Overview</h3>
+              </div>
+              <div class="overview-body">
+                <p class="vp-text">Your Voting Power:</p>
+                <p class="vp-result">{{ externalWalletService.vp?.vp }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <table class="vote-table">
+  <thead>
+    <tr>
+      <th colspan="2">Cast Your Vote</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">
+        <div class="choices">
+          <div class="radio-group">
+            <label *ngFor="let choice of choices; let i = index">
+              <input type="radio" name="vote" [(ngModel)]="selectedChoice" [value]="i+1">{{choice}}
+            </label>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="inner-box">
+          <button class="vote-button" [disabled]="selectedChoice === undefined || selectedChoice === null"
+            (click)="submitVote()">Vote</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table> -->
+
+<!-- <div class="box-container">
+    <div class="box-topbar">
+        Cast Your Vote
+    </div>
+    <div class="box-main">
+        <div class="choices">
+            <div class="radio-group">
+                <label *ngFor="let choice of choices; let i = index">
+                    <input type="radio" name="vote" [(ngModel)]="selectedChoice" [value]="i">{{choice}}
+                </label>
+            </div>
+        </div>
+        <div class="inner-box">
+            <button class="vote-button" [disabled]="!selectedChoice || voteButtonDisabled" (click)="submitVote()">Vote</button>
+        </div>
+    </div>
+</div> -->
+
+<!-- <div class="box-container">
+    <div class="box-topbar">
+        Details
+    </div>
+    <div class="box-main">
+        <div class="identifier"><p>Identifier <a href="'https://snapshot.mypinata.cloud/ipfs/'+{{proposal.id}}">{{proposal.id}}</a></p></div>
+        <div class="creator"><p>Creator <a href="'https://bscscan.com/address/'+{{proposal.author}}">{{proposal.author}}</a></p></div>
+        <div class="snapshot"><p>Snapshot <a href="'https://bscscan.com/block/'+{{proposal.snapshot}}">{{proposal.snapshot}}</a></p></div>
+        <div class="inner-box">
+            <div class="state"><span>{{proposal.state}}</span></div>
+            <div class="start"><span>Start Date</span><span>{{start}}</span></div>
+            <div class="end"><span>End Date</span><span>{{end}}</span></div>
+        </div>
+    </div>
+</div> -->

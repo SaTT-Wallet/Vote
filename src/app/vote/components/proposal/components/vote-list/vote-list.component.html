@@ -1,0 +1,94 @@
+<div class="box-container">
+  <div class="box-topbar">
+    <h1 *ngIf="state !== 'pending'">Votes ({{ votes.length }})</h1>
+    <h1 *ngIf="state === 'pending'">Votes (-)</h1>
+  </div>
+  <div class="box-main">
+    <div *ngIf="votes.length === 0" class="no-votes">
+      <div>
+        <img src="../../../../../../assets/not-found.png" />
+      </div>
+      <p>No votes found.</p>
+    </div>
+    <div *ngFor="let vote of displayedVotes; let isLast = last">
+      <div class="votes-list-row">
+        <span class="votes-list-col1"
+          ><a
+            href="{{ blockExplorerURL }}address/{{ vote.voter }}"
+            target="_blank"
+            >{{ vote.formattedVoter }}
+            <img src="/../../assets/bscscan-logo-circle.png" /></a
+        ></span>
+        <div class="votes-list2">
+          <span class="votes-list-col2">{{ choices[vote.choice - 1] }}</span>
+          <span class="votes-list-col3">{{ vote.vp }}</span>
+        </div>
+      </div>
+      <hr *ngIf="!isLast || votes.length > 10" />
+    </div>
+    <div *ngIf="votes.length > 10" class="btn-class">
+      <button *ngIf="!loadAllVotes" (click)="loadAll()" class="arrow-btn">
+        <img src="../../../../../../assets/arrow-down.png" />
+      </button>
+      <button
+        *ngIf="loadAllVotes"
+        (click)="loadInitialVotes()"
+        class="arrow-btn"
+      >
+        <img src="../../../../../../assets/arrow-up.png" />
+      </button>
+    </div>
+  </div>
+</div>
+<!-- <div class="box-container">
+    <div class="box-topbar">
+        Votes ({{votes.length}})
+    </div>
+    <div class="box-main">
+        <div *ngFor="let vote of votes">
+            <div class="votes-list-row">
+                <div class="votes-list-col1"><a href="https://bscscan.com/address/{{vote.voter}}">{{ vote.voter
+                        }}</a></div>
+                <div class="votes-list-col2">{{ vote.choice }}</div>
+                <div class="votes-list-col3">{{ vote.vp }}</div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- <div class="box-container">
+    <div class="box-topbar">
+        Votes ({{votes.length}})
+    </div>
+    <div class="box-main">
+        <div class="votes-list-header">
+        <div class="votes-list-col">Voter</div>
+        <div class="votes-list-col">Choice</div>
+        <div class="votes-list-col">VP</div>
+      </div>
+        <div *ngFor="let vote of votes">
+            <div class="votes-list-row">
+                <div class="votes-list-col1"><a href="'https://bscscan.com/address/'+{{vote.voter}}">{{ vote.voter
+                        }}</a></div>
+                <div class="votes-list-col2">{{ vote.choice }}</div>
+                <div class="votes-list-col3">{{ vote.vp }}</div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- <div class="box-container">
+    <div class="topbar">
+        <p>Votes ({{votes.length}})</p>
+    </div>
+    <div class="list">
+        <ul>
+            
+            <li>
+                <td><a href="'https://bscscan.com/address/'+{{votes.voter}}">{{votes.voter}}</a></td>
+                <td>{{votes.choice}}</td>
+                <td>{{votes.vp}}</td>
+            </li>
+        </ul>
+    </div>
+</div> -->

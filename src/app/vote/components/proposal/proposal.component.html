@@ -1,0 +1,133 @@
+<div class="full-page">
+  <div class="left-sec">
+    <div class="a1-div">
+      <a [routerLink]="['/']"> &lt;Back to Vote Overview</a>
+    </div>
+    <div class="bt">
+      <span>
+        <button
+          id="authorButton"
+          class="button-core"
+          *ngIf="proposal?.creator === 'CORE'"
+        >
+          core
+        </button>
+        <button
+          id="authorButton"
+          class="button-community"
+          *ngIf="proposal?.creator === 'COMMUNITY'"
+        >
+          community
+        </button>
+      </span>
+      <span>
+        <button
+          id="stateButton"
+          class="button-active"
+          *ngIf="proposal?.state === 'active'"
+        >
+          {{ proposal?.state }}
+        </button>
+        <button
+          id="stateButton"
+          class="button-soon"
+          *ngIf="proposal?.state === 'pending'"
+        >
+          {{ proposal?.state }}
+        </button>
+        <button
+          id="stateButton"
+          class="button-closed"
+          *ngIf="proposal?.state === 'closed'"
+        >
+          {{ proposal?.state }}
+        </button>
+      </span>
+    </div>
+    <div class="proposal-desc">
+      <h1>{{ proposal?.title }}</h1>
+      <!-- <p>{{ body }}</p> -->
+      <blockquote [innerHTML]="body" class="description-vote"></blockquote>
+      <!-- <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /> -->
+    </div>
+    <app-cast-vote
+      [proposalID]="proposalID"
+      *ngIf="proposal?.state === 'active'"
+    ></app-cast-vote>
+
+    <app-vote-list [proposalID]="proposalID"></app-vote-list>
+  </div>
+  <div class="a-div">
+    <a [routerLink]="['/']"> &lt;Back to Vote Overview</a>
+  </div>
+  <div class="right-sec">
+    <!-- <a (click)="backToOverview()"> &lt;Back to Vote Overview</a> -->
+    <!-- <span class="sticky"> -->
+    <app-proposal-details [proposalID]="proposalID"></app-proposal-details>
+    <app-vote-results [proposalID]="proposalID"></app-vote-results>
+    <!-- </span> -->
+  </div>
+</div>
+
+<!-- <div class="full-page">
+    <div class="bt">
+        <span>
+          <button
+            id="stateButton"
+            class="button-active"
+            *ngIf="proposal.state === 'active'"
+          >
+            {{ proposal.state }}
+          </button>
+          <button
+            id="stateButton"
+            class="button-soon"
+            *ngIf="proposal.state === 'pending'"
+          >
+            {{ proposal.state }}
+          </button>
+          <button
+            id="stateButton"
+            class="button-closed"
+            *ngIf="proposal.state === 'closed'"
+          >
+            {{ proposal.state }}
+          </button>
+        </span>
+        <span>
+          <button
+            id="authorButton"
+            class="button-core"
+            *ngIf="creator === 'CORE'"
+          >
+            core
+          </button>
+          <button
+            id="authorButton"
+            class="button-community"
+            *ngIf="creator === 'COMMUNITY'"
+          >
+            community
+          </button>
+        </span>
+      </div>
+    <h1>{{proposal.title}}</h1>
+    <p>{{proposal.body}}</p>
+    <div class="right-sec">
+        <app-cast-vote [proposalID]="proposalID"></app-cast-vote>
+        <app-vote-list [proposalID]="proposalID"></app-vote-list>
+    </div>
+
+    <div class="left-sec">
+        <app-proposal-details [proposalID]="proposalID"></app-proposal-details>
+        <app-vote-results [voteCounts]="voteCounts"></app-vote-results>
+    </div>
+
+</div> -->
+
+<!-- <div>
+    <app-cast-vote [proposalID]="proposalID"></app-cast-vote>
+    <app-proposal-details [proposalID]="proposalID"></app-proposal-details>
+    <app-vote-list [proposalID]="proposalID"></app-vote-list>
+    <app-vote-results [voteCounts]="voteCounts"></app-vote-results>
+</div> -->

@@ -1,0 +1,233 @@
+<div class="box-container">
+  <div class="box-topbar">
+    <div class="tabs">
+      <button
+        class="all-btn"
+        [ngClass]="{ active: activeButton === 'ALL' }"
+        (click)="loadProposals('ALL')"
+      >
+        All
+      </button>
+      <button
+        class="core-btn"
+        [ngClass]="{ active: activeButton === 'CORE' }"
+        (click)="loadProposals('CORE')"
+      >
+        Core
+      </button>
+      <button
+        class="community-btn"
+        [ngClass]="{ active: activeButton === 'COMMUNITY' }"
+        (click)="loadProposals('COMMUNITY')"
+      >
+        Community
+      </button>
+    </div>
+    <div class="radio-container">
+      <div class="radio-bar">
+        <label for="NOW" class="form-control"
+          >Vote Now
+          <input
+            type="radio"
+            class="radio-btn"
+            value="NOW"
+            checked=""
+            id="NOW"
+            name="voting_status"
+            (change)="onVotingStatusChange($event)"
+          />
+          <span class="checkmark"></span>
+        </label>
+        <label for="SOON" class="form-control"
+          >Soon
+          <input
+            type="radio"
+            class="radio-btn"
+            id="SOON"
+            name="voting_status"
+            value="SOON"
+            (change)="onVotingStatusChange($event)"
+          />
+          <span class="checkmark"></span>
+        </label>
+        <label for="CLOSED" class="form-control"
+          >Closed
+          <input
+            type="radio"
+            class="radio-btn"
+            id="CLOSED"
+            name="voting_status"
+            value="CLOSED"
+            (change)="onVotingStatusChange($event)"
+          />
+          <span class="checkmark"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="box-main">
+    <div class="proposals-list-row">
+      <div *ngIf="proposals.length === 0" class="no-proposals">
+        <div>
+          <img src="../../../../assets/not-found.png" />
+        </div>
+        <p>No proposals found.</p>
+      </div>
+      <div
+        *ngFor="let proposal of proposals; let isLast = last"
+        class="proposals-list-row"
+      >
+        <a [routerLink]="['/proposal/',(proposal.id)]">
+          <div class="row">
+            <div class="first-row">
+              <span class="title">
+                <h1>{{ proposal.title }}</h1>
+              </span>
+              <span class="bt">
+                <span>
+                  <button
+                    id="authorButton"
+                    class="button-core"
+                    *ngIf="proposal.creator === 'CORE'"
+                  >
+                    core
+                  </button>
+                  <button
+                    id="authorButton"
+                    class="button-community"
+                    *ngIf="proposal.creator === 'COMMUNITY'"
+                  >
+                    community
+                  </button>
+                </span>
+                <span>
+                  <button
+                    id="stateButton"
+                    class="button-active"
+                    *ngIf="proposal.state === 'active'"
+                  >
+                    {{ proposal.state }}
+                  </button>
+                  <button
+                    id="stateButton"
+                    class="button-soon"
+                    *ngIf="proposal.state === 'pending'"
+                  >
+                    {{ proposal.state }}
+                  </button>
+                  <button
+                    id="stateButton"
+                    class="button-closed"
+                    *ngIf="proposal.state === 'closed'"
+                  >
+                    {{ proposal.state }}
+                  </button>
+                </span>
+              </span>
+            </div>
+            <div *ngIf="proposal.state === 'active'" class="state">
+              <p>Ends on {{ proposal.end }}</p>
+            </div>
+            <div *ngIf="proposal.state === 'pending'" class="state">
+              <p>Starts on {{ proposal.end }}</p>
+            </div>
+            <div *ngIf="proposal.state === 'closed'" class="state">
+              <p>Ended {{ proposal.end }}</p>
+            </div>
+          </div>
+          <hr *ngIf="!isLast" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<!-- <div class="box-container">
+    <div class="box-topbar">
+        <div class="tabs">
+            <button [ngClass]="{ active: activeButton === 'CORE' }" (click)="loadProposals('CORE')">
+                <div>Core</div>
+            </button>
+            <button [ngClass]="{ active: activeButton === 'COMMUNITY' }" (click)="loadProposals('COMMUNITY')">
+                <div>Community</div>
+            </button>
+            <button [ngClass]="{ active: activeButton === 'ALL' }" (click)="onButtonClick('ALL')">
+                <div>All</div>
+            </button>
+        </div>
+        <div class="radio-bar">
+            <label for="NOW" class="form-control">Vote Now
+                <input type="radio" class="radio-btn" value="NOW" checked="" id="NOW" name="voting_status"
+                    (change)="onVotingStatusChange($event)" />
+                <span class="checkmark"></span>
+            </label>
+            <label for="SOON" class="form-control">Soon
+                <input type="radio" class="radio-btn" id="SOON" name="voting_status" value="SOON"
+                    (change)="onVotingStatusChange($event)" />
+                <span class="checkmark"></span>
+            </label>
+            <label for="CLOSED" class="form-control">Closed
+                <input type="radio" class="radio-btn" id="CLOSED" name="voting_status" value="CLOSED"
+                    (change)="onVotingStatusChange($event)" />
+                <span class="checkmark"></span>
+            </label>
+        </div>
+    </div>
+    <div class="box-main">
+        <div *ngFor="let proposal of proposals">
+            <div class="proposals-list-row">
+                <div class="proposal">
+                    <a (click)="goToProposal(proposal.id)">
+                        <h1>{{proposal.title}}</h1>
+                        <h3>{{proposal.body}}</h3>
+                        <p>{{proposal.author}}</p>
+                        <button onclick="proposal(proposal.id)">{{proposal.state}}</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- <div class="box-container">
+    <div class="box-topbar">
+        <div class="tabs">
+            <button [ngClass]="{ active: activeButton === 'CORE' }" (click)="onButtonClick('CORE')">
+                <div>Core</div>
+            </button>
+            <button [ngClass]="{ active: activeButton === 'COMMUNITY' }" (click)="onButtonClick('COMMUNITY')">
+                <div>Community</div>
+            </button>
+            <button [ngClass]="{ active: activeButton === 'ALL' }" (click)="onButtonClick('ALL')">
+                <div>All</div>
+            </button>
+        </div>
+        <div class="radio-bar">
+            <label for="NOW" class="form-control">Vote Now
+                <input type="radio" class="radio-btn" value="NOW" checked="" id="NOW" name="voting_status" />
+                <span class="checkmark"></span>
+            </label>
+            <label for="SOON" class="form-control">Soon
+                <input type="radio" class="radio-btn" id="SOON" name="voting_status" value="SOON" />
+                <span class="checkmark"></span>
+            </label>
+            <label for="CLOSED" class="form-control">Closed
+                <input type="radio" class="radio-btn" id="CLOSED" name="voting_status" value="CLOSED" />
+                <span class="checkmark"></span>
+            </label>
+        </div>
+    </div>
+    <div class="box-main">
+        <div *ngFor="let proposal of proposals">
+            <div class="proposals-list-row">
+                <div class="proposal">
+                    <a (click)="goToProposal(proposal.id)">
+                        <h1>{{proposal.title}}</h1>
+                        <p>{{proposal.end}}</p>
+                        <button onclick="proposal(proposal.id)">{{proposal.state}}</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

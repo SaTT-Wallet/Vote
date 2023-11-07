@@ -1,0 +1,771 @@
+<div class="page-container">
+  <div class="page-title">
+    <h1>Create your proposal</h1>
+  </div>
+  <div class="page-content">
+    <form [formGroup]="createProposalForm" (ngSubmit)="publish()">
+      <div class="section general">
+        <div class="section-title">
+          <h2>General</h2>
+        </div>
+        <div class="field title">
+          <label for="title" class="header">
+            <h3 class="title">Title</h3>
+          </label>
+          <input
+            type="text"
+            name="title"
+            class="form-control"
+            formControlName="title"
+            (input)="limitInputLength(80, $event)"
+          />
+          <div
+            class="t-danger"
+            *ngIf="
+              createProposalForm.get('title')?.invalid &&
+              (createProposalForm.get('title')?.dirty ||
+                createProposalForm.get('title')?.touched) &&
+              createProposalForm.get('title')?.errors?.['required']
+            "
+          >
+            This is a required field
+          </div>
+          <div
+            class="t-danger"
+            *ngIf="
+              createProposalForm.get('title')?.invalid &&
+              (createProposalForm.get('title')?.dirty ||
+                createProposalForm.get('title')?.touched) &&
+              createProposalForm.get('title')?.errors?.['maxlength']
+            "
+          >
+            You've reached the maximum length
+          </div>
+          <!-- <div *ngIf="myForm.get('myInput').errors?.maxlength">
+            Maximum length exceeded.
+          </div> -->
+        </div>
+
+        <div class="field content">
+          <label
+            style="display: flex; flex-direction: row"
+            for="content"
+            class="header"
+          >
+            <h3 class="content">Content</h3>
+            <span style="margin-left: auto; text-align: right; margin-right: 3px;"
+              >{{ charactersRemaining }} / 10000</span
+            >
+          </label>
+          <div class="editor">
+            <div class="menu">
+              <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+              </ngx-editor-menu>
+            </div>
+            <div class="textarea">
+              <ngx-editor
+                id="my-editor"
+                class="editor-without-border"
+                [(ngModel)]="bodyModel"
+                [editor]="editor"
+                placeholder=""
+                editable="true"
+                minHeight="200px"
+                height="300px"
+                formControlName="body"
+                (ngModelChange)="updateContent()"
+                style="border: none !important"
+                maxlength="10000"
+              >
+              </ngx-editor>
+            </div>
+          </div>
+          <!-- <div
+            class="t-danger"
+            *ngIf="
+              createProposalForm.get('body')?.invalid &&
+              (createProposalForm.get('body')?.dirty ||
+                createProposalForm.get('body')?.touched)
+            "
+          >
+            This is a required field
+          </div> -->
+          <div
+            class="t-danger"
+            *ngIf="
+              createProposalForm.get('body')?.invalid &&
+              (createProposalForm.get('body')?.dirty ||
+                createProposalForm.get('body')?.touched) &&
+              createProposalForm.get('body')?.errors?.['required']
+            "
+          >
+            This is a required field
+          </div>
+          <div
+            class="t-danger"
+            *ngIf="
+              createProposalForm.get('body')?.invalid &&
+              (createProposalForm.get('body')?.dirty ||
+                createProposalForm.get('body')?.touched) &&
+              createProposalForm.get('body')?.errors?.['maxlength']
+            "
+          >
+            Attention: Maximum Character Limit Exceeded! Please reduce your text
+            to fit within 10000 characters.
+          </div>
+        </div>
+
+        <div class="field preview-field" *ngIf="formattedContent">
+          <label for="preview" class="header">
+            <h3 class="preview">Preview</h3>
+          </label>
+          <div class="preview-body">
+            <!-- <div [innerHTML]="bodyModel"></div> -->
+            <blockquote [innerHTML]="formattedContent"></blockquote>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- <div class="section choices">
+        <div class="section-title">
+          <h2>Choices</h2>
+        </div>
+
+        <div class="choice" *ngFor="let choice of choicesArray; let i = index">
+          <div class="field-choice">
+            <label for="choice" class="header">
+              <h3 class="choice">Choice N°{{ i + 1 }}</h3>
+            </label>
+            <div class="input-group">
+              <input
+                type="text"
+                [ngModelOptions]="{ standalone: true }"
+                [(ngModel)]="choice.text"
+                name="choice{{ i }}"
+                class="form-control input-choice"
+              />
+
+              <div class="input-group-append" *ngIf="i > 1">
+                <button
+                  id="close-choice"
+                  class="close"
+                  type="button"
+                  (click)="removeChoice(i)"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            </div>
+            <div
+              class="t-danger"
+              *ngIf="
+                choice === '' ||
+                (choice.text.invalid && (choice.text.dirty || choice.text.touched))
+              "
+            >
+              This is a required field
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-choice"
+          [disabled]="choices.length >= 2 && hasEmptyChoiceText()"
+          (click)="addChoice()"
+        >
+          <svg
+            clip-rule="evenodd"
+            fill-rule="evenodd"
+            stroke-linejoin="round"
+            stroke-miterlimit="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m11 11h-7.25c-.414 0-.75.336-.75.75s.336.75.75.75h7.25v7.25c0 .414.336.75.75.75s.75-.336.75-.75v-7.25h7.25c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-7.25v-7.25c0-.414-.336-.75-.75-.75s-.75.336-.75.75z"
+              fill-rule="nonzero"
+            />
+          </svg>
+          Add choice
+        </button>
+      </div> -->
+
+      <div class="section choices">
+        <div class="section-title">
+          <h2>Choices</h2>
+        </div>
+
+        <div
+          class="choice"
+          *ngFor="let choice of choicesArray.controls; let i = index"
+        >
+          <div class="field-choice">
+            <label for="choice{{ i }}" class="header">
+              <h3 class="choice">Choice N°{{ i + 1 }}</h3>
+            </label>
+            <div class="input-group">
+              <input
+                type="text"
+                [formControl]="choice"
+                name="choice{{ i }}"
+                class="form-control input-choice"
+                (input)="limitInputLength(32, $event)"
+              />
+
+              <div class="input-group-append" *ngIf="i > 1">
+                <button
+                  id="close-choice"
+                  class="close"
+                  type="button"
+                  (click)="removeChoice(i)"
+                >
+                  <!-- <span aria-hidden="true">&times;</span> -->
+                  <img src="assets/closeModal.svg" />
+                </button>
+              </div>
+            </div>
+            <div
+              class="t-danger"
+              *ngIf="!(choice.invalid && (choice.dirty || choice.touched))"
+            >
+              <br />
+            </div>
+            <!-- <div
+              class="t-danger"
+              *ngIf="choice.invalid && (choice.dirty || choice.touched)"
+            >
+              This is a required field
+            </div>
+            <div
+              class="t-danger"
+              *ngIf="choice.invalid && (choice.dirty || choice.touched)"
+            >
+              This is a required field
+            </div> -->
+            <div
+              class="t-danger"
+              *ngIf="
+              choice.invalid &&
+              (choice.dirty ||
+                choice.touched) &&
+              choice.errors?.['required']
+            "
+            >
+              This is a required field
+            </div>
+            <div
+              class="t-danger"
+              *ngIf="
+              choice.invalid &&
+              (choice.dirty ||
+                choice.touched) &&
+              choice.errors?.['maxlength']
+            "
+            >
+              You've reached the maximum length
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-choice"
+          [disabled]="choicesArray.length >= 2 && hasEmptyChoiceText()"
+          (click)="addChoice()"
+        >
+          <svg
+            clip-rule="evenodd"
+            fill-rule="evenodd"
+            stroke-linejoin="round"
+            stroke-miterlimit="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m11 11h-7.25c-.414 0-.75.336-.75.75s.336.75.75.75h7.25v7.25c0 .414.336.75.75.75s.75-.336.75-.75v-7.25h7.25c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-7.25v-7.25c0-.414-.336-.75-.75-.75s-.75.336-.75.75z"
+              fill-rule="nonzero"
+            />
+          </svg>
+          Add choice
+        </button>
+      </div>
+
+      <hr />
+
+      <div class="section action">
+        <div class="section-title">
+          <h2>Action</h2>
+        </div>
+        <div class="section-content">
+          <div class="start">
+            <span class="date">
+              <label for="start-date" class="header">
+                <h3 class="start-date">Start Date</h3>
+              </label>
+              <input
+                id="startDate"
+                class="form-control actionInput"
+                type="date"
+                formControlName="startDate"
+              />
+              <div
+                *ngIf="
+                  !(
+                    createProposalForm.get('startDate')?.invalid &&
+                    (createProposalForm.get('startDate')?.dirty ||
+                      createProposalForm.get('startDate')?.touched)
+                  )
+                "
+              >
+                <br />
+              </div>
+              <div
+                *ngIf="
+                  createProposalForm.get('startDate')?.invalid &&
+                  (createProposalForm.get('startDate')?.dirty ||
+                    createProposalForm.get('startDate')?.touched)
+                "
+                class="t-danger"
+              >
+                This is a required field
+              </div>
+            </span>
+            <span class="time">
+              <label for="start-time" class="header">
+                <h3 class="start-time">Start Time</h3>
+              </label>
+              <input
+                id="startTime"
+                class="form-control"
+                type="time"
+                formControlName="startTime"
+                placeholder="Select a start time"
+              />
+              <div
+                class="t-danger"
+                *ngIf="
+                  !(
+                    createProposalForm.get('startTime')?.invalid &&
+                    (createProposalForm.get('startTime')?.dirty ||
+                      createProposalForm.get('startTime')?.touched)
+                  )
+                "
+              >
+                <br />
+              </div>
+              <div
+                class="t-danger"
+                *ngIf="
+                  createProposalForm.get('startTime')?.invalid &&
+                  (createProposalForm.get('startTime')?.dirty ||
+                    createProposalForm.get('startTime')?.touched)
+                "
+              >
+                This is a required field
+              </div>
+            </span>
+          </div>
+          <div class="end">
+            <span class="date">
+              <label for="end-date" class="header">
+                <h3 class="end-date">End Date</h3>
+              </label>
+              <input
+                id="endDate"
+                class="form-control"
+                type="date"
+                formControlName="endDate"
+              />
+              <div
+                *ngIf="
+                  !(
+                    createProposalForm.get('endDate')?.invalid &&
+                    (createProposalForm.get('endDate')?.dirty ||
+                      createProposalForm.get('endDate')?.touched)
+                  )
+                "
+                class="t-danger"
+              >
+                <br />
+              </div>
+              <div
+                *ngIf="
+                  createProposalForm.get('endDate')?.invalid &&
+                  (createProposalForm.get('endDate')?.dirty ||
+                    createProposalForm.get('endDate')?.touched)
+                "
+                class="t-danger"
+              >
+                This is a required field
+              </div>
+            </span>
+            <span class="time">
+              <label for="end-time" class="header">
+                <h3 class="end-time">end Time</h3>
+              </label>
+              <input
+                id="endTime"
+                type="time"
+                class="form-control"
+                formControlName="endTime"
+              />
+              <div
+                class="t-danger"
+                *ngIf="
+                  !(
+                    createProposalForm.get('endTime')?.invalid &&
+                    (createProposalForm.get('endTime')?.dirty ||
+                      createProposalForm.get('endTime')?.touched)
+                  )
+                "
+              >
+                <br />
+              </div>
+              <div
+                class="t-danger"
+                *ngIf="
+                  createProposalForm.get('endTime')?.invalid &&
+                  (createProposalForm.get('endTime')?.dirty ||
+                    createProposalForm.get('endTime')?.touched)
+                "
+              >
+                This is a required field
+              </div>
+            </span>
+          </div>
+          <div *ngIf="!isTimeCorrect()" class="t-danger">
+            Start date/time must be before end date/time.
+          </div>
+        </div>
+      </div>
+      <div class="section-snapshot">
+        <br />
+        <div *ngIf="!externalWalletService.isWalletConnected">
+          <br />
+        </div>
+
+        <div
+          *ngIf="
+            externalWalletService.isWalletConnected &&
+            externalWalletService.connect
+          "
+          class="creator"
+        >
+          <p>
+            Creator:&nbsp;
+            <a
+              href="{{ blockExplorerURL }}address/{{ walletId }}"
+              target="_blank"
+              >{{ formattedCreator }}
+              <img src="/../assets/bscscan-logo-circle.png"
+            /></a>
+          </p>
+        </div>
+        <div class="snapshot">
+          <p>
+            Snapshot:&nbsp;
+            <a href="{{ blockExplorerURL }}block/{{ snapshot }}" target="_blank"
+              >{{ snapshot }} <img src="/../assets/bscscan-logo-circle.png"
+            /></a>
+          </p>
+        </div>
+        <div *ngIf="!externalWalletService.connect">
+          <button class="btn btn-connect" (click)="showConnectDialog()">
+            Connect Wallet
+          </button>
+        </div>
+
+        <div
+          *ngIf="
+            externalWalletService.isWalletConnected &&
+            externalWalletService.connect
+          "
+        >
+          <button
+            class="btn btn-publish"
+            type="submit"
+            [disabled]="isFormFilled()"
+          >
+            <span>Publish</span>
+            <span
+              *ngIf="this.showSpinner"
+              class="spinner-border text-light"
+              role="status"
+            ></span>
+            <!-- <span
+              *ngIf="this.showSpinner"
+              class="spinner-border text-light"
+              role="status"
+              ><span class="sr-only">Loading...</span>
+            </span> -->
+          </button>
+        </div>
+      </div>
+    </form>
+    <div
+      *ngIf="
+        externalWalletService.isWalletConnected && externalWalletService.connect
+      "
+    >
+      <div class="vp-info">
+        <span class="vp-info-icon"
+          ><img src="../../../../assets/info-icon.png"
+        /></span>
+        <p>YOU NEED AT LEAST 10 000 VOTING POWER TO PUBLISH A PROPOSAL</p>
+      </div>
+      <button class="btn-vp" (click)="showVPDialog()">Check voting power</button>
+    </div>
+    <!-- <dialog #dialog>
+      <div class="dialog-Container">
+        <h5>Connect Wallet</h5>
+        <p>Start by connecting with one of the wallets:</p>
+        <div class="wallet-buttons">
+          <button class="btn btn-primary" (click)="connectWallet('metamask')">
+            <i class="fab fa-ethereum"></i> Connect with MetaMask
+          </button>
+          <button class="btn btn-primary" (click)="connectWallet('trust')">
+              <i class="fab fa-trust"></i> Connect with Trust Wallet
+            </button>
+        </div>
+      </div>
+    </dialog> -->
+    <div
+      class="modal"
+      tabindex="-1"
+      role="dialog"
+      [ngClass]="{ show: isConnectDialog }"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="hideConnectDialog()"
+          >
+            <!-- <span aria-hidden="true">&times;</span> -->
+            <img src="assets/closeModal.svg" />
+          </button>
+          <div class="container">
+            <div class="modal-header">
+              <h5 class="modal-title">Connect Wallet</h5>
+            </div>
+            <div class="modal-body">
+              <p class="description">
+                Before proceeding, make sure to connect with your Metamask
+                wallets and ensure that you have securely stored your private
+                keys or seed phrase, without sharing them with anyone.
+              </p>
+              <br />
+              <div class="wallet-buttons">
+                <button
+                  class="metamask-btn"
+                  (click)="connectWallet('metamask')"
+                >
+                  <img src="../../../../assets/metamask.png" />
+                  <p class="description">Metamask</p>
+                </button>
+                <!-- <div class="div-install" *ngIf="isNotInstalled">
+                  <p class="install">
+                    <img src="assets/icon_alert_info.png" /> Metamask is not
+                    installed
+                  </p>
+                  <img class="qr" src="assets/metamask-qr.png" />
+                  <button class="install-btn">
+                    <a
+                      href="https://metamask.io/download/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="install-button"
+                      >Install now</a
+                    >
+                  </button>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal"
+      tabindex="-1"
+      role="dialog"
+      [ngClass]="{ show: isNotInstalled }"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="hideInstall()"
+          >
+            <img src="assets/closeModal.svg" />
+          </button>
+          <div class="container">
+            <div class="modal-header">
+              <h5 class="modal-title">Install MetaMask</h5>
+            </div>
+            <div class="modal-body">
+              <p class="install">
+                <img src="assets/icon_alert_info.png" /> Metamask is not
+                installed
+              </p>
+              <img class="qr" src="assets/metamask-qr.png" />
+              <br />
+
+              <button class="install-btn">
+                <a
+                  href="https://metamask.io/download/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="install-button"
+                  >Install now</a
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal"
+      tabindex="-1"
+      role="dialog"
+      [ngClass]="{ show: externalWalletService.networkHasChanged }"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="container">
+            <div class="modal-header">
+              <!-- <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              (click)="hide()"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button> -->
+              <h5 class="modal-title">Switch Network</h5>
+            </div>
+            <div class="modal-body">
+              <img src="../../../../assets/switch_modal_satt.png" />
+              <p class="description">
+                SATT token, a BNB Smart Chain token, is essential for voting,
+                requiring users to switch networks. This integration enables
+                seamless participation, empowering stakeholders to utilize SATT
+                for effective decision-making.
+              </p>
+              <br />
+
+              <div class="btns-switch">
+                <button class="confirm-btn" (click)="changeNetwork()">
+                  Switch to BNB Smart Chain
+                </button>
+
+                <button class="cancel-btn" (click)="Disconnect()">
+                  Disconnect Wallet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div
+      class="modal"
+      tabindex="-1"
+      role="dialog"
+      [ngClass]="{ show: isNotInstalled }"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              (click)="hideInstall()"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h5 class="modal-title">Install MetaMask</h5>
+          </div>
+          <div class="modal-body">
+            <p class="description">Install MetaMask to proceed.</p>
+            <br />
+
+           
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div
+      class="modal"
+      tabindex="-1"
+      role="dialog"
+      [ngClass]="{ show: isVPDialog }"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="hideVPDialog()"
+          >
+            <!-- <span aria-hidden="true">&times;</span> -->
+            <img src="assets/closeModal.svg" />
+          </button>
+          <div class="container">
+            <div class="modal-header">
+              <h5 class="modal-title">Voting Power</h5>
+            </div>
+            <div class="modal-body">
+              <p class="description">
+                Your voting power is determined by the amount of SATT you held.
+                SATT held in other places does not contribute to your voting
+                power.
+              </p>
+              <br />
+              <div class="overview">
+                <div class="header">
+                  <h3 class="ov">Overview</h3>
+                </div>
+                <div class="overview-body">
+                  <p class="vp-text">Your Voting Power:</p>
+                  <p class="vp-result">{{ externalWalletService.vp?.vp }}</p>
+                </div>
+              </div>
+              <!-- <div class="overview">
+              <label for="over" class="header">
+                <h3 class="ov">Overview</h3>
+              </label>
+              <div class="overview-body">
+                <p class="vp-text">Your Voting Power:</p>
+                <p class="vp-result">{{ vp?.vp }}</p>
+              </div>
+            </div> -->
+              <!-- <div class="close-btn">
+              <button class="metamask-btn" (click)="hideModal()">
+                Close
+              </button>
+            </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
