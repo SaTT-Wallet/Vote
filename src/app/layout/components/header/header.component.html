@@ -61,7 +61,7 @@
         class="d-md-block d-xl-none d-lg-none d-sm-block navbar-nav"
         *ngIf="!externalWalletService.connect"
       >
-        <button class="button-connect" (click)="voteService.showConnectDialog()">
+        <button class="button-connect" (click)="voteService.showConnectDialog(connectModal)">
           <img src="assets/Images/connected-wallet.png" />
           Connect Wallet
         </button>
@@ -280,7 +280,7 @@
           <a class="" [routerLink]="['/auth/login']">Connect</a>
         </button> -->
         <div *ngIf="!externalWalletService.connect">
-          <button class="button-connect" (click)="voteService.showConnectDialog()">
+          <button class="button-connect" (click)="voteService.showConnectDialog(connectModal)">
             <img src="assets/Images/connected-wallet.png" />
             Connect Wallet
           </button>
@@ -666,3 +666,73 @@
     </div>
   </div> -->
 </div>
+<ng-template #connectModal>
+  <div *ngIf="getScreenWidth > 767" class="d-flex">
+    <div class="d-block col-5 block-primary">
+      <img src="./../../../../assets/Images/connect-wallet-icon.svg" class="description-image" >
+      <h4 class="description-title">
+       
+        Connect Wallet
+      </h4>
+      <p class="description-content">
+        Start by connecting with one of the following wallets
+      </p>
+    </div>
+   
+    <div class="d-block" style=" width: 100%;">
+      <div class="d-flex justify-content-between description-block" >
+        <h4 class="modal-title">
+          Available Wallets
+        </h4>
+        <button (click)="voteService.hideConnectDialog(connectModal)" class="close-button" >
+          <img src="./../../../../assets/Images/icon-close.svg" />
+        </button>
+      </div>
+      
+  
+      <div class="d-flex flex-column justify-content-center align-items-center buttons-block" >
+  
+        <button
+      type="button"
+      
+      (click)="sattConnect()"
+      class="generator wallet-connect-button"><img src="./../../../../assets/Images/Satt.svg" class="wallet-connect-type"/> SaTT Wallet
+    </button>
+  
+    <button
+    (click)="connectMetaMask()"
+      type="button"
+      class="generator wallet-connect-button"><img src="./../../../../assets/Images/metamask.svg" class="wallet-connect-type" /> MetaMask
+    </button>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div *ngIf="getScreenWidth <= 767" class="mobile-block">
+    <button (click)="voteService.hideConnectDialog(connectModal)" class="close-button">
+      <img src="./../../../../assets/Images/icon-close.svg" />
+    </button>
+    <img src="./../../../../assets/Images/connect-wallet-icon.svg" class="description-image" >
+    <h4 class="modal-title">
+      Available Wallets
+    </h4>
+    <div class="d-flex flex-column justify-content-center align-items-center buttons-block" >
+  
+      <button
+    type="button"
+    
+    (click)="sattConnect()"
+    class="generator wallet-connect-button"><img src="./../../../../assets/Images/Satt.svg" class="wallet-connect-type"/> SaTT Wallet
+  </button>
+  
+  <button
+  (click)="connectMetaMask()"
+    type="button"
+    class="generator wallet-connect-button"><img src="./../../../../assets/Images/metamask.svg" class="wallet-connect-type" /> MetaMask 
+  </button>
+    </div>
+  </div>
+  
+  
+  </ng-template>

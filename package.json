@@ -21,6 +21,7 @@
     "@angular/router": "^16.0.3",
     "@apollo/client": "^3.7.15",
     "@metamask/detect-provider": "^2.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^15.1.2",
     "@snapshot-labs/snapshot.js": "^0.4.85",
     "@types/marked": "^5.0.0",
     "@types/turndown": "^5.0.1",

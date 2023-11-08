@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { ExternalWalletService } from "src/app/core/services/vote/external-wallet.service";
 import { environment as env } from '../../../../environments/environment.prod';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,15 +17,14 @@ export class VoteService {
   formattedCreator: string | undefined;
 
 
-  constructor(public externalWalletService: ExternalWalletService) { }
+  constructor(public externalWalletService: ExternalWalletService, public modalService: NgbModal,) { }
 
-  showConnectDialog() {
-    this.isConnectDialog = true;
-    document.body.classList.add('popup-visible');
+  showConnectDialog(content?: any) {
+    this.modalService.open(content)
+    
   }
-  hideConnectDialog() {
-    this.isConnectDialog = false;
-    document.body.classList.remove('popup-visible');
+  hideConnectDialog(content?:any) {
+    this.modalService.dismissAll(content);
   }
 
   showNetworkHasChanged() {
@@ -80,7 +79,7 @@ export class VoteService {
       await this.externalWalletService.checkConnectedWallet();
     }
 
-    this.hideConnectDialog();
+    //this.hideConnectDialog();
   }
 
   checkWalletConnected = async () => {

@@ -11,7 +11,8 @@ import {
   OnInit,
   PLATFORM_ID,
   ViewChild,
-  Input
+  Input,
+  TemplateRef
 } from '@angular/core';
 // import { bscan, etherscan } from '@app/config/atn.config';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
@@ -68,6 +69,7 @@ const bttscanAddr = env.bttscanAddr;
 export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   blockExplorerURL = env.blockExplorerURL;
   currentScreenSize: string | undefined;
+  public connectModal!: TemplateRef<any>;
   query = '(max-width: 991.98px)';
   mediaQueryList?: MediaQueryList;
   query2 = '(width =   767.9px)';
@@ -574,11 +576,11 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.navigate(['/']);
   }
   showPopup() {
-    this.voteService.showConnectDialog();
+    //this.voteService.showConnectDialog();
   }
 
   hidePopup() {
-    this.voteService.hideConnectDialog();
+    //this.voteService.hideConnectDialog();
   }
   show() {
     this.voteService.showNetworkHasChanged();
@@ -604,7 +606,9 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     // }
   }
 
-
+  sattConnect() {
+    window.open(env.domainName + '/auth/login', '_self')
+  }
   Disconnect() {
     this.voteService.Disconnect();
   }
@@ -651,7 +655,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       // }
     }
   }
-
+  connectMetaMask() {
+    this.voteService.hideConnectDialog(this.connectModal);
+    this.voteService.connectWallet('metamask')
+  }
 
   ngOnDestroy(): void {
     if (!!this.isDestroyed$) {
