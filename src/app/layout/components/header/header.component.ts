@@ -607,7 +607,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   sattConnect() {
-    window.open(env.domainName, '_self')
+    window.open(env.domainName + '/auth/login', '_self')
   }
   Disconnect() {
     this.voteService.Disconnect();
