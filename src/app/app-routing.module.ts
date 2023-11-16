@@ -12,6 +12,12 @@ const routes: Routes = [
       import('./layout/layout.module').then((m) => m.LayoutModule)
     //canActivateChild:
   },
+  {
+    path: 'ad-pools',
+    loadChildren: () =>
+     import('./ad-pools/ad-pools.module').then((m) => m.AdPoolsModule)
+    //canActivateChild:
+  },
 ];
 
 @NgModule({

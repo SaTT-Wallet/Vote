@@ -15,8 +15,9 @@ import { CommonModule } from '@angular/common';
   ],
   imports: [
      LayoutRoutingModule, HttpClientModule, CommonModule],
-
-  providers: [
+  exports: [
+    HeaderComponent,
+    FooterBarComponent
   ]
 })
 export class LayoutModule {}
