@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  API_URL: 'https://api2.satt-token.com',
+  API_URL: 'https://localhost:3015',
   url: 'https://dapp.satt.com/',
   ipfsURL: 'https://ipfs.io/ipfs/',
   url_subgraph_bsc:
@@ -127,7 +127,14 @@ export const environment = {
   etherscanaddr: 'https://ropsten.etherscan.io/address/',
   simplexUrl: 'https://sandbox.test-simplexcc.com/payments/new'*/
   urlSocialMedia: {
-    urlTiktok: 'https://www.tiktok.com/'
+    urlTwitter: 'https://www.twitter.com/',
+    urlGoogleChannel: 'https://www.youtube.com/channel/',
+    urlFacebook: 'https://www.facebook.com/',
+    urlInstagram: 'https://www.instagram.com/',
+    urlLinkedinCompany: 'https://www.linkedin.com/company/',
+    urlTiktok: 'https://www.tiktok.com/',
+    urlthreadsAccount: 'https://threads.net/@'
+
   },
   FACEBOOK_URL: 'https://www.facebook.com/',
 
