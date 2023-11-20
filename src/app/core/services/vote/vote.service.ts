@@ -4,6 +4,7 @@ import { ExternalWalletService } from "src/app/core/services/vote/external-walle
 import { environment as env } from '../../../../environments/environment.prod';
 import { ApiprofilService } from 'src/app/apiprofil.service';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,19 +20,14 @@ export class VoteService {
   formattedCreator: string | undefined;
 
 
-  constructor(public externalWalletService: ExternalWalletService,
-    public apiprofilService:ApiprofilService ) { }
+  constructor(public externalWalletService: ExternalWalletService,public apiprofilService:ApiprofilService, public modalService: NgbModal,) { }
 
-
-
+  showConnectDialog(content?: any) {
+    this.modalService.open(content)
     
-  showConnectDialog() {
-    this.isConnectDialog = true;
-    document.body.classList.add('popup-visible');
   }
-  hideConnectDialog() {
-    this.isConnectDialog = false;
-    document.body.classList.remove('popup-visible');
+  hideConnectDialog(content?:any) {
+    this.modalService.dismissAll(content);
   }
 
   showNetworkHasChanged() {
@@ -88,7 +84,7 @@ export class VoteService {
       await this.externalWalletService.checkConnectedWallet();
     }
 
-    this.hideConnectDialog();
+    //this.hideConnectDialog();
   }
 
  createAccount(wallet:any):void {
