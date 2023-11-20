@@ -1,0 +1,33 @@
+.avatar {
+  width: 53px;
+  border-radius: 50px;
+  position: absolute;
+  top: 5px;
+  left: 9px;
+}
+
+.avatarimage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  border: #fff solid 0.3px;
+}
+@media (max-width: 1024px) {
+  .avatarimage {
+    width: 45px;
+    height: 45px;
+  }
+}
+// @media (max-width: 1111px) {
+//   .avatarimage {
+//     width: 40px;
+//     height: 40px;
+//   }
+// }
+
+// @media (max-width: 767px) {
+//     .avatarimage {
+//         width: 40px !important;
+//         height: 40px !important;
+//     }
+// }
