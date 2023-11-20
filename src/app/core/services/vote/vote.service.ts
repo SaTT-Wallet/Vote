@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { ExternalWalletService } from "src/app/core/services/vote/external-wallet.service";
 import { environment as env } from '../../../../environments/environment.prod';
+import { ApiprofilService } from 'src/app/apiprofil.service';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Injectable({
   providedIn: 'root'
 })
 export class VoteService {
+
   public walletConnected!: boolean;
   public walletId: string = '';
   web3 !: Web3Provider;
@@ -17,7 +20,7 @@ export class VoteService {
   formattedCreator: string | undefined;
 
 
-  constructor(public externalWalletService: ExternalWalletService, public modalService: NgbModal,) { }
+  constructor(public externalWalletService: ExternalWalletService,public apiprofilService:ApiprofilService, public modalService: NgbModal,) { }
 
   showConnectDialog(content?: any) {
     this.modalService.open(content)
@@ -62,6 +65,7 @@ export class VoteService {
     if (walletType === 'metamask') {
       if (this.externalWalletService.isMetaMaskInstalled) {
         this.provider = await this.externalWalletService.connectMetamask();
+
       } else {
         this.showInstall();
       }
@@ -76,11 +80,40 @@ export class VoteService {
     if (typeof window.ethereum !== 'undefined') {
       this.web3 = new Web3Provider(window.ethereum);
       this.account = await this.web3.listAccounts();
+       this.createAccount(this.account[0])
       await this.externalWalletService.checkConnectedWallet();
     }
 
     //this.hideConnectDialog();
   }
+
+ createAccount(wallet:any):void {
+
+  this.apiprofilService.createUser(wallet.toLowerCase()).subscribe(
+    (response) => {
+      console.log('API response:', response);
+    },
+    (error) => {
+      console.error('API error:', error);
+    }
+  );
+   
+ }
+
+  detectAccountChange(): void {
+    if (typeof window.ethereum ) {
+      window.ethereum .on('accountsChanged', (accounts: string[]) => {
+        if (accounts.length > 0) {
+          const newAccount = accounts[0];
+          console.log("newAccountnewAccountnewAccount",newAccount)
+          this.createAccount(newAccount)
+        }
+      });
+    }
+  }
+  
+
+
 
   checkWalletConnected = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -88,8 +121,13 @@ export class VoteService {
       if (accounts.length > 0) {
         this.walletConnected = true;
         this.walletId = accounts[0];
-        this.formattedCreator = `${this.walletId.substr(0, 4)}...${this.walletId.substr(-3)}`;
+        this.formattedCreator = `${this.walletId.substr(0, 4)}...${this.walletId.substr(-3)}`;     
+      
+
+      
       }
     }
   }
+
+
 }

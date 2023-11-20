@@ -6,17 +6,27 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FooterBarComponent } from './components/footer-bar/footer-bar.component';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { SocialNetworksComponent } from './components/social-networks/social-networks.component';
+import { TransfomNumberPipe } from '../shared/pipes/transfom-number.pipe';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     LayoutComponent,
     HeaderComponent,
     SidebarComponent,
-    FooterBarComponent
+    FooterBarComponent,
+    SocialNetworksComponent,
+    TransfomNumberPipe,
   ],
   imports: [
-     LayoutRoutingModule, HttpClientModule, CommonModule],
+    LayoutRoutingModule,
+    HttpClientModule,
+    CommonModule,
+    TranslateModule.forRoot(),
+    MatSnackBarModule,
+  ],
 
-  providers: [
-  ]
+  providers: [],
 })
 export class LayoutModule {}
