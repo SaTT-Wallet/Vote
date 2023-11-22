@@ -478,14 +478,15 @@ goToAccount(oracle: string, userName: string) {
   }
 
   deleteAccount(id: string, network: string,linkedinId : string ="") {
+    console.log({id})
     if (network === 'google') {
       this.socialAccountFacadeService
         .deleteOneSocialNetworksGoogle(id)
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            // this.getSocialNetwork();
+            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            this.getSocialNetwork();
             this.closeModal(id);
           }
         });

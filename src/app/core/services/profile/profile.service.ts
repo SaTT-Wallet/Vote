@@ -49,7 +49,13 @@ export class ProfileService {
   }
   // /profile/socialAccounts
   deleteOneSocialNetworksGoogle(id: string) {
-    return this.http.delete(sattUrl + '/profile/RemoveGoogleChannel/' + id);
+    const headers = new HttpHeaders({
+      'X-Signature': Cookies.get('metamaskSignature') || '',
+      'X-Address': Cookies.get('metamaskAddress') || '',
+      'X-Message': Cookies.get('metamaskNonce') || ''
+    });
+    const options = { headers: headers };
+    return this.http.delete(sattUrl + '/profile/external/RemoveGoogleChannel/' + id, options);
   }
   deleleteAllSocialNetworksTwitter() {
     return this.http.delete(sattUrl + '/profile/RemoveTwitterChannels');
