@@ -12,6 +12,8 @@ import { environment as env } from '../../../../environments/environment';
 import { sattUrl } from 'src/app/config/atn.config';
 import { SocialAccountFacadeService } from 'src/app/core/facades/socialAcounts-facade/socialAcounts-facade.service';
 import { TokenStorageService } from 'src/app/core/services/tokenStorage/token-storage-service.service';
+import Cookies from 'js-cookie';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 export interface IGetSocialNetworksResponse {
   facebook: { [key: string]: string | boolean }[];
   google: { [key: string]: string | boolean }[];
@@ -68,7 +70,7 @@ export class SocialNetworksComponent implements OnInit {
   isLoading: any = false;
   threadIdToDelete: any = '';
   private isDestroyed = new Subject();
-  userId = this.tokenStorageService.getIdUser();
+  userId = Cookies.get('userId');
   showSpinner: boolean = true;
   checkThreadsExist: boolean = false;
   private socialAccount$ = this.socialAccountFacadeService.socialAccount$;
@@ -80,6 +82,7 @@ export class SocialNetworksComponent implements OnInit {
     private tokenStorageService: TokenStorageService,
     private sanitizer: DomSanitizer,
     private snackBar: MatSnackBar,
+    private profileService: ProfileService,
     @Inject(PLATFORM_ID) private platformId: string
   ) { }
   ngOnInit(): void {
@@ -142,7 +145,103 @@ export class SocialNetworksComponent implements OnInit {
   // }
   getSocialNetwork(): void {
     this.showSpinner = true;
-    this.socialAccount$
+    this.profileService.getSocialNetworks().pipe(
+      catchError(() => {
+        return of(null);
+      }),
+      mergeMap((data) => {
+        return this.route.queryParams.pipe(
+          map((params) => {
+            return { params, data };
+          })
+        );
+      }),
+      takeUntil(this.isDestroyed)
+    ).subscribe(
+      ({ params, data }: { params: Params; data: any }) => {
+        console.log({data})
+        if (data !== null) {
+        
+          let count = 0;
+          this.allChannels = data.data;
+          this.channelGoogle = data.data.google;
+          this.channelTwitter = data.data.twitter;
+          this.channelFacebook = data.data.facebook;
+          this.channelLinkedin = data.data.linkedin;
+
+          this.channelTiktok = data.data.tikTok;
+          this.setUrlMsg(params, data.data);
+         this.channelThreads = this.checkTheradsAccountExit(data.data)
+        
+        
+         
+          if (this.channelGoogle?.length !== 0) {
+            count++;
+          } else {
+            this.channelGoogle?.forEach((ch: any) => {
+              this.deactivateGoogle = !!data.google[ch].deactivate;
+            });
+          }
+
+          if (this.channelTwitter?.length !== 0) {
+            count++;
+          } else {
+            this.channelTwitter?.forEach((ch: any) => {
+              this.deactivateTwitter = !!data.twitter[ch].deactivate;
+            });
+          }
+
+          if (this.channelFacebook?.length !== 0) {
+            count++;
+          } else {
+            this.channelFacebook?.forEach((ch: any) => {
+              this.deactivateFacebook = !!data.facebook[ch].deactivate;
+            });
+          }
+
+          if (this.channelLinkedin?.length !== 0) {
+            count++;
+          } else {
+            this.channelLinkedin?.forEach((ch: any) => {
+              this.deactivateLinkedin = !!data.linkedin[ch].deactivate;
+            });
+          }
+
+          if (this.channelTiktok?.length !== 0) {
+            count++;
+          } else {
+            this.channelTiktok?.forEach((ch: any) => {
+              this.deactivateTiktok = !!data.tiktok[ch].deactivate;
+            });
+          }
+          if (this.channelThreads !== false) {
+   
+            count++;
+          }
+          let stat = (count * 100) / 6;
+         
+          
+          this.percentSocial = stat.toFixed(0);
+          setTimeout(() => {
+            this.showSpinner = false;
+          }, 2000);
+          console.log({google: this.channelGoogle, percent:this.percentSocial, twitter: this.channelTwitter, facebook: this.channelFacebook, linkedin: this.channelLinkedin, tiktok: this.channelTiktok})
+        } else {
+          this.percentSocial = 0;
+          this.allChannels = [];
+          this.channelGoogle = [];
+          this.channelTwitter = [];
+          this.channelFacebook = [];
+          this.channelLinkedin = [];
+          this.channelTiktok = [];
+          this.channelThreads= [];
+          setTimeout(() => {
+            this.showSpinner = false;
+          }, 2000);
+        }
+      }
+    )
+    /*this.socialAccount$
       .pipe(
         catchError(() => {
           return of(null);
@@ -235,11 +334,11 @@ export class SocialNetworksComponent implements OnInit {
             this.showSpinner = false;
           }, 2000);
         }
-      });
+      });*/
   }
   checkTheradsAccountExit(data:any)
   {     
-   return this.checkThreadsExist = data.facebook.some((elem : any) => elem.threads_id )      
+   return false    
    }  
   
    clearMessages = (): void => {
@@ -313,10 +412,11 @@ export class SocialNetworksComponent implements OnInit {
 
   onReditectSocial(social: string) {
     //let url = this.router.url.split('?')[0];
+    const userId = Cookies.get('userId');
     if (isPlatformBrowser(this.platformId))
       window.location.href =
         sattUrl +
-        `/profile/addChannel/${social}/${this.userId}` +
+        `/profile/addChannel/${social}/${userId}` +
         '?redirect=' +
         this.router.url;
   }

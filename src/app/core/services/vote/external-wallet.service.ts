@@ -5,7 +5,7 @@ import Web3 from 'web3';
 import { environment as env } from '../../../../environments/environment.prod';
 import { abi } from '../../../../environments/abi';
 import { SnapshotService } from './snapshot.service';
-
+import Cookies from 'js-cookie';
 declare let window: any;
 
 @Injectable({
@@ -46,16 +46,41 @@ export class ExternalWalletService {
 
   async connectMetamask(): Promise<void> {
     const provider = await detectEthereumProvider();
+    
     if (provider && provider.isMetaMask) {
-      const accounts = await this.ethereum.request({ method: 'eth_requestAccounts' });
-      await this.ethereum.request({ method: 'wallet_requestPermissions', params: [{ eth_accounts: {} }] });
-      await this.changeToBinance(provider);
-      await this.addTokenToBinance(provider);
-      this.connect = true;
-      this.isWalletConnected = true;
-      localStorage.setItem('connect', 'true');
-      return accounts[0];
+      try {
+        // Generate a unique nonce for each connection
+      
+      const timestamp = Date.now().toString();
+
+      // Construct the message
+      const message = `authentication=true&address=${this.ethereum.selectedAddress}&ts=${timestamp}`;
+
+        
+        const accounts = await this.ethereum.request({ method: 'eth_requestAccounts' });
+        const signature = await this.ethereum.request({
+          method: 'personal_sign',
+          params: [message, accounts[0]],
+        });
+  
+        // Save the signature and address to local storage
+        Cookies.set('metamaskSignature', signature, { secure: true, sameSite: 'Lax' });
+        Cookies.set('metamaskAddress', accounts[0], { secure: true, sameSite: 'Lax' });
+        Cookies.set('metamaskNonce', message, { secure: true, sameSite: 'Lax' });
+        
+        // Rest of your code
+        await this.ethereum.request({ method: 'wallet_requestPermissions', params: [{ eth_accounts: {} }] });
+        await this.changeToBinance(provider);
+        await this.addTokenToBinance(provider);
+        this.connect = true;
+        this.isWalletConnected = true;
+        localStorage.setItem('connect', 'true');
+      } catch (error) {
+        console.error('Error connecting with MetaMask:', error);
+        // Handle errors as needed
+      }
     } else {
+      // Handle the case where MetaMask is not available
       // throw new Error('Please install MetaMask!');
     }
   }

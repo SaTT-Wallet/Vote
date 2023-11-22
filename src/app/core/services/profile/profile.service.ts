@@ -4,6 +4,7 @@ import { TokenStorageService } from '../tokenStorage/token-storage-service.servi
 import { Observable } from 'rxjs';
 import { sattUrl } from 'src/app/config/atn.config';
 import { IGetSocialNetworksResponse } from '../../store/social-accounts/reducers/social-accounts.reducer';
+import Cookies from 'js-cookie';
 @Injectable({
   providedIn: 'root'
 })
@@ -34,8 +35,16 @@ export class ProfileService {
     )
   }
   getSocialNetworks() {
+    
+    const headers = new HttpHeaders({
+      'X-Signature': Cookies.get('metamaskSignature') || '',
+      'X-Address': Cookies.get('metamaskAddress') || '',
+      'X-Message': Cookies.get('metamaskNonce') || ''
+    });
+    const options = { headers: headers };
     return this.http.get<IGetSocialNetworksResponse>(
-      sattUrl + '/profile/socialAccounts'
+      sattUrl + '/profile/external/socialAccounts',
+      options
     );
   }
   // /profile/socialAccounts
