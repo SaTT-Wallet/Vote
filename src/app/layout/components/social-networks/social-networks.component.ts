@@ -496,8 +496,8 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            //this.getSocialNetwork();
+            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            this.getSocialNetwork();
             this.closeModal(id);
           }
         });
@@ -507,8 +507,8 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            //this.getSocialNetwork();
+            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            this.getSocialNetwork();
             this.closeModal(id);
           }
         });
@@ -518,8 +518,8 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            //this.getSocialNetwork();
+            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            this.getSocialNetwork();
             this.closeModal(id);
           }
         });
@@ -529,25 +529,15 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            //this.getSocialNetwork();
+            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            this.getSocialNetwork();
             this.closeModal(id);
           }
         });
-    } else if(network === 'threads') {
-      this.socialAccountFacadeService.deleteThreadAccount(this.threadIdToDelete).subscribe((response:any) => {
-        if (response.message === 'deleted successfully') {
-          this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-      
-          //this.getSocialNetwork();
-          this.closeModal(id);
-        }
-      })
-    }
+    } 
   }
+  
   deleteList(modalName: any, network: string) {
-   
-    
     if (network === 'google') {
       this.socialAccountFacadeService
         .deleteAllSocialNetworksGoogle()

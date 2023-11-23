@@ -35,61 +35,50 @@ export class ProfileService {
     )
   }
   getSocialNetworks() {
-    
-    const headers = new HttpHeaders({
-      'X-Signature': Cookies.get('metamaskSignature') || '',
-      'X-Address': Cookies.get('metamaskAddress') || '',
-      'X-Message': Cookies.get('metamaskNonce') || ''
-    });
-    const options = { headers: headers };
     return this.http.get<IGetSocialNetworksResponse>(
-      sattUrl + '/profile/external/socialAccounts',
-      options
+      sattUrl + '/external/socialAccounts'
+      
     );
   }
   // /profile/socialAccounts
   deleteOneSocialNetworksGoogle(id: string) {
-    const headers = new HttpHeaders({
-      'X-Signature': Cookies.get('metamaskSignature') || '',
-      'X-Address': Cookies.get('metamaskAddress') || '',
-      'X-Message': Cookies.get('metamaskNonce') || ''
-    });
-    const options = { headers: headers };
-    return this.http.delete(sattUrl + '/profile/external/RemoveGoogleChannel/' + id, options);
+    return this.http.delete(sattUrl + '/external/RemoveGoogleChannel/' + id);
   }
   deleleteAllSocialNetworksTwitter() {
-    return this.http.delete(sattUrl + '/profile/RemoveTwitterChannels');
+    return this.http.delete(sattUrl + '/external/RemoveTwitterChannels');
   }
   deleteOneSocialNetworksTwitter(id: string) {
-    return this.http.delete(sattUrl + '/profile/RemoveTwitterChannel/' + id);
+    return this.http.delete(sattUrl + '/external/RemoveTwitterChannel/' + id);
   }
   deleleteAllSocialNetworksGoogle() {
-    return this.http.delete(sattUrl + '/profile/RemoveGoogleChannels');
+    return this.http.delete(sattUrl + '/external/RemoveGoogleChannels');
   }
   deleleteAllSocialNetworksFb() {
-    return this.http.delete(sattUrl + '/profile/RemoveFacebookchannels');
+    
+    return this.http.delete(sattUrl + '/external/RemoveFacebookchannels');
   }
   deleteOneSocialNetworksFb(id: string) {
-    return this.http.delete(sattUrl + '/profile/RemoveFacebookChannel/' + id);
+    
+    return this.http.delete(sattUrl + '/external/RemoveFacebookChannel/' + id);
   }
   deleteAllSocialNetworksLinkedin() {
-    return this.http.delete(sattUrl + '/profile/RemoveLinkedInChannels');
+    return this.http.delete(sattUrl + '/external/RemoveLinkedInChannels' );
   }
   deleteOneSocialNetworksLinkedin(organization: string,linkedinId:string) {
+   
     return this.http.delete(
-      sattUrl + '/profile/remove/'+ linkedinId+'/linkedInChannel/'+ organization
-      
+      sattUrl + '/external/remove/'+ linkedinId+'/linkedInChannel/'+ organization
     );
   }
 
   deleteTiktokChannel(tiktokProfileId: string) {
     return this.http.delete(
-      sattUrl + '/profile/RemoveTiktokChannel/' + tiktokProfileId
-      
+      sattUrl + '/external/RemoveTiktokChannel/' + tiktokProfileId 
     );
   }
+
   deleteAllTiktokChannels() {
-    return this.http.delete(sattUrl + '/profile/RemoveTiktokChannels');
+    return this.http.delete(sattUrl + '/external/RemoveTiktokChannels');
   }
 
   updateprofile(body: any) {
