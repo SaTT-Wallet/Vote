@@ -47,7 +47,10 @@
       name="facebook-domain-verification"
       content="ag3bpno6r3diau1vlmnxrmf0i6g4vd"
     />-->
-
+    <script>
+      // Required by some npm packages
+      window.process = { browser: true, env: { ENVIRONMENT: 'BROWSER' } };
+  </script>
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"

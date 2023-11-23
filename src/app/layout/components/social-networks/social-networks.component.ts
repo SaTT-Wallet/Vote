@@ -14,6 +14,7 @@ import { SocialAccountFacadeService } from 'src/app/core/facades/socialAcounts-f
 import { TokenStorageService } from 'src/app/core/services/tokenStorage/token-storage-service.service';
 import Cookies from 'js-cookie';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { ExternalWalletService } from 'src/app/core/services/vote/external-wallet.service';
 export interface IGetSocialNetworksResponse {
   facebook: { [key: string]: string | boolean }[];
   google: { [key: string]: string | boolean }[];
@@ -78,6 +79,7 @@ export class SocialNetworksComponent implements OnInit {
     private modalService: NgbModal,
     private route: ActivatedRoute,
     private router: Router,
+    public externalWalletService: ExternalWalletService,
     private socialAccountFacadeService: SocialAccountFacadeService,
     private tokenStorageService: TokenStorageService,
     private sanitizer: DomSanitizer,
@@ -85,22 +87,9 @@ export class SocialNetworksComponent implements OnInit {
     private profileService: ProfileService,
     @Inject(PLATFORM_ID) private platformId: string
   ) { }
+
   ngOnInit(): void {
-    this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-    // this.socialAccountFacadeService.checkThreads().subscribe((res:any) => {
-    //   if(res.message === true) this.checkThreadsExist = true
-    //   else this.checkThreadsExist = false;
-    // });
-    this.getSocialNetwork();
-
-    // this.profilService.getTiktokProfilPrivcay().subscribe((res:any)=>
-    // {
-
-    //   this.tiktokProfilePrivacy = res.data;
-    //  this.CheckPrivacy();
-
-    // }
-    // )
+     this.getSocialNetwork()
   }
 
   showToast(message: string): void {
@@ -214,11 +203,8 @@ export class SocialNetworksComponent implements OnInit {
               this.deactivateTiktok = !!data.tiktok[ch].deactivate;
             });
           }
-          if (this.channelThreads !== false) {
-   
-            count++;
-          }
-          let stat = (count * 100) / 6;
+          
+          let stat = (count * 100) / 5;
          
           
           this.percentSocial = stat.toFixed(0);
@@ -536,7 +522,7 @@ goToAccount(oracle: string, userName: string) {
         });
     } 
   }
-  
+
   deleteList(modalName: any, network: string) {
     if (network === 'google') {
       this.socialAccountFacadeService

@@ -1,15 +1,9 @@
 <div
   class="container-fluid page-content"
   [style]="'margin-top: 4%!important; '"
-  *ngIf="!showSpinner"
+  *ngIf="!showSpinner && externalWalletService.isWalletConnected && externalWalletService.connect"
 >
-  <div class="show-mobile">
-    <div class="col-md-12 col-lg-12 col-xs-12 mb-3 px-0">
-      <button type="button" class="btn-back" [routerLink]="['/home/settings/']">
-        <
-      </button>
-    </div>
-  </div>
+  
 
   <div class="social-network-bloc mt-3">
     <p class="title">
