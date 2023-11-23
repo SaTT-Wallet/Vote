@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SocialAccountFacadeService } from '@app/core/facades/socialAcounts-facade/socialAcounts-facade.service';
-import { TokenStorageService } from '@app/core/services/tokenStorage/token-storage-service.service';
+import { SocialAccountFacadeService } from './../../../../core/facades/socialAcounts-facade/socialAcounts-facade.service';
+import { TokenStorageService } from './../../../../core/services/tokenStorage/token-storage-service.service';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';

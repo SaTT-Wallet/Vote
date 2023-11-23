@@ -5,6 +5,7 @@ import { environment as env } from '../../../../environments/environment.prod';
 import { ApiprofilService } from 'src/app/apiprofil.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Cookies from 'js-cookie';
 @Injectable({
   providedIn: 'root'
 })
@@ -77,10 +78,11 @@ export class VoteService {
     } else {
       throw new Error('Invalid wallet type');
     }
+    console.log(typeof window.ethereum !== 'undefined')
     if (typeof window.ethereum !== 'undefined') {
       this.web3 = new Web3Provider(window.ethereum);
       this.account = await this.web3.listAccounts();
-       this.createAccount(this.account[0])
+      this.createAccount(this.account[0])
       await this.externalWalletService.checkConnectedWallet();
     }
 
@@ -89,14 +91,16 @@ export class VoteService {
 
  createAccount(wallet:any):void {
 
+  console.log({wallet})
   this.apiprofilService.createUser(wallet.toLowerCase()).subscribe(
-    (response) => {
-      console.log('API response:', response);
-    },
-    (error) => {
-      console.error('API error:', error);
+    (res:any) => {
+      console.log({res})
+     Cookies.set('userId', res.data._id)
+    }, (err:any) => {
+      console.error(err)
     }
   );
+  
    
  }
 

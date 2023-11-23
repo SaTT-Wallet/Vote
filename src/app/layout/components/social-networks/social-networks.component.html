@@ -1,15 +1,9 @@
 <div
   class="container-fluid page-content"
   [style]="'margin-top: 4%!important; '"
-  *ngIf="!showSpinner"
+  *ngIf="!showSpinner && externalWalletService.isWalletConnected && externalWalletService.connect"
 >
-  <div class="show-mobile">
-    <div class="col-md-12 col-lg-12 col-xs-12 mb-3 px-0">
-      <button type="button" class="btn-back" [routerLink]="['/home/settings/']">
-        <
-      </button>
-    </div>
-  </div>
+  
 
   <div class="social-network-bloc mt-3">
     <p class="title">
@@ -32,7 +26,7 @@
     </div>
 
     <div class="col-12 d-flex justify-content-center py-1">
-      <p class="desc">{{ 'social_networks.desc' | translate }}</p>
+      <p class="desc">{{ "social_networks.desc" | translate }}</p>
     </div>
 
     <div class="col-12 d-flex justify-content-center py-1">
@@ -1111,23 +1105,7 @@
           <img src="./assets/Images/tiktok-white.svg" width="20px" />
           <span> {{ 'social_networks.add_tiktok' | translate }}</span>
         </button>
-        <button
-          class="tiktok-btn-cnx"
-          [className]="isLoading ? 'center-div' : 'tiktok-btn-cnx'"
-          (click)="addThreadsAccount()"
-          *ngIf="!checkThreadsExist"
-        >
-          <ng-container *ngIf="!isLoading">
-            <img src="./assets/Images/threads-logo.svg" width="24px" />
-            <span > {{ 'social_networks.add_threads' | translate }}</span>
-          </ng-container>
-          <div *ngIf="isLoading"
-                class="spinner-border text-light"
-                role="status"
-          >
-            <span class="sr-only">Loading...</span>
-          </div>
-        </button>
+        
       </div>
     </div>
   </div>

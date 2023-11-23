@@ -4,6 +4,7 @@ import { TokenStorageService } from '../tokenStorage/token-storage-service.servi
 import { Observable } from 'rxjs';
 import { sattUrl } from 'src/app/config/atn.config';
 import { IGetSocialNetworksResponse } from '../../store/social-accounts/reducers/social-accounts.reducer';
+import Cookies from 'js-cookie';
 @Injectable({
   providedIn: 'root'
 })
@@ -35,46 +36,49 @@ export class ProfileService {
   }
   getSocialNetworks() {
     return this.http.get<IGetSocialNetworksResponse>(
-      sattUrl + '/profile/socialAccounts'
+      sattUrl + '/external/socialAccounts'
+      
     );
   }
   // /profile/socialAccounts
   deleteOneSocialNetworksGoogle(id: string) {
-    return this.http.delete(sattUrl + '/profile/RemoveGoogleChannel/' + id);
+    return this.http.delete(sattUrl + '/external/RemoveGoogleChannel/' + id);
   }
   deleleteAllSocialNetworksTwitter() {
-    return this.http.delete(sattUrl + '/profile/RemoveTwitterChannels');
+    return this.http.delete(sattUrl + '/external/RemoveTwitterChannels');
   }
   deleteOneSocialNetworksTwitter(id: string) {
-    return this.http.delete(sattUrl + '/profile/RemoveTwitterChannel/' + id);
+    return this.http.delete(sattUrl + '/external/RemoveTwitterChannel/' + id);
   }
   deleleteAllSocialNetworksGoogle() {
-    return this.http.delete(sattUrl + '/profile/RemoveGoogleChannels');
+    return this.http.delete(sattUrl + '/external/RemoveGoogleChannels');
   }
   deleleteAllSocialNetworksFb() {
-    return this.http.delete(sattUrl + '/profile/RemoveFacebookchannels');
+    
+    return this.http.delete(sattUrl + '/external/RemoveFacebookchannels');
   }
   deleteOneSocialNetworksFb(id: string) {
-    return this.http.delete(sattUrl + '/profile/RemoveFacebookChannel/' + id);
+    
+    return this.http.delete(sattUrl + '/external/RemoveFacebookChannel/' + id);
   }
   deleteAllSocialNetworksLinkedin() {
-    return this.http.delete(sattUrl + '/profile/RemoveLinkedInChannels');
+    return this.http.delete(sattUrl + '/external/RemoveLinkedInChannels' );
   }
   deleteOneSocialNetworksLinkedin(organization: string,linkedinId:string) {
+   
     return this.http.delete(
-      sattUrl + '/profile/remove/'+ linkedinId+'/linkedInChannel/'+ organization
-      
+      sattUrl + '/external/remove/'+ linkedinId+'/linkedInChannel/'+ organization
     );
   }
 
   deleteTiktokChannel(tiktokProfileId: string) {
     return this.http.delete(
-      sattUrl + '/profile/RemoveTiktokChannel/' + tiktokProfileId
-      
+      sattUrl + '/external/RemoveTiktokChannel/' + tiktokProfileId 
     );
   }
+
   deleteAllTiktokChannels() {
-    return this.http.delete(sattUrl + '/profile/RemoveTiktokChannels');
+    return this.http.delete(sattUrl + '/external/RemoveTiktokChannels');
   }
 
   updateprofile(body: any) {

@@ -1,6 +1,6 @@
 import {  HttpClientModule } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
-import { ProfileService } from "@core/services/profile/profile.service";
+import { ProfileService } from "./../../../core/services/profile/profile.service";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";

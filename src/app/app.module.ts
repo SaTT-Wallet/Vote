@@ -8,14 +8,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxEditorModule } from 'ngx-editor';
-import { HttpClient, HttpClientModule } from '@angular/common/http'; 
+import { HttpClient, HttpClientModule,HTTP_INTERCEPTORS  } from '@angular/common/http'; 
 import { translateBrowserLoaderFactory } from './core/loaders/translate-browser.loader';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AppInterceptor } from './http-interceptor.service';
 
 
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 @NgModule({
   declarations: [
     AppComponent
@@ -38,14 +36,7 @@ export function createTranslateLoader(http: HttpClient) {
     }),
   ],
   exports:[TranslateModule], 
-  providers: [TranslateService],
+  providers: [{ provide: 'isBrowser', useValue: true }, {provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
-  constructor(private translate: TranslateService) {
-    // Set the default language
-    translate.setDefaultLang('en');
-    // Use the default language
-    translate.use('en');
-  }
-}
+export class AppModule {}
