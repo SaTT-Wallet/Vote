@@ -95,7 +95,7 @@ export class VoteService {
   this.apiprofilService.createUser(wallet.toLowerCase()).subscribe(
     (res:any) => {
       console.log({res})
-     Cookies.set('userId', res.data._id)
+     Cookies.set('userId', res.data.UserId)
     }, (err:any) => {
       console.error(err)
     }
