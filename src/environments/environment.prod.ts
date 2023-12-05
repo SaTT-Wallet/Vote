@@ -16,12 +16,12 @@ export const environment = {
   bsc_node: 'https://bsc-dataseed1.binance.org/',
 
   chainIDDecimal: '1',
-  chainIDHex: '0x38',
-  chainName: 'Binance Smart Chain Mainnet',
+  chainIDHex: '0x61',
+  chainName: 'Binance Smart Chain Testnet',
   currencySymbol: 'BNB',
-  rpcURL: 'https://bsc-dataseed.binance.org/',
-  blockExplorerURL: 'https://bscscan.com/',
-  sattContractAdress: '0x448bee2d93be708b54ee6353a7cc35c4933f1156',
+  rpcURL: 'https://bsc-testnet.publicnode.com',
+  blockExplorerURL: 'https://testnet.bscscan.com/',
+  sattContractAdress: '0x6fAc729f346A46fC0093126f237b4A520c40eb89',
   network: 'bsc',
 
   strategies: [

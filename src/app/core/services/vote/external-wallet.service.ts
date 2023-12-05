@@ -159,6 +159,7 @@ export class ExternalWalletService {
     if (this.isMetaMaskInstalled) {
       window.ethereum.request({ method: 'eth_chainId' })
         .then((chainId: any) => {
+          console.log({chainId})
           if (this.isWalletConnected && chainId !== env.chainIDDecimal && chainId !== env.chainIDHex) {
             this.networkHasChanged = true;
           } else if (this.isWalletConnected && (chainId === env.chainIDDecimal || chainId === env.chainIDHex)) {
@@ -219,9 +220,9 @@ export class ExternalWalletService {
     const provider = await detectEthereumProvider();
     if (connectValue !== null && connectValue === 'true') {
       this.connect = true;
-      if (this.isWalletConnected) {
+      /*if (this.isWalletConnected) {
         await this.checkChangedNetworkOrChainID();
-      }
+      }*/
       await this.checkChangedAccounts();
     } else {
       this.connect = false;
