@@ -247,13 +247,13 @@ export class RecoverGainsComponent implements OnInit {
 
   goToCampaign() {
     //  this.router.navigate([".."]);
-    this.router.navigate(['/home/campaign', this.campaignId], {
+    this.router.navigate(['/campaign', this.campaignId], {
       queryParams: { page: 'campaign' }
     });
   }
   back() {
     //  this.location.back();
-    // this.router.navigate(['/home/campaign/' + this.campaignId]);
+    // this.router.navigate(['/campaign/' + this.campaignId]);
     this.router.navigate(['/home/farm-posts']);
   }
 

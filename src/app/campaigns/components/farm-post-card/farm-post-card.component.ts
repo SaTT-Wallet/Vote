@@ -219,7 +219,7 @@ export class FarmPostCardComponent implements OnInit {
       (res) => {
         network = res.data.token.type;
         this.router.navigate(
-          [`/home/campaign/${prom.campaign._id}/recover-my-gains`],
+          [`/campaign/${prom.campaign._id}/recover-my-gains`],
           {
             queryParams: {
               prom_hash: prom.hash,
@@ -231,7 +231,7 @@ export class FarmPostCardComponent implements OnInit {
       },
       (err: any) => {
         this.router.navigate(
-          [`/home/campaign/${prom.campaign._id}/recover-my-gains`],
+          [`/campaign/${prom.campaign._id}/recover-my-gains`],
           {
             queryParams: { prom_hash: prom.hash, id: prom.campaign._id }
           }
@@ -264,7 +264,7 @@ export class FarmPostCardComponent implements OnInit {
   }
 
   goToCampaignDetail(campaignId: string) {
-    this.router.navigate(['/home/campaign/', campaignId]);
+    this.router.navigate(['/campaign/', campaignId]);
   }
 
   onCheckboxChange(event: any, form: any) {

@@ -15,8 +15,8 @@ import TurndownService from 'turndown';
 // import { SnapshotService } from 'src/app/core/services/vote/snapshot.service';
 import { marked } from 'marked';
 import { Proposal } from '@app/models/proposal.model';
-import { SnapshotService } from '@app/core/services/vote/snapshot.service';
 import { NotificationService } from '@app/core/services/notification/notification.service';
+import { SnapshotService } from '@app/vote/snapshot.service';
 
 declare global {
   interface Window {
@@ -119,7 +119,7 @@ export class CreateProposalComponent implements OnInit, OnDestroy {
       const httpProvider = new Web3.providers.HttpProvider(env.bsc_node);
       const web3 = new Web3(httpProvider);
       // this.web3 = web3.eth as unknown as Web3Provider;
-      const blockNumber: bigint = await web3.eth.getBlockNumber();
+      const blockNumber: bigint = BigInt(await web3.eth.getBlockNumber());
       this.snapshot = Number(blockNumber);
       
       // await web3.eth.getBlockNumber((error: any, blockNumber: any) => {

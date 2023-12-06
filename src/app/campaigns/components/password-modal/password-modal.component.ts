@@ -647,7 +647,7 @@ let dateInSeconds = Math.floor(date.getTime() / 1000);
       .pipe(takeUntil(this.onDestoy$))
       .subscribe((draft: Campaign) => {
         this.idcamp = draft.id || '';
-        this.router.navigate(['home/campaign', this.idcamp, 'edit']);
+        this.router.navigate(['campaign', this.idcamp, 'edit']);
       });
   }
   backToCampaign(): void {

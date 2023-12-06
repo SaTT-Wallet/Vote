@@ -292,7 +292,7 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
   }
   connect(social: any) {
     if(social === 'threads') {
-      this.router.navigate(['/settings/social-networks']);
+      this.router.navigate(['/social-networks']);
     } else {
       var linkFacebook: string =
       sattUrl +
@@ -1688,7 +1688,7 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
     this.isLinkConfirmationChecked = !this.isLinkConfirmationChecked;
   }
   goBack(campaignId: any) {
-    this.router.navigate(['home/campaign', campaignId]);
+    this.router.navigate(['campaign', campaignId]);
   }
   showLinkedMessage() {
     this.linked = false;

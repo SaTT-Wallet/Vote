@@ -139,11 +139,11 @@ export class AdPoolGridComponent implements OnInit, OnChanges {
   }
 
   goToEditPage(id: string) {
-    this.router.navigate(['home/campaign', id, 'edit']);
+    this.router.navigate(['campaign', id, 'edit']);
   }
   goToDetailsPage(id: string) {
     if (this.deletebutton === false) {
-      this.router.navigate(['home/campaign', id]);
+      this.router.navigate(['campaign', id]);
     }
   }
 

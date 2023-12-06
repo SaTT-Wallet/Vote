@@ -85,7 +85,7 @@ export class TransactionMessageStatusComponent implements OnInit {
           this.isFailure = true;
         } else {
           if (!!this.campaignId) {
-            this.router.navigate(['home/campaign', this.campaignId]);
+            this.router.navigate(['campaign', this.campaignId]);
           } else {
             this.router.navigate(['home/ad-pools']);
           }
@@ -94,7 +94,7 @@ export class TransactionMessageStatusComponent implements OnInit {
       });
     if (this.isSuccessful === null && this.isFailure === null) {
       if (!!this.campaignId) {
-        this.router.navigate(['home/campaign', this.campaignId]);
+        this.router.navigate(['campaign', this.campaignId]);
       } else {
         this.router.navigate(['home/ad-pools']);
       }
@@ -110,7 +110,7 @@ export class TransactionMessageStatusComponent implements OnInit {
     this.router.navigate(path);
   }
   goToCampaign() {
-    this.router.navigate(['home/campaign', this.campaignId]);
+    this.router.navigate(['campaign', this.campaignId]);
     // .then(() => {
     //     window.location.reload();
     //   })

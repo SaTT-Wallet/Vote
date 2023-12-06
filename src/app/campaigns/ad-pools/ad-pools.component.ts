@@ -51,7 +51,6 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
   show: boolean = true;
   picUserUpdated: boolean = false;
   user!: User;
-  userPicture: any;
   subscription: Subscription | undefined;
   isLoading = true;
   introJS = introJs();
@@ -148,7 +147,7 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.onDestoy$))
       .subscribe((draft: Campaign) => {
         this.idcamp = draft.id || '';
-        this.router.navigate(['home/campaign', this.idcamp, 'edit']);
+        this.router.navigate(['campaign', this.idcamp, 'edit']);
       });
   }
   sortList(array: any) {

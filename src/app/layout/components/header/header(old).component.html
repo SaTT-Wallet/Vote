@@ -57,7 +57,7 @@
           <ul class="navbar-nav"  >
             <li class="btnTest dropdown " style=" width:50%;" *ngIf="router.url!=='password_wallet'" >
               <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink2" role="button" aria-haspopup="true" aria-expanded="false" style="margin-top: 3px ;cursor:default">
-                <img class="avatarimage rounded-circle img2 border:none " [src]=" user?.userPicture " width="60" height="60" (error)="onImgError($event)" style="cursor:default " />
+                <!-- <img class="avatarimage rounded-circle img2 border:none " [src]=" user?.userPicture " width="60" height="60" (error)="onImgError($event)" style="cursor:default " /> -->
                 <span class="user mt-2 " *ngIf="user?.firstName && user?.lastName">{{ user?.getFullName() }}</span>
               </a>
               <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink2" role="button" aria-haspopup="true" aria-expanded="false" 

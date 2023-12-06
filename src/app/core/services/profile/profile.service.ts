@@ -4,6 +4,7 @@ import { sattUrl } from '@config/atn.config';
 import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
 import { Observable } from 'rxjs';
 import { IresponseCodeQr } from '@app/core/iresponse-code-qr';
+import { IGetSocialNetworksResponse } from '@app/layout/components/social-networks/social-networks.component';
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +35,10 @@ export class ProfileService {
     )
   }
   getSocialNetworks() {
-
+    return this.http.get<IGetSocialNetworksResponse>(
+      sattUrl + '/external/socialAccounts'
+      
+    );
   }
   // /profile/socialAccounts
   deleteOneSocialNetworksGoogle(id: string) {

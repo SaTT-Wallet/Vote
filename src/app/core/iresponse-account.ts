@@ -38,7 +38,6 @@ export interface IresponseAccount {
     recieveNews: string;
     tikTokLink: string;
     twitterLink: string;
-    userPicture: string;
     userSatt: boolean;
     visitPassphrase: boolean;
     youtubeLink: string;

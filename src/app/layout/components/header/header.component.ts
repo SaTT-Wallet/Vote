@@ -40,6 +40,8 @@ import {
   take,
   first
 } from 'rxjs/operators';
+import Web3Provider from 'web3';
+
 import { WalletFacadeService } from '@core/facades/wallet-facade.service';
 import { AuthStoreService } from '@core/services/Auth/auth-store.service';
 import { WalletService } from '@app/core/services/wallet/wallet.service';
@@ -58,6 +60,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { REPL_MODE_STRICT } from 'repl';
 import { Title } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { VoteService } from '@app/core/services/vote/vote.service';
+import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
 const bscan = environment.bscanaddr;
 const etherscan = environment.etherscanaddr;
 const tronScanAddr = environment.tronScanAddr;
@@ -81,6 +85,11 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('myprofile') myprofile?: ElementRef;
   bnbGaz: any;
   ethGaz: any;
+  web3 !: Web3Provider;
+
+  provider!: any;
+  formattedCreator: string | undefined;
+  public walletConnected!: boolean;
   languageSelected: any;
   dataNotification: any[] = [];
   user!: User;
@@ -89,9 +98,11 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   showWallet: boolean = false;
   showMenuNotif: boolean = false;
   showMenuProfil: boolean = false;
+  account!: string[];
   isTransactionHashCopiedtron = false;
   private connectModal!: TemplateRef<any>;
   existV2: any;
+  public walletId: string = '';
 
   isDropdownOpen: boolean = true;
   tronAddress: string = '';
@@ -203,6 +214,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     private accountFacadeService: AccountFacadeService,
     private NotificationService: NotificationService,
     public router: Router,
+    public voteService: VoteService,
     private tokenStorageService: TokenStorageService,
     public translate: TranslateService,
     public sidebarService: SidebarService,
@@ -215,6 +227,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     private walletFacade: WalletFacadeService,
     private renderer: Renderer2,
     private walletService: WalletService,
+    public externalWalletService: ExternalWalletService,
     private campaignFacade: CampaignsService,
     private profileSettingsFacade: ProfileSettingsFacadeService,
     private socialAccountFacadeService: SocialAccountFacadeService,
@@ -465,6 +478,37 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         this.showConnectButton = true;
       }
     }
+
+    this.isConnected = false;
+    setInterval(async () => {
+      await this.voteService.checkWalletConnected();
+    }, 700);
+  
+  }
+
+  show() {
+    this.voteService.showNetworkHasChanged();
+  }
+  hide() {
+    this.voteService.hideNetworkHasChanged();
+  }
+  showInstall() {
+    this.voteService.showInstall();
+  }
+
+  hideInstall() {
+    this.voteService.hideInstall();
+  }
+
+  async changeNetwork() {
+    // if (this.externalWalletService.networkHasChanged) {
+    await this.externalWalletService.changeToBinance(window.ethereum).then(() => {
+      this.voteService.hideNetworkHasChanged();
+    })
+      .catch(() => {
+        // this.hide();
+      });
+    // }
   }
 
   isDisplayNew() {
@@ -755,7 +799,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
           if (response.message === 'notification_seen') {
             this.getNotifications();
             if (notif?.label?.cmp_hash) {
-              this.router.navigate(['home/campaign', notif.label.cmp_hash], {
+              this.router.navigate(['campaign', notif.label.cmp_hash], {
                 queryParams: { type: 'earnings' }
               });
             } //if the notification has cmp_has it will redirect to campaign detail component
@@ -797,7 +841,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             if (notif?.label?.cmp_hash && notif?.label?.linkHash) {
               // console.log(notif?.label?.promHash)
-              this.router.navigate(['home/campaign', notif.label.cmp_hash], {
+              this.router.navigate(['campaign', notif.label.cmp_hash], {
                 queryParams: {
                   linkHash: notif?.label?.linkHash,
                   type: 'earnings'
@@ -811,7 +855,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (notif.isSeen === true) {
       this.getNotifications();
       if (notif?.label?.cmp_hash) {
-        this.router.navigate(['home/campaign', notif.label.cmp_hash], {
+        this.router.navigate(['campaign', notif.label.cmp_hash], {
           queryParams: { type: 'earnings' }
         });
       } //if the notification has cmp_has it will redirect to campaign detail component
@@ -851,7 +895,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       if (notif?.label?.cmp_hash && notif?.label?.linkHash) {
         // console.log(notif?.label?.promHash)
-        this.router.navigate(['home/campaign', notif.label.cmp_hash], {
+        this.router.navigate(['campaign', notif.label.cmp_hash], {
           queryParams: { linkHash: notif?.label?.linkHash, type: 'earnings' }
         });
       }
@@ -866,6 +910,9 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   sattConnect() {
     this.closeModal();
     this.router.navigateByUrl('/auth/login');
+  }
+  Disconnect() {
+    this.voteService.Disconnect();
   }
   siwtchFunction(item: any) {
     const etherInWei = new Big(1000000000000000000);
@@ -1637,6 +1684,55 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       
     );
   }
+
+  connectWallet = async (walletType: string) => {
+    if (walletType === 'metamask') {
+      if (this.externalWalletService.isMetaMaskInstalled) {
+        this.provider = await this.externalWalletService.connectMetamask();
+      } else {
+        this.showInstall();
+      }
+      if (this.externalWalletService.connect === true) {
+        // localStorage.setItem('connect', 'true');
+      }
+    } else if (walletType === 'trust') {
+      // this.provider = await this.externalWalletService.connectTrust();
+    } else {
+      throw new Error('Invalid wallet type');
+    }
+    if (typeof window.ethereum !== 'undefined') {
+      this.web3 = new Web3Provider(window.ethereum);
+      this.account = await this.web3.eth.getAccounts();
+      await this.externalWalletService.checkConnectedWallet();
+    }
+    // const dialog = document.querySelector('dialog');
+    // if (dialog) {
+    //   dialog.close();
+    // }
+  }
+
+  checkWalletConnected = async () => {
+    // console.log("body", this.createProposalForm.value.body)
+    if (typeof window.ethereum !== 'undefined') {
+      const accounts = await this.externalWalletService.checkConnectedWallet();
+      if (accounts.length > 0) {
+        this.walletConnected = true;
+        this.walletId = accounts[0];
+        this.formattedCreator = `${this.walletId.substr(0, 4)}...${this.walletId.substr(-3)}`;
+        // this.vp = await this.snapshotService.getVotingPower(this.walletId);
+      }
+      // else {
+      //   this.externalWalletService.connect = false;
+      //   // localStorage.setItem('connect', 'false');
+      // }
+    }
+  }
+  connectMetaMask() {
+    this.voteService.hideConnectDialog(this.connectModal);
+    this.voteService.connectWallet('metamask')
+  }
+
+
   ngOnDestroy(): void {
     
     if (!!this.isDestroyed$) {

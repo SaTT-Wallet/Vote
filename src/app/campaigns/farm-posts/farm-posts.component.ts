@@ -183,7 +183,7 @@ export class FarmPostsComponent implements OnInit {
   }
 
   goToDetailsPage(id: string) {
-    this.router.navigate(['/home/campaign/' + id], {
+    this.router.navigate(['/campaign/' + id], {
       queryParams: { type: 'earnings' }
     });
   }

@@ -16,12 +16,15 @@ export class NotificationService {
   public currentMessage: BehaviorSubject<any> = new BehaviorSubject(null);
   public newNotification: BehaviorSubject<any> = new BehaviorSubject(false);
   public triggerFireBaseNotifications = new Subject();
-
+  message!: string;
+    isSuccess!: boolean;
+    show: boolean = false;
   readonly notifications$ = this.currentMessage.asObservable().pipe(
     filter((message) => {
       return message !== null;
     })
   );
+
   constructor(
     private http: HttpClient,
     private angularFireMessaging: AngularFireMessaging,
@@ -54,6 +57,16 @@ export class NotificationService {
       data
     );
   }
+
+  showNotification(message: string, isSuccess: boolean) {
+    this.show = true;
+    this.message = message;
+    this.isSuccess = isSuccess;
+    setTimeout(() => {
+        this.message = '';
+        this.show = false;
+    }, 5000);
+}
 
   requestPermission() {
     if (!!this.angularFireMessaging) {

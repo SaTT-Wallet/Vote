@@ -43,7 +43,7 @@ export class VerifyLinkComponent implements OnDestroy {
   }
 
   goToCampaign() {
-    this.router.navigate(['/home/campaign', this.campaignId], {
+    this.router.navigate(['/campaign', this.campaignId], {
       queryParams: { page: 'campaign' }
     });
   }

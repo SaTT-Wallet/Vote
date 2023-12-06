@@ -4,7 +4,7 @@ import axios from 'axios';
 import { environment as env } from '../../../../environments/environment.prod';
 import { Observable } from 'rxjs';
 import { Proposal } from '@app/models/proposal.model';
-import { SnapshotService } from '@app/core/services/vote/snapshot.service';
+import { SnapshotService } from '@app/vote/snapshot.service';
 
 @Component({
   selector: 'app-proposal-list',

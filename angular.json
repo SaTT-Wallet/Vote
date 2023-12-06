@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["ng2-validation","moment","lodash","file-saver","jszip","libphonenumber-js"],
             "outputPath": "dist/frontend",
             "index": "src/index.html",
             "main": "src/main.ts",

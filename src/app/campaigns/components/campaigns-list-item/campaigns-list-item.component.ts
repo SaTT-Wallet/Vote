@@ -91,7 +91,7 @@ truncateTitle(title: string): string {
     // const currentUrl = this.router.url;
     // if(this.deletebutton==false){
     //   this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //     this.router.navigate(['/home/campaign'+this.campaign.id]);
+    //     this.router.navigate(['/campaign'+this.campaign.id]);
     // });
     // }
     // this.router.navigate(["home/campaign", this.campaign.id])
@@ -99,11 +99,11 @@ truncateTitle(title: string): string {
     //   window.location.reload();
     // })
     // this.router.navigateByUrl('/', {skipLocationChange: false}).then(() => {
-    //       this.router.navigate(['/home/campaign'+this.campaign.id]);
+    //       this.router.navigate(['/campaign'+this.campaign.id]);
     //   });
     // window.location.reload();
     if (this.deletebutton === false) {
-      this.router.navigate(['home/campaign', id]);
+      this.router.navigate(['campaign', id]);
     }
   }
   onImgError(event: any) {
@@ -127,7 +127,7 @@ truncateTitle(title: string): string {
         this.tokenStorageService.saveWalletBtc(data.data.btcAddressV2);
         this.walletStoreService.getCryptoList();
         this.walletStoreService.getTotalBalance();
-        this.router.navigate(['home/campaign', id, 'edit']);
+        this.router.navigate(['campaign', id, 'edit']);
       });
   }
 

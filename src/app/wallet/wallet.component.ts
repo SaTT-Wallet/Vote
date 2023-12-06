@@ -1442,19 +1442,10 @@ export class WalletComponent implements OnInit, OnDestroy {
       .subscribe((profile: any) => {
         if (!!profile) {
           let objectURL = URL.createObjectURL(profile);
-          if (this.user.idSn === 0) {
-            this.user.userPicture =
-              this.sanitizer.bypassSecurityTrustUrl(objectURL);
-          }
-          if (this.picUserUpdated && this.user.idSn !== 0) {
-            this.user.userPicture =
-              this.sanitizer.bypassSecurityTrustUrl(objectURL);
-          }
+
         }
 
-        if (this.user.picLink && !this.user.userPicture) {
-          this.user.userPicture = this.user?.picLink;
-        }
+
       });
   }
 
@@ -1480,7 +1471,7 @@ export class WalletComponent implements OnInit, OnDestroy {
   }
   goToCampaign() {
     this.closeRedBloc();
-    this.router.navigate(['home/campaign', id_campaign_to_participate]);
+    this.router.navigate(['campaign', id_campaign_to_participate]);
     this.sidebarService.toggleSidebarMobile.next(false);
   }
   closeRedBloc() {

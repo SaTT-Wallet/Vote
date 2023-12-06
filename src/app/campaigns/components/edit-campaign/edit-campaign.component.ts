@@ -294,7 +294,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   }
   goToView() {
     // this.router.navigate(['home/campaign/', this.draftId]);
-    this.router.navigateByUrl('/home/campaign/'+this.draftId+'?mode=edit');
+    this.router.navigateByUrl('/campaign/'+this.draftId+'?mode=edit');
 
   }
   scrollToTop() {

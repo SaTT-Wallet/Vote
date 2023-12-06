@@ -5,17 +5,88 @@
       /* margin-left: 56px; */
       align-items: center;
       list-style: none;
-      padding: 5px;
+      padding: 0;
       margin-top: 12px;
       display: none !important;
     }
   }
+}
 
+@media (max-width: 768px) {
+  .button-connect {
+    width: 184px !important;
+    font-size: 15px !important;
+    padding: 10px 16px !important;
+  }
+  a.btn.dropdown-toggle.dropdown-toggle-content {
+    width: 195px !important;
+  }
+}
+.vote{
+  font-weight: 700;
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  // .d-md-block.d-xl-none.d-lg-none.d-sm-block {
+  //   display: none !important;
+  // }
+}
+// @media (min-width: 767px){
+
+// }
+// @media (max-width: 767px) {
+//   .phone {
+//     position: relative !important;
+//   }
+//   .d-md-block.d-xl-none.d-lg-none.d-sm-block {
+//     position: absolute !important;
+//     right: 0 !important;
+//     top: 10px;
+//   }
+//   .right_nav_side {
+//     display: none !important;
+//   }
+// }
+
+.phone {
+  display: none;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(31, 35, 55, 0.7);
+}
+@media (max-width: 767px) {
+  .wallet-connect-button {
+    width: 80%
+  }
+  .close-button {
+    position: fixed;
+    right: 0;
+    left: 85%;
+    top: 0;
+  }
+  
+  .description-image {
+    margin-top: 25vh;
+    width: 25%;
+  }
+  .modal-title {
+    margin-top: 5vh;
+    text-align: center;
+  }
+
+  .buttons-block {
+    margin-top: 4vh;
+  }
 
   
 }
-
-
 
 .wallet-connect-type {
   max-width: 100%;
@@ -117,10 +188,37 @@
   margin-top: 0 !important; 
    
  }
+/* // .modal-header {
+//   padding: none !important;
+// } */
+.modal-title {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  letter-spacing: 1px;
+  letter-spacing: 1px;
+  /* // padding-top: 15px;
+  // padding-bottom: 30px; */
+}
+
+.modal-body {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  color: #212529;
+  text-align: center;
+  /* // padding-top: 30px;
+  // margin-top: 15px; */
+}
+
 #title_wallet {
   // position: absolute;
   // top: 10%;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -133,7 +231,7 @@
 #biarrow-repeat-icon {
   position: absolute;
   top: 10%;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -143,31 +241,8 @@
   letter-spacing: 1px;
 }
 
-@media (max-width: 767px) {
-  .wallet-connect-button {
-    width: 80%
-  }
-  .close-button {
-    position: fixed;
-    right: 0;
-    left: 85%;
-    top: 0;
-  }
-  
-  .description-image {
-    margin-top: 25vh;
-    width: 25%;
-  }
-  .modal-title {
-    margin-top: 5vh;
-    text-align: center;
-  }
-
-  .buttons-block {
-    margin-top: 4vh;
-  }
-
-  
+#intro11 span {
+  cursor: pointer;
 }
 @media (max-height: 780px) {
   .container-qr {
@@ -230,8 +305,6 @@
     padding: 11px;
     margin-left: -31px !important;
     margin-top: -24px; */
-  margin-top: -0.5em;
-  padding-top: 0px;
   height: 48px;
 }
 
@@ -558,6 +631,8 @@ a.click-to-top:hover span {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  position: absolute;
+  right: 1em;
   /* gap: 5px; */
 }
 
@@ -691,21 +766,6 @@ ul.dropdown-menu.notif_drop_main.show {
   display: none;
 }
 
-
-.ul-left-side {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.li-menu {
-  flex:auto;
-  white-space: nowrap;
-  padding:5px;
-  margin-left: -1%;
-  align-content: center;
-}
 @media (max-height: 850px) {
   ul.dropdown-menu.notif_drop_main.show {
     /*
@@ -715,26 +775,22 @@ ul.dropdown-menu.notif_drop_main.show {
   }
 }
 
-/*@media (max-width: 880.98px) {
+@media (max-width: 880.98px) {
   .li-menu {
     padding: 5px !important;
-    width: auto;
   }
-}*/
+}
 
-/*@media (max-width: 1111px) and (min-width: 768px) {
+@media (max-width: 1111px) and (min-width: 768px) {
   /* .right-menu {
         display: none;
     } */
-  /*.li-menu {
+  .li-menu {
     margin: 0 !important;
-    padding: 5px !important;
-    width: auto;
-    flex-grow: 1 !important;
   }
   .height-fluid {
     height: 44px;
-    justify-content: flex-start !important;
+    // justify-content: flex-start !important;
   }
   .chevron-wallet {
     display: none;
@@ -745,23 +801,23 @@ ul.dropdown-menu.notif_drop_main.show {
     border-radius: 50%;
     width: 45px !important;
     gap: 0 !important;
-  }*/
+  }
   /* ul.dropdown-menu.notif_drop_main.show {
         width: 300px;
         height: 90vh;
-    } *//*
+    } */
   .notifBody {
     max-width: 240px;
   }
   .link-hash {
     width: auto !important;
   }
-  .li-menu-profil {
-    display: none !important;
-  }
-  .notif-md-link {
-    display: block !important;
-  }
+  // .li-menu-profil {
+  //   display: none !important;
+  // }
+  // .notif-md-link {
+  //   display: block !important;
+  // }
   .notifLink {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
@@ -770,7 +826,7 @@ ul.dropdown-menu.notif_drop_main.show {
     position: absolute;
   }
 }
-*/
+
 .dropdown-tablette-profile-md.show {
   transform: translate3d(-8px, 21px, 0px) !important;
 }
@@ -918,7 +974,8 @@ ul.droptrans.show {
 }
 
 li {
-  font-size: 14px;}
+  font-size: 14px;
+}
 
 .navbar .show {
   display: block;
@@ -983,7 +1040,7 @@ ul .notif_drop_main {
 
 .clear-fix:before,
 .clear-fix:after {
-  content: ' ';
+  content: " ";
   display: table;
 }
 
@@ -1243,9 +1300,9 @@ li:focus {
 }
 
 .chevron:before {
-  font-style: normal, 'Open Sans', sans-serif, 'FontAwesome' !important;
+  font-style: normal, "Open Sans", sans-serif, "FontAwesome" !important;
   font-size: 0.9rem;
-  content: '\f107';
+  content: "\f107";
   display: inline-block;
   line-height: 22px;
   color: #ffffff;
@@ -1271,9 +1328,20 @@ li:focus {
   /* width: 45px !important; */
   width: 48px !important;
 }
-
+div#intro4.dropdown2.show {
+  width: fit-content;
+  height: fit-content;
+}
+ul {
+  width: fit-content;
+  height: fit-content;
+}
+.li-menu-profil {
+  width: fit-content;
+  height: fit-content;
+}
 .dropdown2.show {
-  transform: translate3d(0px, 63px, 0px) !important;
+  transform: translate3d(0px, 20px, 0px) !important;
 }
 
 .span-userName {
@@ -1282,22 +1350,61 @@ li:focus {
   font-size: 14px;
   line-height: 26px;
   color: #ffffff;
-  width: 90px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  display: block;
-  margin-top: -20%;
-  margin-left: 25%;
+  // width: 90px;
+  // text-overflow: ellipsis;
+  // white-space: nowrap;
+  // overflow: hidden;
+  // display: block;
+  // margin-top: -20%;
+  // margin-left: 25%;
+  // margin: 0;
+  // position: absolute;
+  // top: 50%;
+  // -ms-transform: translateY(-50%);
+  // transform: translateY(-50%);
+  margin-left: 30px;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+a.btn.dropdown-toggle.dropdown-toggle-content img {
+  margin: 0;
+  margin-left: 5px;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  // width: 25px;
+  // height: 25px;
+  padding: 3px;
+  border-radius: 50px;
+  border: #fff solid 0.3px;
+}
+
+a.btn.dropdown-toggle.dropdown-toggle-content {
+  width: 211.48px;
 }
 
 .icoo {
   font-size: 18px;
 }
-
 .deconnect_icon {
-  border-top: 1px solid rgba(173, 173, 200, 0.3);
+  // border-top: 1px solid rgba(173, 173, 200, 0.3);
   color: #ffffff;
+  height: 100%;
+  // padding: 8px;
+  // border-bottom-right-radius: 30px;
+  // border-bottom-left-radius: 30px;
+  // background-color: #ffff;
+  // color: #323754;
+}
+
+.deconnect_icon a {
+  color: #ffffff;
+  height: 100%;
+  padding-bottom: 10px;
 }
 
 .profil_icon :hover,
@@ -1458,7 +1565,7 @@ li:focus {
 #change-wallet-title-phishing-show {
   position: absolute;
   top: 8vh;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -1469,7 +1576,7 @@ li:focus {
 #change-wallet-title {
   position: absolute;
   top: 4vh;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -1659,7 +1766,7 @@ bottom: 77.54% ; */
 }
 
 .TBC {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
@@ -1755,13 +1862,12 @@ bottom: 77.54% ; */
   position: relative;
   top: 5vh;
   margin-bottom: 22px;
-  margin-top: 15vh;
-  font-family: 'Poppins';
+  margin-top: 17.2vh;
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   font-size: 17px;
   line-height: 28px;
-  padding: 4%;
   /* or 140% */
 
   text-align: center;
@@ -1794,7 +1900,7 @@ bottom: 77.54% ; */
 .titleIDW {
   // padding-top: 4vh;
   // padding-bottom: -20px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -1813,7 +1919,7 @@ bottom: 77.54% ; */
 .titleID-Wallet {
   padding-top: 9vh;
   padding-bottom: -20px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -1872,7 +1978,7 @@ bottom: 77.54% ; */
   border-radius: 30px;
   /* width: 174px; */
   /* height: 27px; */
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
@@ -1949,7 +2055,7 @@ bottom: 77.54% ; */
   /* height: 56px; */
   height: 63px;
   width: 100%;
-  z-index: 999 !important;
+  z-index: 998 !important;
   color: white;
   /*  position: fixed;*/
 }
@@ -1965,7 +2071,7 @@ bottom: 77.54% ; */
     180deg,
     rgba(31, 35, 55, 0.35) 17.22%,
     rgba(31, 35, 55, 0) 100%
-  ) !important;
+  );
   /*background: linear-gradient(
     180deg,
     rgba(31, 35, 55, 0.7) 27.82%,
@@ -2010,7 +2116,7 @@ bottom: 77.54% ; */
     top: -3%;
   }
 }
-@media (max-width: 1023.98px) {
+@media (max-width: 1100px) {
   .three-points,
   .div-copy-wallet-mobile,
   .btn-toggle-pic-mobile {
@@ -2024,10 +2130,13 @@ bottom: 77.54% ; */
   ul.dropdown-menu.notif_drop_main.show {
     width: 284px !important;
   }
-  .desktop-menu,
-  .right-menu {
+  .ul-left-side {
+    // .right-menu {
     display: none !important;
   }
+  // .navbar-nav {
+  //   right: 5em !important;
+  // }
   .image-tablette {
     display: none !important;
   }
@@ -2072,22 +2181,7 @@ bottom: 77.54% ; */
   //   ) !important;
   // }
 }
-@media (max-height: 640px) {
-  .qrr_imgg1 {
-    width: 219px;
-    height: 160px;
-  }
-  .title {
-    margin-bottom: 1svh !important;
-    margin-top: 11svh;
-  }
-  #change-wallet-title {
-    top: 2%;
-  }
-  #title_wallet {
-    top: -3%;
-  }
-}
+
 .position_icon_notif_mobile {
   padding-top: 2.7%;
   position: absolute;
@@ -2267,8 +2361,9 @@ bottom: 77.54% ; */
 }
 
 .button-connect {
-  width: 120px;
-  height: 41px;
+  // width: 120px;
+  // height: 41px;
+  padding: 10px 16px;
   border: none;
   background: #f52079;
   color: white;
@@ -2276,8 +2371,9 @@ bottom: 77.54% ; */
   font-size: 18px;
   text-align: center;
   border-radius: 30px;
-  position: absolute;
-  right: 1em;
+  position: relative;
+  // top: 13px;
+  // right: 1em;
   /* padding: 0.5em 1em; */
 }
 

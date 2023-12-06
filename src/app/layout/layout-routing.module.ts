@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '@core/services/auth-guard.service';
 import { PasswordModalComponent } from '../campaigns/components/password-modal/password-modal.component';
 import { LayoutComponent } from './layout.component';
+import { SocialNetworksComponent } from './components/social-networks/social-networks.component';
 
 // import { FarmPostsComponent } from "@app/components/farm-posts/farm-posts.component";
 
@@ -23,7 +24,13 @@ const routes: Routes = [
         canActivate: [AuthGuardService]
       },
 
-      { path: 'home', redirectTo: 'ad-pools', pathMatch: 'full' }
+      { path: 'home', redirectTo: 'ad-pools', pathMatch: 'full' },
+      {
+        path: 'vote',
+        loadChildren: () => import('../vote/vote.module').then((m) => m.VoteModule)
+      },
+      { path: 'social-networks', component: SocialNetworksComponent },
+
     ]
   }
 ];

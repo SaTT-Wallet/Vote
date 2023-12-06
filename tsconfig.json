@@ -3,8 +3,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./src",
-    "skipLibCheck": true,
     "outDir": "./dist/out-tsc",
+    "types": ["web3"],
     "esModuleInterop": true,
     "target": "esnext",
     "module": "es2020",
@@ -62,29 +62,18 @@
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "diagnostics": true,
     "sourceMap": true,
+    "declaration": false,
+    "emitDecoratorMetadata": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "useDefineForClassFields": false
   },
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "path/to/unused-file.ts",
-    // Add more patterns for unused files
-  ],
-  "include": [
-    "src/**/*.ts",  // Include your project files
-    "node_modules/web3-types/src/used-file.ts",
-    // Add more paths for necessary files
-  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
-    "enableIvy": false ,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
 

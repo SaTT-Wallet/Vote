@@ -8,7 +8,7 @@ import { VoteResultsComponent } from './components/vote-results/vote-results.com
 import axios from 'axios';
 import { environment as env } from '../../../../environments/environment.prod';
 import { marked } from 'marked';
-import { SnapshotService } from '@app/core/services/vote/snapshot.service';
+import { SnapshotService } from '@app/vote/snapshot.service';
 
 
 

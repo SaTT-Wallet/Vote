@@ -1013,7 +1013,7 @@ export class CampaignInfoComponent implements OnInit, OnChanges, AfterViewInit {
       });
   }*/
   linkAccount() {
-    this.router.navigate(['/settings/social-networks']);
+    this.router.navigate(['/social-networks']);
   }
 
   campaignMissions(oracle: any) {

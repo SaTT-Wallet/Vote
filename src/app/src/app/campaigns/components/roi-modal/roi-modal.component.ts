@@ -198,7 +198,7 @@ export class RoiModalComponent implements OnInit {
     }
   }
   goToCampaignDetail() {
-    this.router.navigate(['/home/campaign/', this.campaign.id]);
+    this.router.navigate(['/campaign/', this.campaign.id]);
     this.closeModaleEvent.emit(true);
   }
 }
