@@ -123,6 +123,11 @@
 
     <!-- <script src="assets/js/facebook.js"></script> -->
 
+    <script>
+      // Required by some npm packages
+      window.process = { browser: true, env: { ENVIRONMENT: 'BROWSER' } };
+  </script>
+  
     <link
       href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"
       rel="stylesheet"

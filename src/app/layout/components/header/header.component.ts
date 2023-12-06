@@ -111,6 +111,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   gazsend: any;
   erc20Gaz: any;
   bepGaz: any;
+  networkLabel: any = "BSC";
+  networkLogo: any = "bnb"
+  networkList: any[] = [];
+  showNetwork: any = false;
   showNotifications: boolean = false;
   newNotification: boolean = false;
   isSeen: number = 0;
@@ -326,8 +330,29 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 
+  toggleNetworkList() {
+    this.showNetwork = !this.showNetwork;
+  }
+
+  displayNetwork(e: any){
+    this.networkLabel = e.network;
+    this.networkLogo = e.label;
+  }
 
   ngOnInit(): void {
+
+    this.networkList = [
+      {network:"Binance Smart Chain" , label: "bnb" ,logo: "" , adress:"0x742d35Cc6634C0532925a3b844Bc454e4438f44e" },
+      {network:"Etherium" , label: "erc20" ,logo: "" , adress:"0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE" },
+      {network:"Polygon" , label: "polygon" ,logo: "" , adress:"0x4E1000616990D83e56f4f6Ff6208d31e0F52350d" },
+      {network:"Btt" , label: "btt" ,logo: "" , adress:"0xFA456Cf55250A839088b27EE32A424d7DAc7f8c3"  }
+    ]
+
+    this.networkList.forEach(item => {
+      item.logo = `assets/Images/${item.label}.svg`;
+    });
+
+
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
 
