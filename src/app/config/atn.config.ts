@@ -1,6 +1,6 @@
 import { Big } from 'big.js';
 import { environment as env } from '../../environments/environment';
-const sattUrl = env.API_URL;
+const sattUrl = "https://api-preprod2.satt-token.com";
 const ipfsURL = env.ipfsURL;
 const walletUrl = 'http://localhost:4200/#/';
 const bscan = env.bscan;
