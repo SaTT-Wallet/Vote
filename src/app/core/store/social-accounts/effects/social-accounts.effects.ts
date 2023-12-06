@@ -28,21 +28,7 @@ export class SocialAccountsEffects {
           account === null ||
           action.type === loadUpdatedSocialAccountss.type
         ) {
-          return this.socialAccountFacadeService.getSocialNetworks().pipe(
-            map((data: any) => {
-              if (data.message === 'jwt expired') {
-                let error: any = {};
-                error.error = data.message;
-                this.tokenStorageService.signOut();
-                return loadSocialAccountssLogout();
-              } else if (data.message === 'success') {
-                return loadSocialAccountssSuccess({ data });
-              } else {
-                return loadSocialAccountssFailure(data);
-              }
-            }),
-            catchError((error: any) => of(loadSocialAccountssFailure(error)))
-          );
+
         }
         return of(
           loadSocialAccountssSuccess({

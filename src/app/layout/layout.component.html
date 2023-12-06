@@ -1,11 +1,6 @@
-<!-- <ng-container *ngIf="!phishingVisibility">
-  <div class="div1"> -->
-<!-- <img
-      src="assets/Images/moon-boy-warning.svg"
-      alt=""
-      *ngIf="getScreenWidth < 960"
-    /> -->
-<!-- <img
+<ng-container *ngIf="getStorageInformation() !== 'false'">
+  <div class="div1">
+    <img
       id="img-moon-warning"
       src="assets/Images/moon-boy-warning.svg"
       alt=""
@@ -21,13 +16,9 @@
           <a href="https://dapp.satt.com"></a> https://dapp.satt.com</span
         >
         <span class="title-modal"> - check the URL carefully</span>
-      </div> -->
+      </div>
 
-<!-- <div class="close-modale">
-        <img src="assets/Images/closeModal.svg" alt="" />
-      </div> -->
-
-<!-- <span *ngIf="getScreenWidth > 960">
+      <span *ngIf="getScreenWidth > 960">
         <img
           id="cross"
           src="assets/Images/closeModal.svg"
@@ -45,157 +36,21 @@
       />
     </div>
   </div>
-</ng-container> -->
+</ng-container>
 <!-- send phishing visibility to header -->
-<!-- [phishingClosing]="phishingVisibility"
-[ngClass]="{
-  fromWallet: router.url.includes('wallet')
-}"
-*ngIf="router.url !== 'password_wallet'" -->
-<!-- <app-header
- 
+<app-header
+  [phishingClosing]="phishingVisibility"
+  [ngClass]="{
+    fromWallet: router.url.includes('wallet')
+  }"
+  *ngIf="router.url !== 'password_wallet'"
   [ngStyle]="{
-    top: phishingVisibility ? '0' : '10vh',
+    top: getStorageInformation() === 'false' ? '0' : '10vh',
     display: router.url.includes('help') ? 'none' : 'block'
   }"
-></app-header> -->
-<!-- <app-header
- 
-  [ngStyle]="{
-    display: router.url.includes('help') ? 'none' : 'block'
-  }"
-></app-header> -->
-<app-header></app-header>
-
-
-
-<div
-class="modal"
-tabindex="-1"
-role="dialog"
-[ngClass]="{ show: voteService.isNotInstalled }"
 >
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <button
-      type="button"
-      class="close"
-      data-dismiss="modal"
-      aria-label="Close"
-      (click)="voteService.hideInstall()"
-    >
-      <img src="assets/closeModal.svg" />
-    </button>
-    <div class="container">
-      <div class="modal-header">
-        <h5 class="modal-title">Install MetaMask</h5>
-      </div>
-      <div class="modal-body">
-        <p class="install">
-          <img src="assets/icon_alert_info.png" /> Metamask is not
-          installed
-        </p>
-        <img class="qr" src="assets/metamask-qr.png" />
-        <br />
+</app-header>
 
-        <button class="install-btn">
-          <a
-            href="https://metamask.io/download/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="install-button"
-            >Install now</a
-          >
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-<div
-  class="modal"
-  tabindex="-1"
-  role="dialog"
-  [ngClass]="{ show: externalWalletService.networkHasChanged }"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="container">
-        <div class="modal-header">
-          <h5 class="modal-title">Switch Network</h5>
-        </div>
-        <div class="modal-body">
-          <img src="../../../../../../assets/switch_modal_satt.png" />
-          <p class="description">
-            SATT token, a BNB Smart Chain token, is essential for voting,
-            requiring users to switch networks. This integration enables
-            seamless participation, empowering stakeholders to utilize SATT for
-            effective decision-making.
-          </p>
-          <br />
-
-          <div class="btns-switch">
-            <button class="confirm-btn" (click)="voteService.changeNetwork()">
-              Switch to BNB Smart Chain
-            </button>
-
-            <button class="cancel-btn" (click)="voteService.Disconnect()">
-              Disconnect Wallet
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div
-  class="modal"
-  tabindex="-1"
-  role="dialog"
-  [ngClass]="{ show: voteService.isConnectDialog }"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <button
-        type="button"
-        class="close"
-        data-dismiss="modal"
-        aria-label="Close"
-        (click)="voteService.hideConnectDialog()"
-      >
-        <!-- <span aria-hidden="true">&times;</span> -->
-        <img src="assets/closeModal.svg" />
-      </button>
-      <div class="container">
-        <div class="modal-header">
-          <h5 class="modal-title">Connect Wallet</h5>
-        </div>
-        <div class="modal-body">
-          <p class="description">
-            Before proceeding, make sure to connect with your Metamask wallets
-            and ensure that you have securely stored your private keys or seed
-            phrase, without sharing them with anyone.
-          </p>
-          <br />
-          <div class="wallet-buttons">
-            <button
-              class="metamask-btn"
-              (click)="voteService.connectWallet('metamask')"
-            >
-              <img src="../../../../assets/metamask.png" />
-              <p class="description">Metamask</p>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="success" *ngIf="(notificationService.show && notificationService.isSuccess)"><img src="assets/icon_alert_success.png"><p>{{notificationService.message}}</p></div>
-<div class="error" *ngIf="(notificationService.show && !notificationService.isSuccess)"><img src="assets/icon_alert_error.png"><p>{{notificationService.message}}</p></div>
 <div
   class="container-main"
   *ngIf="router.url !== 'password_wallet'"
@@ -203,8 +58,8 @@ role="dialog"
 >
   <app-sidebar></app-sidebar>
   <div
-    [className]="phishingVisibility ? 'center-content' : 'center-content2'"
-    id="center-content"
+  id="center-content"
+  [className]="getStorageInformation() === 'false' ? 'center-content' : 'center-content2'"
     (scroll)="onScroll($event)"
     (window:resize)="onResize($event)"
   >
@@ -212,8 +67,7 @@ role="dialog"
   </div>
 </div>
 
-<app-footer-bar></app-footer-bar>
-<!-- <app-footer-bar
+<app-footer-bar
   [ngClass]="{
     fromWallet: router.url.includes('wallet')
   }"
@@ -223,4 +77,4 @@ role="dialog"
     !router.url.includes('help') &&
     !router.url.includes('/campaign/')
   "
-></app-footer-bar> -->
+></app-footer-bar>

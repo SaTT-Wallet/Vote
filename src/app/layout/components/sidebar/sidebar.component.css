@@ -146,7 +146,7 @@
 
 a[data-toggle='collapse'] {
     position: relative;
-    background-image: url('src/assets/Images/arrow-white-down.svg');
+    background-image: url('assets/Images/arrow-white-down.svg');
     background-repeat: no-repeat;
     background-position: 90% 47%;
 }

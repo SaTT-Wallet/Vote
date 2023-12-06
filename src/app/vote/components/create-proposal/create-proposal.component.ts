@@ -4,7 +4,6 @@ import { FormControl, FormGroup, FormBuilder, NgForm, Validators, FormArray } fr
 import { Editor, Toolbar } from 'ngx-editor';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Proposal } from 'src/app/models/proposal.model';
 import { ProposalType } from '@snapshot-labs/snapshot.js/dist/sign/types';
 // import { SnapshotService } from '@app/core/services/vote/snapshot.service';
 import { Web3Provider } from '@ethersproject/providers';
@@ -13,9 +12,11 @@ import { environment as env } from '../../../../environments/environment.prod';
 import { NgxSpinnerService } from 'ngx-spinner';
 // import * as marked from 'marked';
 import TurndownService from 'turndown';
-import { SnapshotService } from 'src/app/core/services/vote/snapshot.service';
+// import { SnapshotService } from 'src/app/core/services/vote/snapshot.service';
 import { marked } from 'marked';
-import { NotificationService } from 'src/app/core/services/vote/notification.service';
+import { Proposal } from '@app/models/proposal.model';
+import { SnapshotService } from '@app/core/services/vote/snapshot.service';
+import { NotificationService } from '@app/core/services/notification/notification.service';
 
 declare global {
   interface Window {
@@ -118,14 +119,17 @@ export class CreateProposalComponent implements OnInit, OnDestroy {
       const httpProvider = new Web3.providers.HttpProvider(env.bsc_node);
       const web3 = new Web3(httpProvider);
       // this.web3 = web3.eth as unknown as Web3Provider;
-      await web3.eth.getBlockNumber((error, blockNumber) => {
-        if (error) {
-          console.error(error);
-        } else {
-          this.snapshot = blockNumber;
-          // console.log("Current block number: " + blockNumber);
-        }
-      });
+      const blockNumber: bigint = await web3.eth.getBlockNumber();
+      this.snapshot = Number(blockNumber);
+      
+      // await web3.eth.getBlockNumber((error: any, blockNumber: any) => {
+      //   if (error) {
+      //     console.error(error);
+      //   } else {
+      //     this.snapshot = blockNumber;
+      //     // console.log("Current block number: " + blockNumber);
+      //   }
+      // });
     }
     setInterval(async () => {
       await this.checkWalletConnected();

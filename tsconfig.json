@@ -2,33 +2,93 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "./src",
+    "skipLibCheck": true,
     "outDir": "./dist/out-tsc",
+    "esModuleInterop": true,
+    "target": "esnext",
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "@app/*": [
+        "app/*"
+      ],
+      "@config/*": [
+        "app/config/*"
+      ],
+      "@environments/*": [
+        "environments/*"
+      ],
+      "@helpers/*": [
+        "app/helpers/*"
+      ],
+      "@services/*": [
+        "app/services/*"
+      ],
+      "@wallet/*": [
+        "app/wallet/*"
+      ],
+      "@shared/*": [
+        "app/shared/*"
+      ],
+      "@core/*": [
+        "app/core/*"
+      ],
+      "@auth/*": [
+        "app/auth/*"
+      ],
+      "@faq/*": [
+        "app/faq/*"
+      ],
+      "@campaigns/*": [
+        "app/campaigns/*"
+      ],
+      "@social-accounts/*": [
+        "app/social-accounts/*"
+      ],
+      "@user-settings/*": [
+        "app/user-settings/*"
+      ],
+      "jszip": [
+        "./node_modules/jszip/dist/jszip.min.js"
+      ]
+    },
+    "removeComments": true,
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "diagnostics": true,
     "sourceMap": true,
-    "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": false,
-    "lib": [
-      "ES2022",
-      "dom"
-    ]
+    "useDefineForClassFields": false
   },
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "path/to/unused-file.ts",
+    // Add more patterns for unused files
+  ],
+  "include": [
+    "src/**/*.ts",  // Include your project files
+    "node_modules/web3-types/src/used-file.ts",
+    // Add more paths for necessary files
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
+    "enableIvy": false ,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+
   }
+
+
 }

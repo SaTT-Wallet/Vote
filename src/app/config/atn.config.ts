@@ -1,5 +1,5 @@
 import { Big } from 'big.js';
-import { environment as env } from '../../environments/environment';
+import { environment as env } from '../../environments/environment.prod';
 const sattUrl = env.API_URL;
 const ipfsURL = env.ipfsURL;
 const walletUrl = 'http://localhost:4200/#/';

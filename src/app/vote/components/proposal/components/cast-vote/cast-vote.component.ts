@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SnapshotService } from 'src/app/core/services/vote/snapshot.service';
+import { SnapshotService } from '@app/core/services/vote/snapshot.service';
 import axios from 'axios';
 import { Console } from 'console';
 import { environment as env } from '../../../../../../environments/environment.prod';
-import { ExternalWalletService } from 'src/app/core/services/vote/external-wallet.service';
 import { Web3Provider } from '@ethersproject/providers';
 import Web3 from 'web3';
-import { NotificationService } from 'src/app/core/services/vote/notification.service';
+import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
+import { NotificationService } from '@app/core/services/vote/notification.service';
 
 @Component({
   selector: 'app-cast-vote',

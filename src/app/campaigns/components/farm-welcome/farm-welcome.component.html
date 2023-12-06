@@ -1,0 +1,313 @@
+<div class="welcome_cover d-flex">
+  <div class="col welcome_description">
+    <div class="row mb-1 welcome_title">{{ 'FARM_YOUR_SOCIAL_NETWORKS' | translate }}</div>
+    <div class="row mb-3 welcome_subtitle">{{'earn_crypto'| translate }}</div>
+    <div class="row mb-4 welcome_description_long">
+{{ 'DESCRIPTION_WELCOME' | translate }}
+    </div>
+    <div class="row welcome_btn_launch">
+      <button class="btnStart" routerLink="/ad-pools">{{ 'Launch_App_Welcome' | translate }}</button>
+    </div>
+    <div>
+      <video
+        class="d-block d-sm-none"
+        src="assets/Images/dancing_moonboy.webm"
+        style="width: 100%; height: auto; mix-blend-mode: exclusion"
+        autoplay
+        loop
+      ></video>
+    </div>
+  </div>
+  <div class="col justify-content-center align-items-center d-none d-sm-block">
+    <video
+      src="assets/Images/dancing_moonboy.webm"
+      style="width: 150%; height: auto; mix-blend-mode: exclusion"
+      autoplay
+      loop
+    ></video>
+  </div>
+</div>
+<!-- <div class="bg-container">
+  <div class="bg-content d-flex flex-column">
+    <div class=""><h1>Hello World</h1></div>
+    <div class="bg-title text-left">FARM YOUR SOCIAL NETWORKS</div>
+    <div class="bg-subtitle text-left">Earn Cryptos with a Post</div>
+    <p class="bg-description text-left">
+      Are you interested in earning cryptos through the power of blockchain
+      technology and social media? So why not start leveraging your social media
+      accounts today and see how you can earn cryptos with just a few clicks?
+      With a little effort and engagement, you can start "farming" your social
+      networks and earning crypto, So why not start exploring the world of
+      socialfi and crypto today, and see how you can turn your social media
+      presence into a profitable venture?
+    </p>
+    <div class="bg-moon-boy text-right">
+      <img src="assets/Images/welcome-page-bg-img.png" #moonBoyImg alt="" />
+    </div>
+  </div>
+</div> -->
+<div
+  class="row d-flex align-items-center justify-content-center mt-lg-5 mt-md-0"
+>
+  <span class="adpool-title">{{ 'New_AdPools_welcome' | translate }}</span>
+</div>
+<div class="row d-flex align-items-center justify-content-center mt-2">
+  <div class="container mt-lg-5 mt-md-0 d-flex justify-content-center">
+    <div class="row adpools-container">
+      <div class="style-grid mt-4">
+        <app-list-items
+          [infiniteScrollContainer]="'.center-content'"
+          [fromRoot]="true"
+        >
+          <ng-template appItemsList>
+            <app-campaigns-list-item
+              *ngFor="
+                let campaign of campaignsList.slice(0, 3);
+                trackBy: trackById
+              "
+              [campaign]="campaign"
+            ></app-campaigns-list-item>
+            <ng-container *ngIf="isLoading">
+              <app-campaigns-list-item-placeholder-ui
+                *ngFor="let card of [1]"
+              ></app-campaigns-list-item-placeholder-ui>
+            </ng-container>
+          </ng-template>
+        </app-list-items>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row d-flex align-items-center justify-content-center mt-4 mb-5">
+  <div
+    class="btn_container_loadmore"
+    *ngIf="!isLoading && !noData"
+    (click)="loadMore()"
+    routerLink="/ad-pools"
+  >
+    <span class="load-more-btn">{{ 'All_Adpools_Welcome' | translate }}</span>
+    <span class="load-more-btn-arrow">></span>
+  </div>
+</div>
+
+<div class="container d-flex justify-content-center">
+  <div class="row info-container margin-top">
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">{{ 'MARKET_CAP' | translate }}</span>
+        <span class="info-value">$ {{ marketCap }}</span>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">{{'SaTTPrice' | translate }}</span>
+        <div class="d-flex justify-content-center align-items-center">
+          <span class="d-md-none mr-4">
+            <img
+              *ngIf="percentChange >= 0"
+              src="assets/Images/price-up.svg"
+              alt="price-up" />
+            <img
+              *ngIf="percentChange < 0"
+              src="assets/Images/price-down.svg"
+              alt="price-down"
+          /></span>
+          <span class="info-value"
+            >$ {{ sattPrice }}
+            <span class="satt-percent d-none d-md-block" style="color: #00cc9e">
+              ({{ percentChange }}%)
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transactions and wallets counts -->
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">{{ 'Holders' | translate }}</span>
+        <span class="info-value">{{ nbrWallet| number: '1.0-0' }}</span>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">{{ 'Nb_of_Transactions' | translate }}</span>
+        <span class="info-value">{{ nbr_tx_mainnet| number: '1.0-0' }}</span>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">AdPools</span>
+        <span class="info-value">{{ nbPools | number: '1.0-0'}}</span>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">{{ 'Reach' | translate }}</span>
+        <span class="info-value">{{ reach }} % </span>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">Posts</span>
+        <span class="info-value">{{ posts| number: '1.0-0' }}</span>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">{{ 'Views' | translate }}</span>
+        <span class="info-value">{{ views| number: '1.0-0' }}</span>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">TVL</span>
+        <span class="info-value">$ {{ tvl | number }}</span>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-3">
+      <div class="info-box d-flex justify-content-between align-items-center">
+        <span class="info-name">{{ 'Harvested' | translate }}</span>
+        <!-- <span class="info-value"> {{ harvested | currency: 'USD' }} </span> -->
+        <span class="info-value">$ {{ harvested | number }} </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="welcome_btn_launch" id="btn_launch_stat">
+  <button class="btnStart" routerLink="/ad-pools">{{ 'Launch_App_Welcome' | translate }}</button>
+</div>
+
+<div class="mt-5 d-flex blog-bloc">
+  <div class="col-4 d-none d-sm-block" style="left: 4%">
+    <div class="row adpool-title mb-3">Blog</div>
+    <div class="row blog-description mb-3">
+      {{ 'blogWelcomText' | translate}}
+    </div>
+    <button
+      class="row btn_apply_lunch"
+      style="width: 134px"
+      onclick="window.open('https://satt-token.com/blog');"
+    >
+      Visit Blog
+    </button>
+  </div>
+
+  <div class="col">
+    <div class="d-block d-sm-none">
+      <div class="row adpool-title justify-content-center mb-3">Blog</div>
+      <div class="row blog-description mb-3">
+        {{ 'blogWelcomText' | translate}}
+      </div>
+      <button
+        class="row btn_apply_lunch mb-5"
+        style="width: 134px; display: table-column"
+        onclick="window.open('https://satt-token.com/blog');"
+      >
+        Visit Blog
+      </button>
+    </div>
+    <div class="row flex-nowrap overflow-auto">
+      <ng-container *ngIf="!!blogs">
+        <div class="col" *ngFor="let blog of blogs.slice(0, 3)">
+          <!-- [@scrollAnimation] -->
+          <div
+            class="card mb-4 box-shadow"
+            style="border: hidden; background: transparent"
+          >
+            <a target="_blank" href="{{ blog.link }}">
+              <img
+                class="card-img-top blog-img"
+                [src]="blog._embedded['wp:featuredmedia'][0].source_url"
+                alt="{{ blog.title.rendered }}"
+              />
+            </a>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<div class="welcome_footer_lunch text-center">
+  <div class="col-11 col-md-7" style="margin: auto">
+    <div class="pt-5 mb-2 welcome_footer_title" style="margin: auto">
+     {{ 'launchYourAdpoolNowTitle' | translate }}
+    </div>
+    <div class="row mb-4 welcome_description_long">
+      {{ 'launchYourAdpoolNowText' | translate }}
+
+    </div>
+    <button
+      class="btn_apply_lunch1 mb-3"
+      onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScmtK5oh0fWi_S-yG2LGtUFZ_pQPESd2rgcBbtgXLV830H7pQ/viewform');"
+    > {{ 'Apply_to_launch' | translate }}
+
+    </button>
+  </div>
+</div>
+
+<ng-container>
+  <div
+    class="row welcome-page-footer d-flex flex-column align-items-center justify-content-center mt-4"
+  >
+    <div class="welcome-page-footer-title">Follow us</div>
+    <div class="d-flex justify-content-center align-items-center">
+      <img
+        class="social-footer"
+        src="assets/Images/socials/facebook-white.svg"
+        (click)="openInNewTab('https://www.facebook.com/SaTT.Token/')"
+        alt="facebook"
+      />
+      <img
+        class="social-footer"
+        src="assets/Images/socials/instagram-white.svg"
+        (click)="openInNewTab('https://www.instagram.com/satt.token/')"
+        alt="instagram"
+      />
+      <img
+        class="social-footer"
+        src="assets/Images/socials/twitch-white.svg"
+        (click)="openInNewTab('https://www.twitch.tv/satt_token')"
+        alt="twitch"
+      />
+      <img
+        class="social-footer"
+        src="assets/Images/socials/twitter-white.svg"
+        (click)="openInNewTab('https://twitter.com/SaTT_Token')"
+        alt="twitter"
+      />
+      <img
+        class="social-footer"
+        src="assets/Images/socials/youtube-white.svg"
+        (click)="
+          openInNewTab(
+            'https://www.youtube.com/channel/UCNSq8P6ZmrhF0Ft3fouqOTw'
+          )
+        "
+        alt="youtube"
+      />
+    </div>
+
+    <div
+      class="d-flex justify-content-center align-items-center copyrights flex-column"
+    >
+      <div>Copyright © 2023 Atayen, Inc.</div>
+      <div>
+        {{ 'Sidebar.copyright' | translate }},&nbsp;
+        <span style="text-decoration: underline" routerLink="/cgu" class="point"
+          >CONDITIONS</span
+        >&nbsp; and &nbsp;
+        <span
+          style="text-decoration: underline"
+          routerLink="/privacy-policy"
+          class="point"
+          >{{ 'privacyPolicy' | translate }}</span
+        >
+      </div>
+    </div>
+  </div>
+</ng-container>
+

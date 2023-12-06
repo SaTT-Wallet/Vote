@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { LocalStorageRefService } from '../localstorage-ref/local-storage-ref-service.service';
-import { sattUrl } from 'src/app/config/atn.config';
+import { sattUrl } from '@app/config/atn.config';
 const TOKEN_KEY = 'access_token';
 const isAuth = 'isAuthenticated';
 const idWallet = 'wallet_id';

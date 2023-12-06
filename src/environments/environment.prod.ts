@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  API_URL: 'https://localhost:3015',
+  API_URL: 'https://api-preprod2.satt-token.com',
   url: 'https://dapp.satt.com/',
   ipfsURL: 'https://ipfs.io/ipfs/',
   url_subgraph_bsc:
@@ -23,7 +23,15 @@ export const environment = {
   blockExplorerURL: 'https://bscscan.com/',
   sattContractAdress: '0x448bee2d93be708b54ee6353a7cc35c4933f1156',
   network: 'bsc',
-
+  YOUTUBE_WATCH_LINK: 'youtube.com/watch',
+  YOUTUBE_SHORTEN_LINK: 'https://youtu.be/',
+  YOUTUBE_EMBED_LINK: 'https://www.youtube.com/embed/',
+  FACEBOOK_URL: 'https://www.facebook.com/',
+  M_FACEBOOK_URL: 'https://m.facebook.com/',
+  TIKTOK_URL: 'https://www.tiktok.com/',
+  TIKTOK_SHORTEN_LINK: 'https://vm.tiktok.com',
+  FACEBOOK_POST_URL:
+    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F',
   strategies: [
     {
       name: 'erc20-balance-of',
@@ -136,16 +144,7 @@ export const environment = {
     urlthreadsAccount: 'https://threads.net/@'
 
   },
-  FACEBOOK_URL: 'https://www.facebook.com/',
-
-  FACEBOOK_POST_URL:
-    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F',
-
-  YOUTUBE_WATCH_LINK: 'youtube.com/watch',
-
-  YOUTUBE_SHORTEN_LINK: 'https://youtu.be/',
-
-  YOUTUBE_EMBED_LINK: 'https://www.youtube.com/embed/',
+  dateRefund: 1296000,
 
   typeSN: {
     facebook: 1,
@@ -164,8 +163,6 @@ export const environment = {
     linkedin: 'linkedin',
     tiktok: 'tiktok'
   },
-
-  TIKTOK_URL: 'https://www.tiktok.com/',
 
   Network: {
     BNB: 'BNB',

@@ -4,11 +4,7 @@ import { ProfileService } from '@core/services/profile/profile.service';
 import { TelegramLinkAccountService } from '@core/services/telegramAuth/telegram-link-account.service';
 import { ProfileSettingsStoreService } from '@core/services/profile/profile-settings-store.service';
 import { Store } from '@ngrx/store';
-import {
-  clearProfilePicStore,
-  loadProfilePics
-} from '@user-settings/store/actions/profile-pic.actions';
-import { selectProfilePic } from '@user-settings/store/selectors/profile-pic.selectors';
+
 
 @Injectable({
   providedIn: 'root'
@@ -63,7 +59,7 @@ export class ProfileSettingsFacadeService {
 
   // profile pic state
   get profilePic$() {
-    return this.store.select(selectProfilePic);
+    return null;
     /*
     return this.profileSettingsStoreService.profilePic$;
 */
@@ -121,10 +117,7 @@ export class ProfileSettingsFacadeService {
   }
 
   loadUserProfilePic() {
-    /*
-    this.profileSettingsStoreService.loadProfilePic();
-*/
-    this.store.dispatch(loadProfilePics());
+
   }
 
   addInterests(body: any) {
@@ -179,7 +172,6 @@ export class ProfileSettingsFacadeService {
   
  
   clearProfilePicStore() {
-    this.store.dispatch(clearProfilePicStore());
   }
 
 

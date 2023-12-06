@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { sattUrl } from '@config/atn.config';
 import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
 import { Observable } from 'rxjs';
-import { sattUrl } from 'src/app/config/atn.config';
-import { IGetSocialNetworksResponse } from '../../store/social-accounts/reducers/social-accounts.reducer';
+import { IresponseCodeQr } from '@app/core/iresponse-code-qr';
 @Injectable({
   providedIn: 'root'
 })
@@ -34,9 +34,7 @@ export class ProfileService {
     )
   }
   getSocialNetworks() {
-    return this.http.get<IGetSocialNetworksResponse>(
-      sattUrl + '/profile/socialAccounts'
-    );
+
   }
   // /profile/socialAccounts
   deleteOneSocialNetworksGoogle(id: string) {
@@ -102,10 +100,50 @@ export class ProfileService {
   }
 
 
+  getUserProfilePic() {
+    return this.http.get(sattUrl + '/profile/picture', {
+      responseType: 'blob',
+    });
+  }
 
+  addInterests(body: any) {
+    return this.http.post(
+      sattUrl + '/profile/AddUserIntersts',
+      { interests: body }
+    );
+  }
+  getInterests() {
+    let httpHeaders = new HttpHeaders({
+      'Cache-Control': 'no-store',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.tokenStorageService.getToken()
+    });
 
+    return this.http.get(sattUrl + '/profile/UserIntersts');
+  }
+  updateInterests(body: any) {
+    return this.http.put(
+      sattUrl + '/profile/UpdateUserIntersts',
+      { interests: body }
+    );
+  }
 
+  logoutRS(social: any) {
+    return this.http.put(sattUrl + '/auth/disconnect/' + social, null);
+  }
 
+  deleteAccount(obj: any) {
+    return this.http.post(sattUrl + '/auth/purge', obj);
+  }
+  generateQRCode() {
+    return this.http.get(sattUrl + '/auth/qrCode');
+  }
+  verifyQRCode(body: any): Observable<IresponseCodeQr> {
+    return this.http.post<IresponseCodeQr>(
+      sattUrl + '/auth/verifyQrCode',
+      body
+    );
+  }
 
  
 

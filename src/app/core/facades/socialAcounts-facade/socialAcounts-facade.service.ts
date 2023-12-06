@@ -1,10 +1,13 @@
 import { Injectable, Injector } from '@angular/core';
-
+import { ProfileService } from '@app/core/services/profile/profile.service';
+import {
+  loadSocialAccountss,
+  loadSocialAccountssLogout,
+  loadUpdatedSocialAccountss
+} from '@app/core/store/social-accounts/actions/social-accounts.actions';
+import { socialAccountState } from '@app/core/store/social-accounts/reducers/social-accounts.reducer';
+import { selectSocialAccount } from '@app/core/store/social-accounts/selectors/social-accounts.selectors';
 import { Store } from '@ngrx/store';
-import { socialAccountState } from '../../store/social-accounts/reducers/social-accounts.reducer';
-import { selectSocialAccount } from '../../store/social-accounts/selectors/social-accounts.selectors';
-import { loadSocialAccountss, loadUpdatedSocialAccountss, loadSocialAccountssLogout } from '../../store/social-accounts/actions/social-accounts.actions';
-import { ProfileService } from '../../services/profile/profile.service';
 
 @Injectable({
   providedIn: 'root'

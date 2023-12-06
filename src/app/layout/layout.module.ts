@@ -4,29 +4,21 @@ import { LayoutComponent } from './layout.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from '@app/shared/shared.module';
 import { FooterBarComponent } from './components/footer-bar/footer-bar.component';
-import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
-import { SocialNetworksComponent } from './components/social-networks/social-networks.component';
-import { TransfomNumberPipe } from '../shared/pipes/transfom-number.pipe';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 @NgModule({
   declarations: [
     LayoutComponent,
     HeaderComponent,
     SidebarComponent,
-    FooterBarComponent,
-    SocialNetworksComponent,
-    TransfomNumberPipe,
+    FooterBarComponent
   ],
-  imports: [
-    LayoutRoutingModule,
-    HttpClientModule,
-    CommonModule,
-    TranslateModule.forRoot(),
-    MatSnackBarModule,
-  ],
+  imports: [SharedModule, LayoutRoutingModule, HttpClientModule],
 
-  providers: [],
+  providers: [
+    //{ provide: LOCALE_ID, useValue: "fr-FR" },
+    //{ provide: LOCALE_ID, useValue: 'de-DE' },
+  ]
 })
 export class LayoutModule {}

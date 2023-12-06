@@ -7,9 +7,9 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class SidebarService {
-  // @Output() sendClickedEvent = new EventEmitter<string>();
-  // @Output() recieveClickedEvent = new EventEmitter<string>();
-  // @Output() buyClickedEvent = new EventEmitter<string>();
+  @Output() sendClickedEvent = new EventEmitter<string>();
+  @Output() recieveClickedEvent = new EventEmitter<string>();
+  @Output() buyClickedEvent = new EventEmitter<string>();
 
   public recieveBtn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
@@ -22,8 +22,8 @@ export class SidebarService {
   );
   public toggleSidebarMobile: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
-  // public toggleWalletMobile: BehaviorSubject<boolean> =
-  //   new BehaviorSubject<boolean>(false);
+  public toggleWalletMobile: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
   public toggleFooterMobile: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
   activatedRoute: ActivatedRoute | null | undefined;
@@ -55,9 +55,9 @@ export class SidebarService {
   public toggleMobile2() {
     this.toggleSidebarMobile.next(!this.toggleSidebarMobile.value);
   }
-  // public toggleWallet() {
-  //   this.toggleWalletMobile.next(!this.toggleWalletMobile.value);
-  // }
+  public toggleWallet() {
+    this.toggleWalletMobile.next(!this.toggleWalletMobile.value);
+  }
   public toggleFooter() {
     this.toggleFooterMobile.next(!this.toggleFooterMobile.value);
   }
@@ -77,13 +77,13 @@ export class SidebarService {
   //   });
   // }
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  // sendClicked(msg: string) {
-  //   this.sendClickedEvent.emit(msg);
-  // }
-  // recieveClicked(msg: string) {
-  //   this.recieveClickedEvent.emit(msg);
-  // }
-  // buyClicked(msg: string) {
-  //   this.buyClickedEvent.emit(msg);
-  // }
+  sendClicked(msg: string) {
+    this.sendClickedEvent.emit(msg);
+  }
+  recieveClicked(msg: string) {
+    this.recieveClickedEvent.emit(msg);
+  }
+  buyClicked(msg: string) {
+    this.buyClickedEvent.emit(msg);
+  }
 }

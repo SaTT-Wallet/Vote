@@ -1,38 +1,41 @@
 <div class="div-menu">
-  <div class="div-home">
-    <a href="https://dapp.satt.com/wallet">
-      <div class="div-pic">
-        <img src="assets/Images/blue-icons/wallet-icon-blue.svg" />
-      </div>
+  <div
+    class="div-home"
+    [routerLink]="['/wallet/token-info']"
+    (click)="toggleMobile()"
+  >
+    <div class="div-pic">
+      <img src="assets/Images/market-icon-blue.svg" />
+    </div>
 
-      <span class="span-text">Wallet</span>
-    </a>
+    <span class="span-text">{{ 'Sidebar.market' | translate }}</span>
   </div>
 
-  <div class="div-adPool">
-    <a href="https://dapp.satt.com/ad-pools">
-      <div class="div-pic">
-        <img src="assets/Images/blue-icons/adpool-icon-blue.svg" />
-      </div>
+  <div class="div-adPool" [routerLink]="['/ad-pools']" (click)="toggleMobile()">
+    <div class="div-pic">
+      <img src="assets/Images/blue-icons/adpool-icon-blue.svg" />
+    </div>
 
-      <span class="span-text">AdPool</span>
-    </a>
+    <span class="span-text">{{ 'Sidebar.adpool' | translate }}</span>
   </div>
 
-  <div class="div-wallet">
-    <!-- <div
+  <div
+    class="div-wallet"
+    (click)="(this.sidebarService.toggleFooterMobile.value)"
+  >
+    <div
       class="half-circle"
       *ngIf="this.sidebarService.toggleFooterMobile.value"
       [ngClass]="{
         'half-circle-block': this.sidebarService.toggleFooterMobile.value
       }"
-    > -->
-    <!-- <div class="d-flex justify-content-center">
+    >
+      <div class="d-flex justify-content-center">
         <button
           type="button"
           class="half-circle-button"
  
-          (click)="toggleMobile();"
+          (click)="toggleMobile(); clickBuy()"
         >
           <span class="icon-ins"></span>
         </button>
@@ -43,7 +46,7 @@
             [routerLink]="['/wallet/send']"
             type="button"
             class="half-circle-button"
-            (click)="toggleMobile();"
+            (click)="toggleMobile(); clickSend()"
           >
             <span class="icon-arrow-1"></span>
           </button>
@@ -53,53 +56,47 @@
             [routerLink]="['/wallet/receive']"
             type="button"
             class="half-circle-button"
-            (click)="toggleMobile();"
+            (click)="toggleMobile(); clickRecieve()"
           >
             <span class="icon-arrow1"></span>
           </button>
         </div>
-      </div> -->
-    <!-- </div> -->
-
+      </div>
+    </div>
+    <div class="pic-wallet-curvy"></div>
     <div
       class="div-pic-wallet"
-      [routerLink]="['/']"
+      [routerLink]="['/wallet']"
+      (click)="toggle()"
       [ngClass]="{ 'blue-bg': showHalf }"
     >
-      <div class="div-pic">
-        <img src="assets/Images/blue-icons/vote-blue-icon.png" />
-      </div>
-      <!-- <span
+      <span
         class="icon-ic1 span-icon ms-1"
         *ngIf="!this.sidebarService.toggleFooterMobile.value"
       ></span>
       <i
         class="fas fa-check checked-icon"
         *ngIf="this.sidebarService.toggleFooterMobile.value"
-      ></i> -->
+      ></i>
       <!-- <img src="assets/Images/blue-icons/wallet-icon-blue.svg" /> -->
     </div>
 
-    <span class="span-text">Vote</span>
+    <span class="span-text">{{ 'Sidebar.Wallet' | translate }}</span>
   </div>
 
-  <div class="div-farm">
-    <a href="https://dapp.satt.com/farm-posts">
-      <div class="div-pic">
-        <img src="assets/Images/blue-icons/farmpost-icon-blue.svg" />
-      </div>
+  <div class="div-farm" [routerLink]="['/farm-posts']" (click)="toggleMobile()">
+    <div class="div-pic">
+      <img src="assets/Images/blue-icons/farmpost-icon-blue.svg" />
+    </div>
 
-      <span class="span-text">PostFarm</span>
-    </a>
+    <span class="span-text"> {{ 'Sidebar.PostFarm' | translate }}</span>
   </div>
 
-  <div class="div-help">
-    <a href="https://dapp.satt.com/FAQ">
-      <div class="div-pic">
-        <img src="assets/Images/blue-icons/help-icon-blue.svg" />
-      </div>
+  <div class="div-help" [routerLink]="['/FAQ']" (click)="toggleMobile()">
+    <div class="div-pic">
+      <img src="assets/Images/blue-icons/help-icon-blue.svg" />
+    </div>
 
-      <span class="span-text">Help</span>
-    </a>
+    <span class="span-text">{{ 'Sidebar.Aide' | translate }}</span>
   </div>
 </div>

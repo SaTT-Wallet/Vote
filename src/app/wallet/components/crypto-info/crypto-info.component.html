@@ -1,0 +1,372 @@
+<div class="bg-header d-flex justify-content-center">
+  <div
+    class="bg-header-info justify-content-center justify-content-md-between align-items-end mb-3"
+  >
+    <div
+      class="d-md-none d-flex justify-content-end back-button"
+      [routerLink]="['/wallet/token-info']"
+      style="cursor: pointer"
+    >
+      < {{'back' | translate }}
+    </div>
+
+    <div
+      class="crypto-logo d-flex justify-content-center align-items-center flex-md-row flex-column"
+    >
+      <img
+        *ngIf="!cryptoImgUrl"
+        class="spinner"
+        src="/assets/Images/loadingLogo.gif"
+      />
+
+      <!--<img
+        *ngIf="crypto"
+        class="crypto-logo-img mr-md-2"
+        src="assets/Images/symbol_crypto/{{ crypto.symbol }}.svg"
+      />-->
+      <img
+        *ngIf="cryptoImgUrl"
+        class="crypto-logo-img mr-md-2"
+        src="{{ cryptoImgUrl }}"
+      />
+      <div
+        class="crypto-logo-details d-flex flex-column align-items-md-start align-items-center"
+      >
+        <div class="crypto-logo-text">{{ cryptoName }}</div>
+        <div class="crypto-logo-text">
+          ${{ showNumbersRule.transform(cryptoPrice, true) }}
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bg-header-buttons flex-column align-items-end justify-content-end d-none d-md-flex"
+    >
+      <div
+        class="back-button mr-1"
+        [routerLink]="['/wallet/token-info']"
+        style="cursor: pointer"
+      >
+        < {{'back' | translate }}
+      </div>
+      <div class="buttons-container d-flex justify-content-end mt-5">
+        <button
+          [disabled]="disableBtn"
+          class="send-button"
+          (click)="goTosend(cryptoSymbol, crypto_network)"
+        >
+          <img
+            src="assets/Images/sendShape.png"
+            class="mr-2"
+            *ngIf="disableBtn"
+          />
+          <img
+            src="assets/Images/crypto-info/Send.png"
+            class="mr-2"
+            *ngIf="!disableBtn"
+          />{{'Send' | translate }}
+        </button>
+        <button
+          [disabled]="disableBtn"
+          class="buy-button"
+          (click)="goToBuy(cryptoSymbol, crypto_network)"
+        >
+          <img
+            src="assets/Images/buyShape.png"
+            class="mr-2"
+            *ngIf="disableBtn"
+          />
+          <img
+            src="assets/Images/crypto-info/Buy.svg"
+            class="mr-2"
+            *ngIf="!disableBtn"
+          />{{'Buy' | translate }}
+        </button>
+        <button
+          [disabled]="disableBtn"
+          class="request-button"
+          (click)="goTorecieve(cryptoSymbol, crypto_network)"
+        >
+          <img
+            src="assets/Images/recieveshape.png"
+            class="mr-2"
+            *ngIf="disableBtn"
+          />
+          <img
+            *ngIf="!disableBtn"
+            src="assets/Images/crypto-info/Request.svg"
+            class="mr-2"
+          />{{'Request' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="crypto-details-container container d-flex justify-content-center">
+  <div
+    class="flex-column justify-content-center align-items-start crypto-info-body"
+  >
+    <div class="chart-header mb-3" >
+      <div class="price-title">{{'Price' | translate }}</div>
+      <div class="chart-filters d-flex align-items-center justify-content-end">
+        <span class="filter-box" 
+        (click)="handleCryptoList(id_crypto,'1D')" 
+        [ngStyle]="{'background-color': selectedPeriod === '1D' ? '#4048FF' : '', 
+        'color':selectedPeriod === '1D' ? 'white' : ''}">
+        {{ 'chart.day' | translate }}
+         </span>
+        <span class="filter-box" 
+        (click)="handleCryptoList(id_crypto,'7D')" 
+        [ngStyle]="{'background-color': selectedPeriod === '7D' ? '#4048FF' : '',
+         'color':selectedPeriod === '7D' ? 'white' : ''}">
+        {{ 'chart.week' | translate }}
+         </span>
+        <span class="filter-box" 
+        (click)="handleCryptoList(id_crypto,'1M')" 
+        [ngStyle]="{'background-color': selectedPeriod === '1M' ? '#4048FF' : '', 
+        'color':selectedPeriod === '1M' ? 'white' : ''}">
+        {{ 'chart.month' | translate }}
+          </span>
+        <span class="filter-box"
+         (click)="handleCryptoList(id_crypto,'1Y')" 
+         [ngStyle]="{'background-color': selectedPeriod === '1Y' ? '#4048FF' : '', 
+         'color':selectedPeriod === '1Y' ? 'white' : ''}">
+         {{ 'chart.year' | translate }}
+         </span>
+        <span class="filter-box" 
+        (click)="handleCryptoList(id_crypto,'ALL')" 
+        [ngStyle]="{'background-color': selectedPeriod === 'ALL' ? '#4048FF' : '', 
+        'color':selectedPeriod === 'ALL' ? 'white' : ''}">
+        {{ 'chart.all' | translate }}
+         </span>
+      </div>
+    </div>
+    <div [chart]="chart" class="chart" ></div>
+    <div class="mt-4" >
+      <div class="details-boxes-container">
+        <div class="details-box border-top-sm">
+          <div class="gray-title title-border-md">{{ 'MARKET_CAP' | translate }}</div>
+          <div class="right-part-sm-details-box">
+            <div class="text-value">${{ marketCap }}</div>
+            <div
+              class="percent-change title-border-md"
+              [ngStyle]="{
+                color: marketCapChange >= 0 ? '#00cc9e' : '#f52079'
+              }"
+            >
+              <span *ngIf="marketCapChange >= 0 && marketCapChange">+</span
+              >{{ marketCapChange }}%
+            </div>
+          </div>
+        </div>
+        <div class="details-box">
+          <div class="gray-title title-border-md">{{ 'Fully_diluted_market_cap' | translate }}</div>
+          <div class="right-part-sm-details-box">
+            <div class="text-value">
+              $ {{ fully_diluted }}
+            </div>
+            <div
+              class="percent-change title-border-md"
+              [ngStyle]="{
+                color: marketCapChange >= 0 ? '#00cc9e' : '#f52079'
+              }"
+            >
+              <span *ngIf="marketCapChange >= 0 && marketCapChange">+</span
+              >{{ marketCapChange }}%
+            </div>
+          </div>
+        </div>
+        <div class="details-box">
+          <div class="gray-title title-border-md">Volume 24h</div>
+          <div class="right-part-sm-details-box">
+            <div class="text-value">${{ volume24h }}</div>
+            <div
+              class="percent-change title-border-md"
+              [ngStyle]="{
+                color: volume24hChange >= 0 ? '#00cc9e' : '#f52079'
+              }"
+            >
+              <span *ngIf="volume24hChange >= 0">+</span>{{ volume24hChange }}%
+            </div>
+          </div>
+        </div>
+        <div class="details-box">
+          <div class="gray-title title-border-md">{{'circulating_supply' | translate }}</div>
+          <div class="right-part-sm-details-box">
+            <div class="text-value">
+              {{ circulatingSupply }} {{ cryptoSymbol }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-5">
+      <div class="price-title" >
+        {{ cryptoSymbol }} {{ 'priceLiveData' | translate }}
+      </div>
+      <div class="crypto-text-details mt-2">
+        <div class="crypto-text-details-part" id="crypto-description">
+          {{ cryptoDescription }}
+        </div>
+        <div class="crypto-text-details-part mt-3" >
+          {{'interestingArticles' | translate }}
+        </div>
+        <ul class="mt-3" >
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/12/16/how-to-farm-a-tweet/"
+              target="_blank"
+              >{{ 'farmATweet' | translate }}</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/11/03/how-to-find-your-twitter-url/"
+              target="_blank"
+              >{{ 'participateInAdpool' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2022/03/04/how-to-find-my-youtube-video-url/"
+              target="_blank"
+              >{{ 'findMyYoutube' | translate }}</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/12/16/what-does-reach-and-reach-max-mean/
+            "
+              target="_blank"
+              >{{ 'reachMax' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2022/01/03/what-are-the-advantages-of-paying-influencers-per-performance/
+            "
+              target="_blank"
+              >{{ 'payingPerPerformance' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2022/01/24/why-you-need-a-pro-account-on-instagram-and-how-to-open-one/"
+              target="_blank"
+              >{{'proInstagram' | translate}}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/08/19/10-reasons-why-advertising-will-not-escape-the-blockchain-revolution/
+            "
+              target="_blank"
+              >{{'blockchaineAd' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/09/09/crypto-glossary-what-does-halving-means/
+            "
+              target="_blank"
+              >{{ 'cryptoGlossary' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2022/01/08/what-are-the-various-niches-within-influencer-categories/
+            "
+              target="_blank"
+              >{{'niches' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/08/12/what-is-pancakeswap-an-innovative-uniswap-fork/
+            "
+              target="_blank"
+              >{{'pancakeSwap' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/11/27/how-crypto-airdrop-works-a-look-at-the-top-upcoming-airdrops/
+            "
+              target="_blank"
+              >{{ 'airdropCrypto' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/11/16/whatre-nfts-everything-you-need-to-know-about-nfts/
+
+            "
+              target="_blank"
+              >{{ 'whatsNFT' | translate  }}
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="https://satt-token.com/blog/2022/02/04/what-are-the-different-types-of-nfts/ 
+
+
+            "
+              target="_blank"
+              >{{'typesOfNFT' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/10/21/will-2022-be-the-year-of-nfts/
+
+
+            "
+              target="_blank"
+              >{{'NFTs' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/11/03/what-is-a-metaverse/
+
+
+            "
+              target="_blank"
+              >{{ 'metaverse' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://satt-token.com/blog/2021/08/27/what-is-polygon-ethereum-sidechain-network/
+
+
+            "
+              target="_blank"
+              >{{ 'polygon' | translate }}
+            </a>
+          </li>
+        </ul>
+        <div
+          class="buttons-container d-flex w-100 justify-content-start justify-content-md-center"
+          style="margin-bottom: 5rem"
+        >
+         
+          <!-- <div
+            class="visit-button mr-2"
+            *ngIf="cryptoName === 'SaTT'"
+            (click)="openInBSCScan()"
+          >
+            View on BSCScan
+            <img src="assets/Images/crypto-info/visit.svg" class="ml-2" />
+          </div> -->
+       
+          <div class="visit-button mr-2" (click)="openInBitcoinOrg(CryptoUrl)">
+           {{CryptoUrl}}
+            <img src="assets/Images/crypto-info/visit.svg" class="ml-2" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

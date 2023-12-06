@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import axios from 'axios';
 import { environment as env } from '../../../../environments/environment.prod';
-import { Proposal } from 'src/app/models/proposal.model';
 import { Observable } from 'rxjs';
-import { SnapshotService } from 'src/app/core/services/vote/snapshot.service';
+import { Proposal } from '@app/models/proposal.model';
+import { SnapshotService } from '@app/core/services/vote/snapshot.service';
 
 @Component({
   selector: 'app-proposal-list',

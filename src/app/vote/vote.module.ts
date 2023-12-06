@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { VoteComponent } from './vote.component';
 import { CreateProposalComponent } from './components/create-proposal/create-proposal.component';
 import { ProposalComponent } from './components/proposal/proposal.component';
-// import { SharedModule } from 'src/app/shared/shared.module';
 
 import { VoteRoutingModule } from './vote-routing.module';
 import { ProposalListComponent } from './components/proposal-list/proposal-list.component';
@@ -13,7 +12,6 @@ import { VoteListComponent } from './components/proposal/components/vote-list/vo
 import { VoteResultsComponent } from './components/proposal/components/vote-results/vote-results.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxEditorModule } from 'ngx-editor';
-import TurndownService from 'turndown';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
@@ -34,13 +32,11 @@ import { ToastrModule } from 'ngx-toastr';
   imports: [
     ToastrModule.forRoot(),
     CommonModule,
-    // SharedModule,
     NgxEditorModule,
     HttpClientModule,
     // TurndownService,
     FormsModule,
-    // ReactiveFormsModule,
-    ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: 'never' }),
+   ReactiveFormsModule,
     CommonModule,
     RouterModule,
     VoteRoutingModule

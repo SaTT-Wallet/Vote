@@ -1,6 +1,8 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import {TranslateService} from "@ngx-translate/core";
+
 // import { TokenStorageService } from '@core/services/tokenStorage/token-storage-service.service';
 // import { NotificationService } from '@core/services/notification/notification.service';
 // import { ProfileSettingsStoreService } from './core/services/profile/profile-settings-store.service';
@@ -20,6 +22,7 @@ export class AppComponent {
   message: any;
   constructor(
     public router: Router,
+    private translate: TranslateService,
     // private tokenStorageService: TokenStorageService,
     // private notificationService: NotificationService,
     // private profileService: ProfileSettingsStoreService,
@@ -27,6 +30,8 @@ export class AppComponent {
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: string
   ) {
+    translate.setDefaultLang('en');
+    translate.use('en');
     if (isPlatformBrowser(this.platformId)) {
       this.router.events
         .pipe(

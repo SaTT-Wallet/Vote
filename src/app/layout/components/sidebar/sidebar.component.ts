@@ -12,8 +12,11 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { SidebarService } from 'src/app/core/services/sidebar/sidebar.service';
+import { TokenStorageService } from '@core/services/tokenStorage/token-storage-service.service';
+import { SidebarService } from '@core/services/sidebar/sidebar.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GazConsumedByCampaign } from '@app/config/atn.config';
+import { WalletFacadeService } from '@core/facades/wallet-facade.service';
 import { isPlatformBrowser } from '@angular/common';
 
 //TODO: [SW-178] fix sidebar style and animation
@@ -42,8 +45,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   constructor(
     public sidebarService: SidebarService,
     private renderer: Renderer2,
+    private tokenStorageService: TokenStorageService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private walletFacade: WalletFacadeService,
     @Inject(PLATFORM_ID) private platformId: string
   ) {
     this.isOpen = this.sidebarService.toggleSidebar.value;
@@ -67,9 +72,29 @@ export class SidebarComponent implements OnInit, OnDestroy {
   @Output() hidePortfolio: EventEmitter<any> = new EventEmitter();
 
   ngOnInit(): void {
-    
+    if (this.tokenStorageService.getToken()) {
+      this.isConnected = true;
+      if (!this.tokenStorageService.getHideRedBloc()) {
+        this.tokenStorageService.setItem('hideRedBloc', 'false');
+      }
+
+      this.activatedRoute.queryParams.pipe(takeUntil(this.destroy$)).subscribe(
+        (params) => {
+          if (params['page'] === 'wallet') {
+            this.router.navigate(['/home']);
+          }
+        },
+        () => {},
+        () => {}
+      );
+
+      /*
+    this.calcEstimatedValues();
+*/
+      this.parentFunction();
+    } else {
       this.isConnected = false;
-    
+    }
   }
 
   // storeIdWallet(wallet: any) {
@@ -110,9 +135,43 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarService.toggleMobile2();
   }
 
+  parentFunction() {
+    this.walletFacade
+      .getCryptoPriceList()
+      .pipe(
+        map((response: any) => response.data),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((data: any) => {
+        this.bnb = data['BNB'].price;
+        this.eth = data['ETH'].price;
+
+        this.walletFacade.etherGaz$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((gaz: any) => {
+            let price;
+            price = gaz.gasPrice;
+            this.gazsend = (
+              ((price * GazConsumedByCampaign) / 1000000000) *
+              this.eth
+            ).toFixed(2);
+            this.eRC20Gaz = this.gazsend;
+          });
+
+        this.walletFacade.bnbGaz$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((gaz: any) => {
+            let price = gaz.gasPrice;
+            this.bEPGaz = (
+              ((price * GazConsumedByCampaign) / 1000000000) *
+              this.bnb
+            ).toFixed(2);
+          });
+      });
+  }
 
   goToCampaign() {
-    // this.router.navigate(['home/ad-pools']);
+    this.router.navigate(['home/ad-pools']);
     this.sidebarService.toggleSidebarMobile.next(false);
   }
 }
