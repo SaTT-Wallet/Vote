@@ -41,7 +41,10 @@
       name="og:image"
       content="https://satt-token.com/assets/img/share_img_200px.png"
     />
-
+    <script>
+      // Required by some npm packages
+      window.process = { browser: true, env: { ENVIRONMENT: 'BROWSER' } };
+  </script>
     <meta name="title" content="SATT Atayen" />
     <!--<meta
       name="facebook-domain-verification"
