@@ -17,20 +17,38 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["ng2-validation","moment","lodash","file-saver","jszip","libphonenumber-js"],
+            "allowedCommonJsDependencies": [
+              "ng2-validation",
+              "moment",
+              "lodash",
+              "file-saver",
+              "jszip",
+              "libphonenumber-js",
+              "buffer",
+              "@snapshot-labs/snapshot.js",
+              "bn.js",
+              "js-sha3",
+              "bech32",
+              "hash.js",
+              "babel-runtime/helpers/classCallCheck",
+              "babel-runtime/helpers/createClass",
+              "babel-runtime/core-js/get-iterator",
+              "babel-runtime/helpers/extends",
+              "babel-runtime/helpers/slicedToArray",
+              "crc-32",
+              "@ethereumjs/rlp",
+              "setimmediate",
+              "cross-fetch",
+              "events",
+              "@metamask/detect-provider"
+            ],
             "outputPath": "dist/frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/manifest.json"
-            ],
+            "assets": ["src/favicon.ico", "src/assets", "src/manifest.json"],
             "styles": [
               "node_modules/intl-tel-input/build/css/intlTelInput.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -73,7 +91,7 @@
               "namedChunks": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -96,19 +114,11 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         }
