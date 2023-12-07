@@ -282,20 +282,20 @@
         <div>
           <button (click)="toggleNetworkList()"class="network_btn">
             <img class="network_logo" [src]="'assets/Images/' + networkLogo + '.svg'"  alt="">
-            {{networkLabel}}
+            <span class="network_label">{{networkLabel | uppercase}}</span>
             <ng-container *ngIf="!showNetwork; else arrowUp">
-            <i class="bi bi-chevron-down"></i>
+            <i style="color: white; position: relative; top:0.2em;" class="bi bi-chevron-down"></i>
           </ng-container>
           <ng-template #arrowUp>
-            <i class="bi bi-chevron-up"></i>
+            <i style="color: white; position: relative; top:0.2em;" class="bi bi-chevron-up"></i>
           </ng-template>
             <ul class="network_list" [ngClass] = "{'show': showNetwork}">
-              <li (click)="displayNetwork(el)" *ngFor="let el of networkList; last as isLast">
+              <li (click)="displayNetwork(el)" *ngFor="let el of networkList; last as isLast first as isFirst">
                 <!-- *ngIf="showNetwork" -->
                   <ng-container>
-                    <div class="network_list_container" [class.is_last]="isLast">
+                    <div class="network_list_container" [class.is_first]="isFirst" [class.is_last]="isLast">
                       <img class="network_list_logo" [src]="el.logo" alt="">
-                      <p class="network_list_label">{{el.network | uppercase}}  </p>
+                      <p class="network_list_label">{{el.network}}  </p>
                       <!-- <p [ngClass]="'bold'" class="network_list_label" (click)="toggleAddressVisibility(el)">&nbsp;Adress: {{el.adress}}</p> -->
                     </div>
                     </ng-container>

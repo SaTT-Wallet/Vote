@@ -54,6 +54,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { REPL_MODE_STRICT } from 'repl';
 import { ExternalWalletService } from 'src/app/core/services/vote/external-wallet.service';
 import { VoteService } from 'src/app/core/services/vote/vote.service';
+import Cookies from 'js-cookie';
+
 const bscan = env.bscanaddr;
 const etherscan = env.etherscanaddr;
 const tronScanAddr = env.tronScanAddr;
@@ -111,8 +113,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   gazsend: any;
   erc20Gaz: any;
   bepGaz: any;
-  networkLabel: any = "BSC";
-  networkLogo: any = "bnb"
+  networkLabel: any = "BNB Smart chain";
+  networkLogo: any = "bsc"
   networkList: any[] = [];
   showNetwork: any = false;
   showNotifications: boolean = false;
@@ -337,15 +339,38 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   displayNetwork(e: any){
     this.networkLabel = e.network;
     this.networkLogo = e.label;
+    Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
+    Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
   }
 
+  controllingNetwork(){
+    try {
+      this.networkLabel = Cookies.get('networkSelected') || 'BNB smart chain';
+      this.networkLogo = Cookies.get('networkSelectedLogo') || 'bsc'
+    } catch (error) {
+      console.error('Error retrieving or setting cookie:', error);
+      this.networkLabel = 'bnb smart chain';
+      this.networkLogo = 'bsc';
+    }
+  }
+
+  // (click)="onClickOutside($event)" 
+  // onClickOutside(event: Event): void {
+  //   // Stop the event propagation to prevent it from reaching the document click listener
+  //   console.log(event);
+  //   event.stopPropagation();
+  //   this.showNetwork = false;
+  // }
   ngOnInit(): void {
 
+   this.controllingNetwork();
+  
+
     this.networkList = [
-      {network:"Binance Smart Chain" , label: "bnb" ,logo: "" , adress:"0x742d35Cc6634C0532925a3b844Bc454e4438f44e" },
+      {network:"BNB Smart Chain" , label: "bsc" ,logo: "" , adress:"0x742d35Cc6634C0532925a3b844Bc454e4438f44e" },
       {network:"Etherium" , label: "erc20" ,logo: "" , adress:"0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE" },
       {network:"Polygon" , label: "polygon" ,logo: "" , adress:"0x4E1000616990D83e56f4f6Ff6208d31e0F52350d" },
-      {network:"Btt" , label: "btt" ,logo: "" , adress:"0xFA456Cf55250A839088b27EE32A424d7DAc7f8c3"  }
+      {network:"BitTorrent" , label: "btt" ,logo: "" , adress:"0xFA456Cf55250A839088b27EE32A424d7DAc7f8c3"  }
     ]
 
     this.networkList.forEach(item => {
