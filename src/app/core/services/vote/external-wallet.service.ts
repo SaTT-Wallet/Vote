@@ -6,6 +6,7 @@ import { environment as env } from '../../../../environments/environment.prod';
 import { abi } from '../../../../environments/abi';
 import Cookies from 'js-cookie';
 import { SnapshotService } from '@app/vote/snapshot.service';
+import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
 declare let window: any;
 
 @Injectable({
@@ -23,7 +24,7 @@ export class ExternalWalletService {
   latest_acc: string = '';
 
 
-  constructor(private snapshotService: SnapshotService,) {
+  constructor(private snapshotService: SnapshotService, private tokenStorageService :TokenStorageService) {
     this.detectMetaMask();
     const { ethereum } = <any>window;
     this.ethereum = ethereum;
@@ -74,7 +75,7 @@ export class ExternalWalletService {
         await this.addTokenToBinance(provider);
         this.connect = true;
         this.isWalletConnected = true;
-        localStorage.setItem('connect', 'true');
+        this.tokenStorageService.setIsAuth('true')
       } catch (error) {
         console.error('Error connecting with MetaMask:', error);
         // Handle errors as needed
@@ -201,7 +202,7 @@ export class ExternalWalletService {
       this.connect = false;
       this.isWalletConnected = false;
       this.acc = []
-      localStorage.setItem('connect', 'false');
+      this.tokenStorageService.setIsAuth('false')
     } else {
       this.isWalletConnected = true;
       this.acc = accounts;
@@ -216,7 +217,7 @@ export class ExternalWalletService {
   }
 
   public checkConnectedWallet = async () => {
-    const connectValue = await localStorage.getItem('connect');
+    const connectValue = this.tokenStorageService.getIsAuth();
     const provider = await detectEthereumProvider();
     if (connectValue !== null && connectValue === 'true') {
       this.connect = true;
@@ -244,6 +245,6 @@ export class ExternalWalletService {
     this.connect = false;
     this.isWalletConnected = false;
     this.acc = [];
-    localStorage.setItem('connect', 'false');
+    this.tokenStorageService.setIsAuth('false')
   }
 }

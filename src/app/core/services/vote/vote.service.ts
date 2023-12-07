@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Cookies from 'js-cookie';
 import { ApiprofilService } from '@app/apiprofil.service';
 import { ExternalWalletService } from './external-wallet.service';
+import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,7 +22,7 @@ export class VoteService {
   formattedCreator: string | undefined;
 
 
-  constructor(public externalWalletService: ExternalWalletService,public apiprofilService:ApiprofilService, public modalService: NgbModal,) { }
+  constructor(public externalWalletService: ExternalWalletService,public apiprofilService:ApiprofilService, public modalService: NgbModal, public tokenStorageService: TokenStorageService) { }
 
   showConnectDialog(content?: any) {
     this.modalService.open(content)
@@ -59,7 +60,6 @@ export class VoteService {
 
   Disconnect() {
     this.externalWalletService.disconnectMetamask();
-    // localStorage.setItem('connect', 'false');
     this.hideNetworkHasChanged();
   }
   connectWallet = async (walletType: string) => {

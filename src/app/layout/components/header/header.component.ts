@@ -1693,7 +1693,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         this.showInstall();
       }
       if (this.externalWalletService.connect === true) {
-        // localStorage.setItem('connect', 'true');
       }
     } else if (walletType === 'trust') {
       // this.provider = await this.externalWalletService.connectTrust();
@@ -1721,10 +1720,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         this.formattedCreator = `${this.walletId.substr(0, 4)}...${this.walletId.substr(-3)}`;
         // this.vp = await this.snapshotService.getVotingPower(this.walletId);
       }
-      // else {
-      //   this.externalWalletService.connect = false;
-      //   // localStorage.setItem('connect', 'false');
-      // }
+
     }
   }
   connectMetaMask() {

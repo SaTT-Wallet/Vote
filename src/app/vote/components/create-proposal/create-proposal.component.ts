@@ -103,13 +103,7 @@ export class CreateProposalComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    // this.snapshot = await this.snapshotService.getBlockNumber();
-    // const connectValue = localStorage.getItem('connect');
-    // if (connectValue !== null && connectValue === 'true') {
-    //   this.externalWalletService.connect = true;
-    // } else {
-    //   this.externalWalletService.connect = false;
-    // }
+
     if (typeof window.ethereum !== 'undefined') {
       this.web3 = new Web3Provider(window.ethereum);
       // console.log(this.web3);
@@ -260,10 +254,7 @@ export class CreateProposalComponent implements OnInit, OnDestroy {
         //   this.externalWalletService.changeToBinance(window.ethereum);
         // }
       }
-      // else {
-      //   this.externalWalletService.connect = false;
-      //   // localStorage.setItem('connect', 'false');
-      // }
+
     }
   }
 
@@ -291,7 +282,6 @@ export class CreateProposalComponent implements OnInit, OnDestroy {
         this.showInstall();
       }
       if (this.externalWalletService.connect === true) {
-        // localStorage.setItem('connect', 'true');
       }
     } else if (walletType === 'trust') {
       // this.provider = await this.externalWalletService.connectTrust();
@@ -371,7 +361,6 @@ export class CreateProposalComponent implements OnInit, OnDestroy {
 
   Disconnect() {
     this.externalWalletService.disconnectMetamask();
-    // localStorage.setItem('connect', 'false');
     this.hideNetworkHasChanged();
   }
   async publish() {
