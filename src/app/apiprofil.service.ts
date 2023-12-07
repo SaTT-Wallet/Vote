@@ -10,7 +10,7 @@ export class ApiprofilService {
 
 
   createUser(wallet: string) {
-    return this.http.post(environment.API_URL +'/wallet/createUserFromExternalWallet', {wallet});
+    return this.http.post('https://api-preprod2.satt-token.com/external/create-user', {wallet});
   }
   
 
