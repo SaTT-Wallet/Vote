@@ -62,6 +62,7 @@ import { Title } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VoteService } from '@app/core/services/vote/vote.service';
 import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
+
 const bscan = environment.bscanaddr;
 const etherscan = environment.etherscanaddr;
 const tronScanAddr = environment.tronScanAddr;
@@ -908,8 +909,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.modalService.open(content);
   }
   sattConnect() {
-    this.closeModal();
-    this.router.navigateByUrl('/auth/login');
+    window.open(environment.domainName + '/auth/login', '_self')
   }
   Disconnect() {
     this.voteService.Disconnect();
