@@ -62,6 +62,7 @@ import { Title } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VoteService } from '@app/core/services/vote/vote.service';
 import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
+import Cookies from 'js-cookie';
 
 const bscan = environment.bscanaddr;
 const etherscan = environment.etherscanaddr;
@@ -120,6 +121,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   bepGaz: any;
   showNotifications: boolean = false;
   newNotification: boolean = false;
+  networkLabel: any = "BNB Smart chain";
+  networkLogo: any = "bsc"
+  networkList: any[] = [];
+  showNetwork: any = false;
   isSeen: number = 0;
   btcCode: string = '';
   btcCodeV2: string = '';
@@ -387,7 +392,44 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       this.seeNotification();
     }
   }
+
+  toggleNetworkList() {
+    this.showNetwork = !this.showNetwork;
+  }
+
+  displayNetwork(e: any){
+    this.networkLabel = e.network;
+    this.networkLogo = e.label;
+    Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
+    Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
+  }
+
+  controllingNetwork(){
+    try {
+      this.networkLabel = Cookies.get('networkSelected') || 'BNB smart chain';
+      this.networkLogo = Cookies.get('networkSelectedLogo') || 'bsc'
+    } catch (error) {
+      console.error('Error retrieving or setting cookie:', error);
+      this.networkLabel = 'bnb smart chain';
+      this.networkLogo = 'bsc';
+    }
+  }
+
   ngOnInit(): void {
+    this.controllingNetwork();
+  
+
+    this.networkList = [
+      {network:"BNB Smart Chain" , label: "bsc" ,logo: "" , adress:"0x742d35Cc6634C0532925a3b844Bc454e4438f44e" },
+      {network:"Etherium" , label: "erc20" ,logo: "" , adress:"0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE" },
+      {network:"Polygon" , label: "polygon" ,logo: "" , adress:"0x4E1000616990D83e56f4f6Ff6208d31e0F52350d" },
+      {network:"BitTorrent" , label: "btt" ,logo: "" , adress:"0xFA456Cf55250A839088b27EE32A424d7DAc7f8c3"  }
+    ]
+
+    this.networkList.forEach(item => {
+      item.logo = `assets/Images/${item.label}.svg`;
+    });
+    
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
 
