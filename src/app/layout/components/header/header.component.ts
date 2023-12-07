@@ -836,7 +836,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               this.router.navigate(['home/settings/Legal_KYC']);
             }
             if (notif?.label?.promHash) {
-              this.router.navigate(['home/farm-posts'], {
+              this.router.navigate(['farm-posts'], {
                 queryParams: { promHash: notif?.label?.promHash }
               });
             }
