@@ -424,8 +424,7 @@ export class CampaignDetailComponent implements OnInit {
     }
   }
   expiredSession() {
-    this.tokenStorageService.clear();
-    window.open(environment.domainName + '/auth/login', '_self');
+
   }
 
   gettingAllproms(): void {
@@ -587,11 +586,8 @@ export class CampaignDetailComponent implements OnInit {
     return this.tokenStorageService.getLocale() || 'en';
   }
   goParticipate(id: any) {
-    if (this.tokenStorageService.getIsAuth()) {
-      this.router.navigate(['home/part', id]);
-    } else {
-      this.router.navigate(['auth/login']);
-    }
+      this.router.navigate(['part', id]);
+  
   }
 
   getCampaign() {
