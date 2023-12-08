@@ -576,6 +576,7 @@ goToAccount(oracle: string, userName: string) {
           if (response.message === 'deleted successfully') {
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             //this.getSocialNetwork();
+            this.channelTiktok = [];
             this.closeModal(modalName);
           }
         });
