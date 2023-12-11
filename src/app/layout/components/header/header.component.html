@@ -66,7 +66,6 @@
           Connect Wallet
         </button>
       </div>
-
       <ul
         class="d-md-block d-xl-none d-lg-none d-sm-block navbar-nav"
         *ngIf="
@@ -183,10 +182,12 @@
       <ul
         class="right_nav_side navbar-nav right-menu"
         *ngIf="
-          externalWalletService.isWalletConnected &&
+          
+        externalWalletService.isWalletConnected &&
           externalWalletService.connect
         "
       >
+      
         <!------------------------------------------------------------------------->
         <li class="li-menu-profil">
           <div class="dropdown2" id="myDropdown" id="intro4">
@@ -202,6 +203,7 @@
               <span class="span-userName ps-2 pe-2">{{
                 voteService.formattedCreator
               }}</span>
+             
               <i class="chevron fa fa-fw"></i>
             </a>
             <ul
@@ -260,7 +262,7 @@
           <a class="" [routerLink]="['/auth/login']">Connect</a>
         </button> -->
         <div>
-          <button (click)="toggleNetworkList()"class="network_btn">
+          <button (click)="toggleNetworkList()"class="network_btn" [ngClass]="{'margin_right' : externalWalletService.isWalletConnected && externalWalletService.connect}">
             <img class="network_logo" [src]="'assets/Images/' + networkLogo + '.svg'"  alt="">
             <span class="network_label">{{networkLabel | uppercase}}</span>
             <ng-container *ngIf="!showNetwork; else arrowUp">
@@ -282,8 +284,8 @@
                 </li>
             </ul>
           </button>
-
         </div>
+        
         <div *ngIf="!externalWalletService.connect">
           <button class="button-connect" (click)="voteService.showConnectDialog(connectModal)">
             <img src="assets/Images/connected-wallet.png" />

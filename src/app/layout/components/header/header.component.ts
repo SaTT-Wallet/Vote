@@ -20,7 +20,7 @@ import { NotificationService } from '@core/services/notification/notification.se
 import { TokenStorageService } from '@core/services/tokenStorage/token-storage-service.service';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { walletUrl, ListTokens, sattUrl } from '@config/atn.config';
+import { walletUrl, ListTokens, sattUrl , networkList} from '@config/atn.config';
 import { User } from '@app/models/User';
 import { SidebarService } from '@core/services/sidebar/sidebar.service';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -123,7 +123,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   newNotification: boolean = false;
   networkLabel: any = "BNB Smart chain";
   networkLogo: any = "bsc"
-  networkList: any[] = [];
+  networkList: any = networkList;
   showNetwork: any = false;
   isSeen: number = 0;
   btcCode: string = '';
@@ -405,24 +405,29 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   controllingNetwork(){
-      this.networkLabel = Cookies.get('networkSelected') || 'BNB smart chain';
-      this.networkLogo = Cookies.get('networkSelectedLogo') || 'bsc'
+      try {
+        this.networkLabel = Cookies.get('networkSelected') ;
+        this.networkLogo = Cookies.get('networkSelectedLogo');
+      } catch (error) {
+        console.error('Error retrieving or setting cookie:', error);
+        this.networkLabel = 'bnb smart chain';
+      }
   }
 
   ngOnInit(): void {
     this.controllingNetwork();
   
 
-    this.networkList = [
-      {network:"BNB Smart Chain" , label: "bsc" ,logo: "assets/Images/bsc.svg"  },
-      {network:"Etherium" , label: "erc20" ,logo: "assets/Images/erc20.svg"  },
-      {network:"Polygon" , label: "polygon" ,logo: "assets/Images/polygon.svg"  },
-      {network:"BitTorrent" , label: "btt" ,logo: "assets/Images/btt.svg"   }
-    ]
+    // this.networkList = [
+    //   {network:"BNB Smart Chain" , label: "bsc" ,logo: ""  },
+    //   {network:"Ethereum" , label: "erc20" ,logo: ""  },
+    //   {network:"Polygon" , label: "polygon" ,logo: ""  },
+    //   {network:"BitTorrent" , label: "btt" ,logo: ""  }
+    // ]
 
-    // this.networkList.forEach(item => {
-    //   item.logo = `assets/Images/${item.label}.svg`;
-    // });
+    this.networkList.forEach((item: { network: string, label: string, logo: string }) => {
+      item.logo = `assets/Images/${item.label}.svg`;
+    });
     
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
