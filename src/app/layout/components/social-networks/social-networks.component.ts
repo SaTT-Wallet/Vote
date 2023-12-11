@@ -89,7 +89,8 @@ export class SocialNetworksComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-     this.getSocialNetwork()
+    this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+    this.getSocialNetwork()
   }
 
   showToast(message: string): void {
@@ -132,6 +133,55 @@ export class SocialNetworksComponent implements OnInit {
   //     // this.tiktokFollowers=data.data
   //   })
   // }
+
+  getPercentSocial() {
+    let count = 0;
+    if (this.channelGoogle?.length !== 0) {
+      count++;
+    } else {
+      this.channelGoogle?.forEach((ch: any) => {
+        this.deactivateGoogle = !!this.allChannels.google[ch].deactivate;
+      });
+    }
+
+    if (this.channelTwitter?.length !== 0) {
+      count++;
+    } else {
+      this.channelTwitter?.forEach((ch: any) => {
+        this.deactivateTwitter = !!this.allChannels.twitter[ch].deactivate;
+      });
+    }
+
+    if (this.channelFacebook?.length !== 0) {
+      count++;
+    } else {
+      this.channelFacebook?.forEach((ch: any) => {
+        this.deactivateFacebook = !!this.allChannels.facebook[ch].deactivate;
+      });
+    }
+
+    if (this.channelLinkedin?.length !== 0) {
+      count++;
+    } else {
+      this.channelLinkedin?.forEach((ch: any) => {
+        this.deactivateLinkedin = !!this.allChannels.linkedin[ch].deactivate;
+      });
+    }
+
+    if (this.channelTiktok?.length !== 0) {
+      count++;
+    } else {
+      this.channelTiktok?.forEach((ch: any) => {
+        this.deactivateTiktok = !!this.allChannels.tiktok[ch].deactivate;
+      });
+    }
+    
+    let stat = (count * 100) / 5;
+   
+    
+    this.percentSocial = stat.toFixed(0);
+    return this.percentSocial
+  }
   getSocialNetwork(): void {
     this.showSpinner = true;
     this.profileService.getSocialNetworks().pipe(
@@ -148,9 +198,9 @@ export class SocialNetworksComponent implements OnInit {
       takeUntil(this.isDestroyed)
     ).subscribe(
       ({ params, data }: { params: Params; data: any }) => {
-        console.log({data})
+        console.log({params})
         if (data !== null) {
-        
+          console.log({data})
           let count = 0;
           this.allChannels = data.data;
           this.channelGoogle = data.data.google;
@@ -471,8 +521,8 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            this.getSocialNetwork();
+            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            //this.getSocialNetwork();
             this.closeModal(id);
           }
         });
@@ -482,8 +532,8 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            this.getSocialNetwork();
+            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            //this.getSocialNetwork();
             this.closeModal(id);
           }
         });
@@ -493,8 +543,8 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            this.getSocialNetwork();
+            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            //this.getSocialNetwork();
             this.closeModal(id);
           }
         });
@@ -504,8 +554,8 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            this.getSocialNetwork();
+            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            //this.getSocialNetwork();
             this.closeModal(id);
           }
         });
@@ -515,8 +565,8 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
-            //this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            this.getSocialNetwork();
+            this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
+            //this.getSocialNetwork();
             this.closeModal(id);
           }
         });
@@ -532,6 +582,7 @@ goToAccount(oracle: string, userName: string) {
           if (response.message === 'deleted successfully') {
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             this.channelGoogle = [];
+            this.percentSocial -= 20;
             this.closeModal(modalName);
           }
         });
@@ -543,6 +594,7 @@ goToAccount(oracle: string, userName: string) {
           if (response.message === 'deleted successfully') {
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             this.channelFacebook = [];
+            this.percentSocial -= 20;
             this.closeModal(modalName);
           }
         });
@@ -554,6 +606,7 @@ goToAccount(oracle: string, userName: string) {
           if (response.message === 'deleted successfully') {
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             this.channelTwitter = [];
+            this.percentSocial -= 20;
             this.closeModal(modalName);
           }
         });
@@ -565,6 +618,7 @@ goToAccount(oracle: string, userName: string) {
           if (response.message === 'deleted successfully') {
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             this.channelLinkedin = [];
+            this.percentSocial -= 20;
             this.closeModal(modalName);
           }
         });
@@ -575,7 +629,8 @@ goToAccount(oracle: string, userName: string) {
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-            //this.getSocialNetwork();
+            this.channelTiktok = []
+            this.percentSocial -= 20;
             this.closeModal(modalName);
           }
         });
