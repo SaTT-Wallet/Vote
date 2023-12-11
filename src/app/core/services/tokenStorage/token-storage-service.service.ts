@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { LocalStorageRefService } from '../localstorage-ref/local-storage-ref-service.service';
 import { sattUrl } from '@app/config/atn.config';
+import { Observable, BehaviorSubject } from 'rxjs';
 const TOKEN_KEY = 'access_token';
 const isAuth = 'isAuthenticated';
 const idWallet = 'wallet_id';
@@ -25,11 +26,22 @@ const userIdPost = 'userIdPost';
   providedIn: 'root'
 })
 export class TokenStorageService {
+
+  public idWalletSubject: BehaviorSubject<string> = new BehaviorSubject<string>(
+    this.getIdWallet()
+  );
+
+  idWallet$: Observable<string> = this.idWalletSubject.asObservable();
+
   constructor(
     public cookie: CookieService,
     private localStorage: LocalStorageRefService,
     private http: HttpClient
-  ) {}
+  ) {
+    this.idWallet$.subscribe(() => {
+      console.log('Wallet ID changed in service');
+    });
+  }
   headers: any;
   imgheader: any;
   multiFileheader: any;
@@ -144,10 +156,20 @@ public saveLinks(newlink: any){
   public getNetwork() {
     return this.localStorage.getItem(network);
   }
-  public saveIdWallet(adress: string): void {
-    this.localStorage.removeItem(idWallet);
-    this.localStorage.setItem(idWallet, adress);
+
+
+  public saveIdWallet(walletId: string): void {
+    const existingWalletId = localStorage.getItem(idWallet);
+  
+    if (existingWalletId !== walletId) {
+      localStorage.removeItem(idWallet);
+      localStorage.setItem(idWallet, walletId);
+      this.idWalletSubject.next(walletId);
+    }
   }
+  
+
+
   public saveTronWallet(address: string): void {
     this.localStorage.removeItem('tron-wallet');
     this.localStorage.setItem('tron-wallet', address);
@@ -155,8 +177,8 @@ public saveLinks(newlink: any){
   public getTronWalletAddress() {
     return this.localStorage.getItem('tron-wallet');
   }
-  public getIdWallet() {
-    return this.localStorage.getItem(idWallet);
+  public getIdWallet(): string{
+    return localStorage.getItem(idWallet) || '';
   }
 
   public saveExpire(time: any): void {

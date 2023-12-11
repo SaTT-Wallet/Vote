@@ -516,17 +516,22 @@ export class CampaignHttpApiService {
       .set('campaign', campaignId)
       .set('state', state)
       .set('page', '' + page)
-      .set('limit', '' + size)
-      .set('version', '' + this.tokenStorageService.getWalletVersion());
-    let idUser = this.tokenStorageService.getUserId();
-
+      .set('limit', '' + size);
+    let wallet_id = this.tokenStorageService.getIdWallet();
+  
+    // Create an object to represent the request body
+    const requestBody = {
+      wallet_id: wallet_id,
+      // Add other properties if needed
+    };
+  
     return this.http
-      .get(sattUrl + '/campaign/filterLinks/' + idUser, {
-        params: campaignId ? queryParamsCamp : queryParams
+      .post(sattUrl + '/external/campaign/filterLinksExternal', requestBody, {
+        params: campaignId ? queryParamsCamp : queryParams,
       })
       .pipe(share());
   }
-
+  
   allCampaigns(
     page = 1,
     size = 1,

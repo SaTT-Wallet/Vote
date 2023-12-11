@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { environment as env } from '../../../../environments/environment.prod';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Cookies from 'js-cookie';
@@ -21,8 +22,9 @@ export class VoteService {
   account!: string[];
   formattedCreator: string | undefined;
 
+  private previousWalletId!: string;
 
-  constructor(public externalWalletService: ExternalWalletService,public apiprofilService:ApiprofilService, public modalService: NgbModal, public tokenStorageService: TokenStorageService) { }
+  constructor(public externalWalletService: ExternalWalletService,private router: Router, public apiprofilService:ApiprofilService, public modalService: NgbModal, public tokenStorageService: TokenStorageService) { }
 
   showConnectDialog(content?: any) {
     this.modalService.open(content)
@@ -125,6 +127,13 @@ export class VoteService {
       if (accounts.length > 0) {
         this.walletConnected = true;
         this.walletId = accounts[0];
+        this.tokenStorageService.saveIdWallet(this.walletId)
+        if (this.walletId !== this.previousWalletId) {
+          this.previousWalletId = this.walletId;
+           if (this.router.url === '/farm-posts/no-posts-to-farm' || this.router.url === '/farm-posts') {
+            this.router.navigateByUrl('/farm-posts');
+          }
+        }
         this.formattedCreator = `${this.walletId.substr(0, 4)}...${this.walletId.substr(-3)}`;     
       
 

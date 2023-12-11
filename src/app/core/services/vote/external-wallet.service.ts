@@ -59,6 +59,8 @@ export class ExternalWalletService {
 
         
         const accounts = await this.ethereum.request({ method: 'eth_requestAccounts' });
+        this.tokenStorageService.saveIdWallet(accounts[0])
+
         const signature = await this.ethereum.request({
           method: 'personal_sign',
           params: [message, accounts[0]],

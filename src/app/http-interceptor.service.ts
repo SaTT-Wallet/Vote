@@ -24,6 +24,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       '/external/RemoveGoogleChannel',
       '/external/create-user',
       '/external/socialAccounts',
+      '/external/campaign/filterLinksExternal'
     ];
 
     // Check if the request URL matches any of the specified URLs
