@@ -36,7 +36,7 @@ export class NoPostsToFarmComponent implements OnInit {
   }
   goToFarmPosts() {
     this.showSpinnerJoin = true;
-    this.router.navigate(['/home/ad-pools']);
+    this.router.navigate(['/ad-pools']);
   }
   redirectqueryparam() {
     this.showSpinnerInfo = true;

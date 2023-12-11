@@ -29,7 +29,8 @@ type NetworkToTokenStandard = {
 })
 export class WalletService {
 
-
+  private idWalletSubject = new Subject<string>();
+  idWallet$ = this.idWalletSubject.asObservable();
   
   networkToTokenStandard: NetworkToTokenStandard = {
     "Ethereum": "erc20",
@@ -53,6 +54,12 @@ export class WalletService {
     });
   }
 
+
+  updateWalletId(walletId: string) {
+    this.idWalletSubject.next(walletId);
+  }
+
+  
   public getAllWallet(): Observable<IResponseWallet> {
     return this.http
       .get<IResponseWallet>(sattUrl + '/wallet/allwallets')

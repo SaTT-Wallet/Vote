@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit,NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subject, Subscription } from 'rxjs';
@@ -14,6 +14,7 @@ import { DOCUMENT, ViewportScroller } from '@angular/common';
 import { compare } from '@helpers/utils/math';
 import { youtubeThumbnail } from '@config/atn.config';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TokenStorageService } from '@app/core/services/tokenStorage/token-storage-service.service';
 @Component({
   selector: 'app-farm-posts',
   templateUrl: './farm-posts.component.html',
@@ -35,6 +36,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 // ../../components/campaign-detail-gains/campaign-detail-gains.component.css
 export class FarmPostsComponent implements OnInit {
+  private walletIdSubscription!: Subscription;
+  private queryParamSubscription: Subscription | undefined;
+
   throttle = 0;
   distance = 2;
   onScrollSubject = new Subject();
@@ -69,19 +73,23 @@ export class FarmPostsComponent implements OnInit {
     private route: ActivatedRoute,
     private scroller: ViewportScroller,
     private sanitizer: DomSanitizer,
+    private tokenStorageService :TokenStorageService,
+    private ngZone: NgZone,
     @Inject(DOCUMENT) private document: any
   ) {}
 
   ngOnInit(): void {
     this.ParticipationListService.isEarnings = false;
     this.setQuery();
-
-    this.subscription = this.campaignService.loadDataPostFarmWhenEndScroll
-      .pipe(takeUntil(this.isDestroyed))
-      .subscribe(() => {
-        this.ParticipationListService.emitPageScroll();
-      });
-    this.showSpinner = true;
+  
+    this.walletIdSubscription = this.tokenStorageService.idWallet$
+    .pipe(takeUntil(this.isDestroyed))
+    .subscribe((walletId: string) => {
+      console.log('Wallet ID changed:', walletId);
+      if (walletId) {
+        this.getLink();
+      }
+    });
 
     this.ParticipationListService.list$
       .pipe(
@@ -97,52 +105,38 @@ export class FarmPostsComponent implements OnInit {
         if (links.length === 0 && this.postsNumber === 0) {
           this.showWelcome = true;
           this.router.navigate(['/farm-posts/no-posts-to-farm']);
-        } else {
         }
-        this.getLink();
       });
+
     this.ParticipationListService.loadLinks()
       .pipe(takeUntil(this.isDestroyed))
       .subscribe();
-    /*this.campaignFacade.linksList$.subscribe((links) => {
-      let list = [
-        ...this.newHandledLinks(cloneDeep(links)).map(
-          (element) => new Participation(element)
-        )
-      ]
-      this.showSpinner = false;
-      this.listLinks = list ;
-      this.postsNumber = this.listLinks.length;
-
-      /!*if (links.length === 0 && this.postsNumber === 0) {
-        this.showWelcome = true;
-      } else {
-      }*!/
-      // this.disabledFunction(links);
-      this.getLink();
-    })*/
   }
   setQuery() {
     this.ParticipationListService.setQueryParams({ campaignId: '', state: '' });
   }
 
-  getLink() {
-    this.promHash = this.route.snapshot.queryParamMap.get('promHash') as string;
+getLink(): void {
+  this.route.queryParamMap
+    .pipe(takeUntil(this.isDestroyed))
+    .subscribe((queryParams) => {
+      const promHash = queryParams.get('promHash');
+      if (promHash) {
+        let itemFound = false;
+        this.listLinks.forEach((item) => {
+          itemFound = promHash === item.hash;
+          if (itemFound) {
+            this.scroller.scrollToAnchor(promHash);
+          }
+        });
 
-    // this.scroller.scrollToAnchor(this.promHash);
-    if (this.promHash) {
-      let itemFound = false;
-      this.listLinks.forEach((item) => {
-        itemFound = this.promHash === item.hash;
-        if (itemFound) {
-          this.scroller.scrollToAnchor(this.promHash);
+        if (!itemFound) {
+          this.ParticipationListService.loadNextPage({}, false, {});
         }
-      });
-      if (!itemFound) {
-        this.ParticipationListService.loadNextPage({}, false, {});
       }
-    }
-  }
+    });
+}
+
 
   // ngAfterViewInit() {
   //   this.promHash = this.route.snapshot.queryParamMap.get('promHash') as string;
@@ -189,9 +183,12 @@ export class FarmPostsComponent implements OnInit {
   }
 
   ngOnDestroy() {
+
     this.isDestroyed.next('');
     this.isDestroyed.complete();
     this.subscription?.unsubscribe();
+    this.walletIdSubscription.unsubscribe();
+
     //this.ParticipationListService.clearDataFarming();
   }
 

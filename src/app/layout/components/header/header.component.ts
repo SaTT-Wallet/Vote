@@ -398,6 +398,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         .subscribe((isAuth: boolean) => {
           this.isConnected = isAuth;
         });*/
+      
       this.fixMenuItemsWidth();
       if (this.router.url.includes('welcome')) {
         this.isWelcomePage = true;
@@ -425,62 +426,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         this.oldHeight = window.innerHeight;
         this.newHeight = this.oldHeight;
       }
-      if (this.tokenStorageService.getToken()) {
-        this.walletFacade.verifyUserToken()
-      .subscribe((res: any) => {
-        if(res.message === "success") {
-          this.showConnectButton = false;
-          this.isConnected = true;
-          this.getProfileDetails();
-        this.getNotifications();
-        // this.parentFunction();
-        this.portfeuille();
-        // this.showPopUp()
 
-        this.receiveMessage();
-
-        this.tokenStorageService.removeItem('visited-facebook');
-        this.tokenStorageService.removeItem('hasTwitter');
-        this.tokenStorageService.removeItem('visited-google');
-        this.tokenStorageService.removeItem('visited-twitter');
-        this.tokenStorageService.removeItem('visited-tiktok');
-        this.tokenStorageService.removeItem('visited-socialConfig');
-        this.tokenStorageService.removeItem('visited-transactionPwd');
-        this.tokenStorageService.removeItem('visited-pwd');
-        this.tokenStorageService.removeItem('visited-download');
-        this.tokenStorageService.removeItem('visited-activePass');
-        this.tokenStorageService.removeItem('visited-completeProfile');
-        this.tokenStorageService.removeItem('visited-key');
-        this.tokenStorageService.removeItem('enabled');
-        this.tokenStorageService.removeItem('visited-pass-phrase');
-
-        this.isClicked();
-        
-        this.tokenStorageService.setItem('wallet_btc', this.btcCode);
-        this.tokenStorageService.setItem('wallet_btc_v2', this.btcCodeV2);
-        this.tokenStorageService.setItem('tron-wallet', this.tronAddress);
-        this.tokenStorageService.setItem('tron-wallet_v2', this.tronAddressV2);
-        } else {
-          this.signOut();
-          this.isConnected = false;
-          this.showConnectButton = true;
-          
-        };
-      }, (err:any) => {
-        this.signOut();
-        this.isConnected = false;
-        this.showConnectButton = true;
-        
-      })
-
-        
-      } else {
-        this.isConnected = false;
-        this.showConnectButton = true;
-      }
     }
 
-    this.isConnected = false;
+    this.isConnected = true;
     setInterval(async () => {
       await this.voteService.checkWalletConnected();
     }, 700);
@@ -1714,6 +1663,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     // console.log("body", this.createProposalForm.value.body)
     if (typeof window.ethereum !== 'undefined') {
       const accounts = await this.externalWalletService.checkConnectedWallet();
+
       if (accounts.length > 0) {
         this.walletConnected = true;
         this.walletId = accounts[0];

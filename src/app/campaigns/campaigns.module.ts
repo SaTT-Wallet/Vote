@@ -1,7 +1,7 @@
 import { NgModule, ViewContainerRef, ViewRef } from '@angular/core';
 import { CampaignsRoutingModule } from '@app/campaigns/campaigns-routing.module';
 import { DashboardHeaderComponent } from '@app/campaigns/components/dashboard-header/dashboard-header.component';
-import { MultiSelectComponent } from '@app/shared/components/multi-select/multi-select.component';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { FlatSelectComponent } from '@app/campaigns/components/filter-campaign/filter-campaign.component';
 import { VerifyLinkComponent } from '@app/campaigns/components/verify-link/verify-link.component';
 import { RecoverGainsComponent } from '@app/campaigns/components/recover-gains/recover-gains.component';
@@ -28,7 +28,6 @@ import { CampaignsListItemComponent } from '@campaigns/components/campaigns-list
 import { NoPostsToFarmComponent } from '@campaigns/components/no-posts-to-farm/no-posts-to-farm.component';
 import { MissionsComponent } from './components/missions/missions.component';
 import { ConvertFromWei } from '@app/shared/pipes/wei-to-sa-tt.pipe';
-import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DraftPictureComponent } from './components/draft-picture/draft-picture.component';
 import { CommonModule } from '@angular/common';
@@ -40,6 +39,7 @@ import { CryptoEffectsList } from '@app/core/store/crypto-prices/effects/crypto.
 
 
 import { CampaignDetailsModule } from './campaign-details/campaign-details.module';
+import { HttpInterceptorService } from '@app/http-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -70,6 +70,7 @@ import { CampaignDetailsModule } from './campaign-details/campaign-details.modul
     CampaignsRoutingModule,
     CampaignsSharedUiModule,
     CampaignDetailsModule,
+    HttpClientModule,
     NgxTweetModule,
     EffectsModule.forFeature([LinksListEffects]),
     StoreModule.forFeature(
@@ -81,7 +82,7 @@ import { CampaignDetailsModule } from './campaign-details/campaign-details.modul
     EffectsModule.forFeature([CryptoEffectsList]),
   ],
   exports: [CampaignsRoutingModule],
-  providers: [ConvertFromWei]
+  providers: [ConvertFromWei, { provide: 'isBrowser', useValue: true }, {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}]
 })
 export class CampaignsModule {}
 // AOT compilation support

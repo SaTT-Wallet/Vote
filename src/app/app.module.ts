@@ -4,6 +4,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FacebookModule } from 'ngx-facebook';
 
+import { translateBrowserLoaderFactory } from './core/loaders/translate-browser.loader';
+
+
 import { BrowserModule, TransferState } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
@@ -12,7 +15,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '@environments/environment.prod';
 import { TransferHttpCacheModule } from '@nguniversal/common';
-import { translateBrowserLoaderFactory } from '@core/loaders/translate-browser.loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpInterceptorService } from './http-interceptor.service';
 
