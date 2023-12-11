@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  HostListener,
   Input,
   OnInit,
   Output,
@@ -21,6 +22,9 @@ import { Subject } from 'rxjs';
 import { WalletFacadeService } from '@app/core/facades/wallet-facade.service';
 import { WalletStoreService } from '@app/core/services/wallet-store.service';
 import { ipfsURL } from '@app/config/atn.config';
+import { VoteService } from '@app/core/services/vote/vote.service';
+import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
+import { environment } from '@environments/environment';
 // TODO: missing budget property in the data sent by backend /v2/campaigns
 
 @Component({
@@ -41,11 +45,18 @@ export class CampaignsListItemComponent implements OnInit {
   showSpinner = false;
   deletebutton: boolean = false;
   picUserUpdated: boolean = false;
-
- 
+  @ViewChild('connectModal', { static: false })
+  private connectModal!: TemplateRef<any>;
+  public getScreenWidth: any;
   currencyName = '';
  
   private isDestroyed = new Subject();
+  @HostListener('window:resize', ['$event'])
+
+  resize(event: any) {
+    
+    this.getScreenWidth = event.target.innerWidth;
+  }
 
   constructor(
     private router: Router,
@@ -56,11 +67,14 @@ export class CampaignsListItemComponent implements OnInit {
     private toastr: ToastrService,
     private tokenStorageService: TokenStorageService,
     private walletFacade: WalletFacadeService,
-    private walletStoreService: WalletStoreService
+    private walletStoreService: WalletStoreService,
+    private externalWalletService: ExternalWalletService,
+    public voteService: VoteService,
+    
   ) {}
 
   ngOnInit(): void {
-
+    this.getScreenWidth = window.innerWidth;
 this.getNewApplicant()
     this.currencyName = this.campaign.currency.name;
     if (this.currencyName === 'SATTBEP20') {
@@ -80,6 +94,14 @@ getNewApplicant(){
     
   })
 }
+connectMetaMask() {
+  this.voteService.hideConnectDialog(this.connectModal);
+  this.voteService.connectWallet('metamask')
+}
+
+sattConnect() {
+  window.open(environment.domainName + '/auth/login', '_self')
+}
 truncateTitle(title: string): string {
   const maxLength = 17;
   if (title.length > maxLength) {
@@ -87,7 +109,7 @@ truncateTitle(title: string): string {
   }
   return title;
 }
-  goToDetailsPage(id: string) {
+  async goToDetailsPage(id: string) {
     // const currentUrl = this.router.url;
     // if(this.deletebutton==false){
     //   this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -102,9 +124,15 @@ truncateTitle(title: string): string {
     //       this.router.navigate(['/campaign'+this.campaign.id]);
     //   });
     // window.location.reload();
-    if (this.deletebutton === false) {
-      this.router.navigate(['campaign', id]);
+    const res = await this.externalWalletService.checkConnectedWallet();
+    if(res.length > 0) {
+      if (this.deletebutton === false ) {
+        this.router.navigate(['campaign', id]);
+      } 
+    } else {
+      this.modalService.open(this.connectModal);
     }
+    
   }
   onImgError(event: any) {
     event.target.src = 'assets/Images/moonboy/Default_avatar_MoonBoy.png';
