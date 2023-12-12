@@ -62,6 +62,19 @@ let pattPassword =
 
 let cryptoNetwork: any = [];
 
+let networkList: {network: string,label: string,logo: string}[] = [
+  {network:"BNB Smart Chain" , label: "bsc" ,logo: ""  },
+  {network:"Ethereum" , label: "erc20" ,logo: ""  },
+  {network:"Polygon" , label: "polygon" ,logo: ""  },
+  {network:"BitTorrent" , label: "btt" ,logo: ""  }
+];
+
+// let networkList: {network: string,label: string,logo: string}[] = [
+//   {network:"BNB Smart Chain" , label: "bsc" ,logo: "assets/Images/bsc.svg"  },
+//     {network:"Ethereum" , label: "erc20" ,logo: "assets/Images/erc20.svg"  },
+//     {network:"Polygon" , label: "polygon" ,logo: "assets/Images/polygon.svg"  },
+//     {network:"BitTorrent" , label: "btt" ,logo: "assets/Images/btt.svg"   }
+//   ];
 let cryptoList: { symbol: string; network: string; logo: string }[] = [
   { symbol: 'SATT', network: 'bep20', logo: 'SATTBEP20.svg' },
   { symbol: 'SATT', network: 'erc20', logo: 'SATT2.svg' },
@@ -326,7 +339,7 @@ var ListTokens: { [key: string]: { [key: string]: any } } = {
     name: 'BTT',
     contract: null,
     decimals: new Big('10').pow(18),
-    logo: 'BTT.svg',
+    logo: 'btt.svg',
     type: 'BTT',
     symbole: 'BTT'
   }
@@ -879,6 +892,7 @@ export {
   sattUrl,
   ipfsURL,
   walletUrl,
+  networkList,
   arrayCountries,
   GazConsumed,
   GazConsumedByCampaign,
