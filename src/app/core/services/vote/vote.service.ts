@@ -87,13 +87,9 @@ export class VoteService {
       this.createAccount(this.account[0])
       await this.externalWalletService.checkConnectedWallet();
     }
-
-    //this.hideConnectDialog();
   }
 
  createAccount(wallet:any):void {
-
-  console.log({wallet})
   this.apiprofilService.createUser(wallet.toLowerCase()).subscribe(
     (res:any) => {
       console.log({res})
@@ -102,16 +98,13 @@ export class VoteService {
       console.error(err)
     }
   );
-  
-   
  }
 
   detectAccountChange(): void {
     if (typeof window.ethereum ) {
-      window.ethereum .on('accountsChanged', (accounts: string[]) => {
+      window.ethereum.on('accountsChanged', (accounts: string[]) => {
         if (accounts.length > 0) {
           const newAccount = accounts[0];
-          console.log("newAccountnewAccountnewAccount",newAccount)
           this.createAccount(newAccount)
         }
       });

@@ -90,7 +90,40 @@ export class SocialNetworksComponent implements OnInit {
 
   ngOnInit(): void {
     this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
-    this.getSocialNetwork()
+    this.getSocialNetwork();
+    this.subscribeToAccountChanges()
+  }
+  generateSignature() {
+      const timestamp = Date.now().toString();
+      const message = `authentication=true&address=${window.ethereum.selectedAddress}&ts=${timestamp}`;
+      //const accounts = await this.ethereum.request({ method: 'eth_requestAccounts' });
+     
+       window.ethereum
+      .request({
+        method: 'personal_sign',
+        params: [message, window.ethereum.selectedAddress],
+      })
+      .then((signature: string) => {
+       
+       
+        Cookies.set('metamaskSignature', signature, { secure: true, sameSite: 'Lax' });
+        Cookies.set('metamaskAddress', window.ethereum.selectedAddress, { secure: true, sameSite: 'Lax' });
+        Cookies.set('metamaskNonce', message, { secure: true, sameSite: 'Lax' });
+        
+      })
+      .catch((error: any) => {
+        console.error('Error prompting for signature:', error);
+      });
+  }
+  subscribeToAccountChanges() {
+    if (typeof window.ethereum) {
+      window.ethereum.on('accountsChanged', async (accounts: string[]) => {
+        if (accounts.length > 0) {
+          await this.externalWalletService.connectMetamask();
+         
+        }
+      });
+    }
   }
 
   showToast(message: string): void {
@@ -126,62 +159,7 @@ export class SocialNetworksComponent implements OnInit {
     this.modalService.dismissAll(content);
     this.networkName = '';
   }
-  // numberTiktok(){
-  //   this.profile.getTicTokNbFollowers(3871).subscribe((data)=>{
-  //     console.log({data});
-
-  //     // this.tiktokFollowers=data.data
-  //   })
-  // }
-
-  getPercentSocial() {
-    let count = 0;
-    if (this.channelGoogle?.length !== 0) {
-      count++;
-    } else {
-      this.channelGoogle?.forEach((ch: any) => {
-        this.deactivateGoogle = !!this.allChannels.google[ch].deactivate;
-      });
-    }
-
-    if (this.channelTwitter?.length !== 0) {
-      count++;
-    } else {
-      this.channelTwitter?.forEach((ch: any) => {
-        this.deactivateTwitter = !!this.allChannels.twitter[ch].deactivate;
-      });
-    }
-
-    if (this.channelFacebook?.length !== 0) {
-      count++;
-    } else {
-      this.channelFacebook?.forEach((ch: any) => {
-        this.deactivateFacebook = !!this.allChannels.facebook[ch].deactivate;
-      });
-    }
-
-    if (this.channelLinkedin?.length !== 0) {
-      count++;
-    } else {
-      this.channelLinkedin?.forEach((ch: any) => {
-        this.deactivateLinkedin = !!this.allChannels.linkedin[ch].deactivate;
-      });
-    }
-
-    if (this.channelTiktok?.length !== 0) {
-      count++;
-    } else {
-      this.channelTiktok?.forEach((ch: any) => {
-        this.deactivateTiktok = !!this.allChannels.tiktok[ch].deactivate;
-      });
-    }
-    
-    let stat = (count * 100) / 5;
-   
-    
-    this.percentSocial = stat.toFixed(0);
-    return this.percentSocial
-  }
+  
   getSocialNetwork(): void {
     this.showSpinner = true;
     this.profileService.getSocialNetworks().pipe(
@@ -277,101 +255,9 @@ export class SocialNetworksComponent implements OnInit {
         }
       }
     )
-    /*this.socialAccount$
-      .pipe(
-        catchError(() => {
-          return of(null);
-        }),
-        mergeMap((data) => {
-          return this.route.queryParams.pipe(
-            map((params) => {
-              return { params, data };
-            })
-          );
-        }),
-        takeUntil(this.isDestroyed)
-      )
-      .subscribe(({ params, data }: { params: Params; data: any }) => {
-        if (data !== null) {
-        
-          let count = 0;
-          this.allChannels = data;
-          this.channelGoogle = data.google;
-          this.channelTwitter = data.twitter;
-          this.channelFacebook = data.facebook;
-          this.channelLinkedin = data.linkedin;
-
-          this.channelTiktok = data.tikTok;
-          this.setUrlMsg(params, data);
-         this.channelThreads = this.checkTheradsAccountExit(data)
-        
-        
-         
-          if (this.channelGoogle?.length !== 0) {
-            count++;
-          } else {
-            this.channelGoogle?.forEach((ch: any) => {
-              this.deactivateGoogle = !!data.google[ch].deactivate;
-            });
-          }
-
-          if (this.channelTwitter?.length !== 0) {
-            count++;
-          } else {
-            this.channelTwitter?.forEach((ch: any) => {
-              this.deactivateTwitter = !!data.twitter[ch].deactivate;
-            });
-          }
-
-          if (this.channelFacebook?.length !== 0) {
-            count++;
-          } else {
-            this.channelFacebook?.forEach((ch: any) => {
-              this.deactivateFacebook = !!data.facebook[ch].deactivate;
-            });
-          }
-
-          if (this.channelLinkedin?.length !== 0) {
-            count++;
-          } else {
-            this.channelLinkedin?.forEach((ch: any) => {
-              this.deactivateLinkedin = !!data.linkedin[ch].deactivate;
-            });
-          }
-
-          if (this.channelTiktok?.length !== 0) {
-            count++;
-          } else {
-            this.channelTiktok?.forEach((ch: any) => {
-              this.deactivateTiktok = !!data.tiktok[ch].deactivate;
-            });
-          }
-          if (this.channelThreads !== false) {
-   
-            count++;
-          }
-          let stat = (count * 100) / 6;
-         
-          
-          this.percentSocial = stat.toFixed(0);
-          setTimeout(() => {
-            this.showSpinner = false;
-          }, 2000);
-        } else {
-          this.percentSocial = 0;
-          this.allChannels = [];
-          this.channelGoogle = [];
-          this.channelTwitter = [];
-          this.channelFacebook = [];
-          this.channelLinkedin = [];
-          this.channelTiktok = [];
-          this.channelThreads= [];
-          setTimeout(() => {
-            this.showSpinner = false;
-          }, 2000);
-        }
-      });*/
   }
+
+
   checkTheradsAccountExit(data:any)
   {     
    return false    
@@ -514,7 +400,6 @@ goToAccount(oracle: string, userName: string) {
   }
 
   deleteAccount(id: string, network: string,linkedinId : string ="") {
-    console.log({id})
     if (network === 'google') {
       this.socialAccountFacadeService
         .deleteOneSocialNetworksGoogle(id)

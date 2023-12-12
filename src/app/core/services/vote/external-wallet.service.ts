@@ -45,6 +45,33 @@ export class ExternalWalletService {
     }
   }
 
+  generateSignature() {
+    
+
+      const timestamp = Date.now().toString();
+      const message = `authentication=true&address=${this.ethereum.selectedAddress}&ts=${timestamp}`;
+      //const accounts = await this.ethereum.request({ method: 'eth_requestAccounts' });
+     
+       window.ethereum
+      .request({
+        method: 'personal_sign',
+        params: [message, this.ethereum.selectedAddress],
+      })
+      .then((signature: string) => {
+        // Handle the signature, you can send it to the server if needed
+        console.log('Signature:', signature);
+        Cookies.set('metamaskSignature', signature, { secure: true, sameSite: 'Lax' });
+        Cookies.set('metamaskAddress', this.ethereum.selectedAddress, { secure: true, sameSite: 'Lax' });
+        Cookies.set('metamaskNonce', message, { secure: true, sameSite: 'Lax' });
+      })
+      .catch((error: any) => {
+        console.error('Error prompting for signature:', error);
+      });
+    
+
+    
+    
+  }
   async connectMetamask(): Promise<void> {
     const provider = await detectEthereumProvider();
     
@@ -73,8 +100,7 @@ export class ExternalWalletService {
         
         // Rest of your code
         await this.ethereum.request({ method: 'wallet_requestPermissions', params: [{ eth_accounts: {} }] });
-        await this.changeToBinance(provider);
-        await this.addTokenToBinance(provider);
+        
         this.connect = true;
         this.isWalletConnected = true;
         this.tokenStorageService.setIsAuth('true')
