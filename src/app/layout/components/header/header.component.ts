@@ -406,8 +406,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   controllingNetwork(){
       try {
-        this.networkLabel = Cookies.get('networkSelected') ;
-        this.networkLogo = Cookies.get('networkSelectedLogo');
+        this.networkLabel = Cookies.get('networkSelected') || 'BNB SMART CHAIN' ;
+        this.networkLogo = Cookies.get('networkSelectedLogo') || 'bsc'
       } catch (error) {
         console.error('Error retrieving or setting cookie:', error);
         this.networkLabel = 'bnb smart chain';
