@@ -161,7 +161,7 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
         Validators.required,
         Validators.pattern(pattMedia)
       ]),
-      
+      password: new UntypedFormControl('', Validators.required)
     });
   }
 
