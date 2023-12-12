@@ -161,7 +161,7 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
         Validators.required,
         Validators.pattern(pattMedia)
       ]),
-      password: new UntypedFormControl('', Validators.required)
+      
     });
   }
 
@@ -385,7 +385,7 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
     this.tokenStorageService.saveUrlCampaign(this.sendform.get('url')?.value);
     this.showButtonSend = false;
     let myApplication: any = {};
-
+    this.linked = false;
     let media = this.sendform.get('url')?.value || '';
 
     if (
