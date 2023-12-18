@@ -63,6 +63,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VoteService } from '@app/core/services/vote/vote.service';
 import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
 import Cookies from 'js-cookie';
+import detectEthereumProvider from '@metamask/detect-provider';
 
 const bscan = environment.bscanaddr;
 const etherscan = environment.etherscanaddr;
@@ -397,16 +398,27 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showNetwork = !this.showNetwork;
   }
 
-  displayNetwork(e: any){
-    this.networkLabel = e.network;
-    this.networkLogo = e.label;
-    Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
-    Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
+   displayNetwork(e: any){
+    console.log({networkLabel: this.networkLogo, e:e.label})
+    if(this.networkLogo != e.label) {
+      detectEthereumProvider().then((provider) => {
+        this.externalWalletService.changeNetwork(provider, e.label).then((val) => {
+          this.networkLabel = e.network;
+          this.networkLogo = e.label;
+          Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
+          Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
+        })
+      });
+    } 
+     
+    
+    
   }
 
   controllingNetwork(){
       try {
-        this.networkLabel = Cookies.get('networkSelected') || 'BNB SMART CHAIN' ;
+        
+        this.networkLabel = Cookies.get('networkSelected')  || 'BNB SMART CHAIN' ;
         this.networkLogo = Cookies.get('networkSelectedLogo') || 'bsc'
       } catch (error) {
         console.error('Error retrieving or setting cookie:', error);
