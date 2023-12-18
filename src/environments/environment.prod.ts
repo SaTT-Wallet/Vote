@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  API_URL: 'https://api-preprod2.satt-token.com',
+  API_URL: 'https://localhost:3015',
   url: 'https://dapp.satt.com/',
   ipfsURL: 'https://ipfs.io/ipfs/',
   url_subgraph_bsc:
@@ -11,6 +11,14 @@ export const environment = {
   url_subgraph_vote:
     'https://hub.snapshot.org/graphql',
 
+    
+  WEB3_URL : 'https://goerli.infura.io/v3/f1d98cca429e48d29087a4a2deb587c1',
+  WEB3_URL_BEP20 : 'https://data-seed-prebsc-2-s1.binance.org:8545',
+  WEB3_URL_TRON : 'https://api.shasta.trongrid.io/jsonrpc',
+  WEB3_URL_BTT : 'https://pre-rpc.bt.io/',
+  WEB3_URL_POLYGON : 'https://polygon-mumbai.blockpi.network/v1/rpc/public',
+
+  
   snapshot_hub: "https://hub.snapshot.org",
   space_name: "atayen.eth",
   bsc_node: 'https://bsc-dataseed1.binance.org/',

@@ -73,7 +73,7 @@ const routes: Routes = [
   {
     path: 'campaign/:id/edit',
     component: EditCampaignComponent,
-    canActivate: [AuthGuardService]
+    canActivate: []
   },
   {
     path: 'transactions',

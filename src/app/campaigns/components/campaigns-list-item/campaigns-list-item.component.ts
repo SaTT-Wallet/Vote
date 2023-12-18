@@ -117,18 +117,8 @@ truncateTitle(title: string): string {
   }
 
   goToEditPage(id: string) {
-    this.walletFacade
-      .getAllWallet()
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((data: any) => {
-        this.tokenStorageService.saveWalletVersion('v2');
-        this.tokenStorageService.saveIdWallet(data.data.addressV2);
-        this.tokenStorageService.saveTronWallet(data.data.tronAddressV2);
-        this.tokenStorageService.saveWalletBtc(data.data.btcAddressV2);
-        this.walletStoreService.getCryptoList();
-        this.walletStoreService.getTotalBalance();
-        this.router.navigate(['campaign', id, 'edit']);
-      });
+    this.router.navigate(['campaign', id, 'edit']);
+
   }
 
   convertUnixToDate(x: any) {

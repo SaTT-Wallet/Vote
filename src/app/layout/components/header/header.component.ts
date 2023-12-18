@@ -345,11 +345,11 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
           //@ts-ignore
           // this.header?.nativeElement.style.background =
           //   'linear-gradient(180deg, rgba(31, 35, 55, 0.7) 21.94%, rgba(31, 35, 55, 0) 93.77%)';
-          this.renderer.setStyle(
-            this.header?.nativeElement,
-            'background',
-            'linear-gradient(180deg, rgba(31, 35, 55, 0.7) 21.94%, rgba(31, 35, 55, 0) 93.77%)'
-          );
+          // this.renderer.setStyle(
+          //   this.header?.nativeElement,
+          //   'background',
+          //   'linear-gradient(180deg, rgba(31, 35, 55, 0.7) 21.94%, rgba(31, 35, 55, 0) 93.77%)'
+          // );
           this.isWelcomePage = false;
           this.menuBuyToken = true;
         }
@@ -1362,7 +1362,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           this.existV2 = true;
         }
-
+  
         if(this.existV1 && this.existV2 ) {
           this.titleWallet = 'Your wallet ID';
           this.title = 'Go to old wallet';;

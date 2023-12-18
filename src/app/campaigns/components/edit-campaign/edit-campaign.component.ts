@@ -47,6 +47,7 @@ import { IApiResponse } from '@app/core/types/rest-api-responses';
 import { ICampaignResponse } from '@app/core/campaigns-list-response.interface';
 import { environment } from '@environments/environment';
 import { DraftMaximumParticipationComponent} from '../draft-maximum-participation/draft-maximum-participation.component';
+import Cookies from 'js-cookie';
 enum FormStatus {
   Saving = 'saving',
   Saved = 'saved',
@@ -399,7 +400,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           const campaign = new Campaign(c.data);
           campaign.ownedByUser =
             Number(campaign.ownerId) ===
-            Number(this.localeStorageService.getIdUser());
+            Number(Cookies.get('userId'));
           
           
           return campaign;
@@ -407,12 +408,12 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
         takeUntil(this.isDestroyed$)
       )
       .subscribe((c: Campaign) => {
-        if (!c.isOwnedByUser) {
-          this.router.navigateByUrl('/ad-pools');
-        }
-        if (c.isOwnedByUser) {
-          this.isLoading = false;
-        }
+         if (!c.isOwnedByUser) {
+           this.router.navigateByUrl('/ad-pools');
+         }
+         if (c.isOwnedByUser) {
+           this.isLoading = false;
+         }
         this.campaignData = c;
       });
   }

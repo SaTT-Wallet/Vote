@@ -19,6 +19,7 @@ import {
   takeUntil
 } from 'rxjs/operators';
 import { Observable, of, Subject } from 'rxjs';
+import Cookies from 'js-cookie';
 
 import {
   ICampaignResponse,
@@ -51,7 +52,7 @@ export class CampaignHttpApiService {
     const formData: FormData = new FormData();
     formData.append('cover', file);
 
-    return this.http.post(sattUrl + '/campaign/ipfs/' + id, formData);
+    return this.http.post(sattUrl + '/external/externalIpfs/' + id, formData);
   }
   getPromById(id: string) {
     return this.http.get(`${sattUrl}/campaign/prom/stats/${id}`).pipe(
@@ -171,7 +172,7 @@ export class CampaignHttpApiService {
   ): Observable<IApiResponse<ICampaignResponse>> {
     return this.http
       .post<IApiResponse<ICampaignResponse>>(
-        `${sattUrl}/campaign/save`,
+        `${sattUrl}/external/createCampaign`,
         draftCampaign
       )
       .pipe(shareReplay(1));
@@ -313,13 +314,12 @@ export class CampaignHttpApiService {
    */
   updateOneById(
     values: any,
-    id: string
+    campaignId: string
   ): Observable<IApiResponse<ICampaignResponse> | null> {
     return this.http
       .put<IApiResponse<ICampaignResponse>>(
-        `${sattUrl}/campaign/update/${id}`,
-
-        values
+        `${sattUrl}/external/externalUpdate/${campaignId}`,
+        { values, userId: Number(Cookies.get('userId')) } 
       )
       .pipe(
         catchError(() => of(null)),
@@ -327,7 +327,8 @@ export class CampaignHttpApiService {
         shareReplay(1)
       );
   }
-
+  
+  
   approvalERC20(erc20: any) {
     return this.http.post(sattUrl + '/campaign/erc20/approval', {
       tokenAddress: erc20.addr,

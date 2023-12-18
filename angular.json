@@ -94,6 +94,7 @@
           "defaultConfiguration": "development"
         },
         "serve": {
+
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {

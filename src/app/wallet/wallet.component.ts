@@ -1146,25 +1146,7 @@ export class WalletComponent implements OnInit, OnDestroy {
   }
   verifyOnBoarding() {
     let address = this.tokenStorageService.getIdWallet();
-    if (address) {
-      this.authStoreService
-        .getAccount()
-        .pipe(takeUntil(this.onDestoy$))
-        .subscribe((response: any) => {
-          // let getFillMyProfil = this.tokenStorageService.getFillMyProfil();
-          if (
-            (response.data.onBoarding === false ||
-              response.data.onBoarding === '') &&
-            this.router.url === '/wallet'
-          ) {
-            if (window.innerHeight < 1025) {
-              this.updateOnBoarding();
-              return;
-            }
-            this.startSteps();
-          }
-        });
-    }
+
   }
 
 
