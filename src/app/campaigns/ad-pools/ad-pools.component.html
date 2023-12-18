@@ -85,7 +85,7 @@
       </div>
       <app-campaigns-list-item
         *ngFor="
-          let campaign of campaignsList;
+          let campaign of filterCampaigns();
           trackBy: trackByCampaignId;
           let i = index
         "

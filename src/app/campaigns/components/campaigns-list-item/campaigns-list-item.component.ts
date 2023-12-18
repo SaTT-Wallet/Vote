@@ -25,6 +25,7 @@ import { ipfsURL } from '@app/config/atn.config';
 import { VoteService } from '@app/core/services/vote/vote.service';
 import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
 import { environment } from '@environments/environment';
+import Cookies from 'js-cookie';
 // TODO: missing budget property in the data sent by backend /v2/campaigns
 
 @Component({
@@ -93,6 +94,12 @@ getNewApplicant(){
    
     
   })
+}
+
+campaignByNetwork(campaign:any) {
+  const network = Cookies.get('networkSelected');
+  if(campaign.currency.type === network) return true;
+  else return false;
 }
 connectMetaMask() {
   this.voteService.hideConnectDialog(this.connectModal);

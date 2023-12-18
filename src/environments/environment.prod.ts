@@ -42,7 +42,34 @@ export const environment = {
       }
     }
   ],
-  
+  mainnetNetwork: {
+    chainIDHex:'0x1',
+    chainName: 'Ethereum Mainnet',
+    rpcURL:'https://ethereum.publicnode.com',
+    blockExplorerURL:'https://etherscan.io/',
+    currencySymbol: 'ETH'
+  },
+  bnbNetwork: {
+    chainIDHex:'0x38',
+    chainName: 'Binance Smart Chain Mainnet',
+    rpcURL:'https://bsc-dataseed.binance.org/',
+    blockExplorerURL:'https://bscscan.com/',
+    currencySymbol:'BNB'
+  },
+  polygonNetwork: {
+    chainIDHex:'0x89',
+    chainName: 'Polygon Mainnet',
+    rpcURL:'https://polygon-pokt.nodies.app',
+    blockExplorerURL:'https://polygonscan.com/',
+    currencySymbol:'MATIC'
+  },
+  bttNetwork: {
+    chainIDHex:'0xc7',
+    chainName: 'BitTorrent Chain Mainnet',
+    rpcURL:'https://rpc.bittorrentchain.io',
+    blockExplorerURL:'https://bttcscan.com/',
+    currencySymbol:'BTT'
+  },
   core : [
     '0x74bb5cbff3738eca2307fbea15b0ff85c4fddd41',
     '0x1c04ee5fb9a916ea47a4497fd62dbc45c54f42a8'
