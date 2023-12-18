@@ -1,14 +1,14 @@
 <div class="div-menu">
   <div
     class="div-home"
-    [routerLink]="['/wallet/token-info']"
+    [routerLink]="['/social-networks']"
     (click)="toggleMobile()"
   >
     <div class="div-pic">
-      <img src="assets/Images/market-icon-blue.svg" />
+      <i style="font-size: 1.5rem; color: #4048FF;" class="bi bi-person-circle"></i>
     </div>
 
-    <span class="span-text">{{ 'Sidebar.market' | translate }}</span>
+    <span class="span-text">{{ 'Sidebar.profile' | translate }}</span>
   </div>
 
   <div class="div-adPool" [routerLink]="['/ad-pools']" (click)="toggleMobile()">
@@ -19,7 +19,7 @@
     <span class="span-text">{{ 'Sidebar.adpool' | translate }}</span>
   </div>
 
-  <div
+  <!-- <div
     class="div-wallet"
     (click)="(this.sidebarService.toggleFooterMobile.value)"
   >
@@ -63,8 +63,8 @@
         </div>
       </div>
     </div>
-    <div class="pic-wallet-curvy"></div>
-    <div
+    <!-- <div class="pic-wallet-curvy"></div> -->
+    <!--<div
       class="div-pic-wallet"
       [routerLink]="['/wallet']"
       (click)="toggle()"
@@ -78,11 +78,11 @@
         class="fas fa-check checked-icon"
         *ngIf="this.sidebarService.toggleFooterMobile.value"
       ></i>
-      <!-- <img src="assets/Images/blue-icons/wallet-icon-blue.svg" /> -->
     </div>
-
-    <span class="span-text">{{ 'Sidebar.Wallet' | translate }}</span>
-  </div>
+    
+  </div> -->
+  <!-- <img src="assets/Images/blue-icons/wallet-icon-blue.svg" /> -->
+  <!-- <span class="span-text">{{ 'Sidebar.Wallet' | translate }}</span> -->
 
   <div class="div-farm" [routerLink]="['/farm-posts']" (click)="toggleMobile()">
     <div class="div-pic">
@@ -92,11 +92,11 @@
     <span class="span-text"> {{ 'Sidebar.PostFarm' | translate }}</span>
   </div>
 
-  <div class="div-help" [routerLink]="['/FAQ']" (click)="toggleMobile()">
+  <div class="div-help" [routerLink]="['/vote']" (click)="toggleMobile()">
     <div class="div-pic">
-      <img src="assets/Images/blue-icons/help-icon-blue.svg" />
+      <img src="assets/Images/vote2.png" />
     </div>
 
-    <span class="span-text">{{ 'Sidebar.Aide' | translate }}</span>
+    <span class="span-text">{{ 'Sidebar.vote' | translate }}</span>
   </div>
 </div>

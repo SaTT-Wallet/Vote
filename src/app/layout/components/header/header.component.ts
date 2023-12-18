@@ -1708,7 +1708,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       if (accounts.length > 0) {
         this.walletConnected = true;
         this.walletId = accounts[0];
-        this.formattedCreator = `${this.walletId.substr(0, 4)}...${this.walletId.substr(-3)}`;
+        this.formattedCreator = `${this.walletId.substring(0, 6)}...${this.walletId.substring(this.walletId.length - 3)}`;
         // this.vp = await this.snapshotService.getVotingPower(this.walletId);
       }
 

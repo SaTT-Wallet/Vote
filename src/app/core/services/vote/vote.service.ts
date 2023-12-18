@@ -134,7 +134,7 @@ export class VoteService {
             this.router.navigateByUrl('/farm-posts');
           }
         }
-        this.formattedCreator = `${this.walletId.substr(0, 4)}...${this.walletId.substr(-3)}`;     
+        this.formattedCreator = `${this.walletId.substring(0, 7)}...${this.walletId.substring(this.walletId.length - 3)}`;     
       
 
       
