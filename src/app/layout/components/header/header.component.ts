@@ -256,7 +256,63 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
             }); 
         }
       }
-    })
+    });
+
+    if(window.ethereum) {
+      if (window.ethereum) {
+       
+  
+        // Listen for network changes
+        window.ethereum.on('chainChanged', (chainId: string) => {
+         
+        
+          switch (chainId) {
+            case '0x1':
+              this.networkLabel = 'Ethereum';
+              this.networkLogo = 'erc20';
+              break;
+            case '0x38':
+              this.networkLabel = 'BNB Smart Chain';
+              this.networkLogo = 'bsc';
+              break;
+            case '0x89':
+              this.networkLabel = 'Polygon';
+              this.networkLogo = 'polygon';
+              break;
+            case '0xc7':
+              this.networkLabel = 'BitTorrent';
+              this.networkLogo = 'btt';
+              break;
+            default:
+              // ChainId not in the supported list
+              alert('Unsupported network. Please connect to a supported network.');
+              const network = {
+                label: "bsc",
+                logo: "assets/Images/bsc.svg",
+                network: "BNB Smart Chain"
+              }
+              detectEthereumProvider().then((provider) => {
+                this.externalWalletService.changeNetwork(provider, network.label).then((val) => {
+                  this.networkLabel = network.network;
+                  this.networkLogo = network.label;
+                  Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
+                  Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
+                })
+              });
+              // Optionally, you can disconnect the user or take other actions
+              
+          }
+        
+          //this.networkLabel = networkLabel;
+          //this.networkLogo = networkLogo;
+        
+          Cookies.set('networkSelected', this.networkLabel, { secure: true, sameSite: 'Lax' });
+          Cookies.set('networkSelectedLogo', this.networkLogo, { secure: true, sameSite: 'Lax' });
+        });
+      } else {
+        console.error('MetaMask not detected.');
+      }
+    }
     
     
     breakpointObserver
@@ -399,6 +455,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
    displayNetwork(e: any){
+    console.log({e})
     console.log({networkLabel: this.networkLogo, e:e.label})
     if(this.networkLogo != e.label) {
       detectEthereumProvider().then((provider) => {
