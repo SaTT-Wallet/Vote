@@ -170,11 +170,11 @@
           >
         </li>
 
-        <li class="li-menu" id="intro11">
+        <li [ngClass]="{ 'is-visited': menuProfile }" class="li-menu" id="intro11">
           <a class="vote" [routerLink]="['/social-networks']"><span>Profile</span> </a>
         </li>
 
-        <li class="li-menu" id="intro11">
+        <li [ngClass]="{ 'is-visited': menuVote }" class="li-menu" id="intro11">
           <a class="vote" [routerLink]="['/vote']"><span>Vote</span> </a>
         </li>
       </ul>

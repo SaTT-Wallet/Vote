@@ -157,6 +157,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   public getScreenHeight: any;
   seen: boolean = false;
   menuAdpool: boolean = false;
+  menuProfile: boolean = false;
+  menuVote: boolean = false;
   menuFarmPost: boolean = false;
   menuHistory: boolean = false;
   menuHelp: boolean = false;
@@ -400,6 +402,15 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.router.url.includes('welcome')) {
           this.checkMenuAdpool();
         }
+
+        if(this.router.url.includes('social-networks')){
+          this.checkSocialNetwork();
+        }
+
+        if(this.router.url.includes('vote')){
+          this.checkMenuVote();
+        }
+        
         if (
           this.router.url.includes('buy-token') ||
           this.router.url.includes('edit')
@@ -1580,6 +1591,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   checkMenuFarmPost() {
     this.menuWallet = false;
     this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = true;
     this.menuHistory = false;
     this.menuHelp = false;
@@ -1591,6 +1604,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   checkMenuBuyToken() {
     this.menuWallet = false;
     this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = false;
     this.menuHistory = false;
     this.menuHelp = false;
@@ -1613,10 +1628,42 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (isPlatformBrowser(this.platformId))
       window.open('https://satt-token.com/blog/', '_blank');
   }
+
+  checkSocialNetwork(){
+    this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
+    this.menuWallet = false;
+    this.menuAdpool = false;
+    this.menuProfile = true;
+    this.menuVote = false;
+    this.menuFarmPost = false;
+    this.menuHistory = false;
+    this.menuHelp = false;
+    this.menuBuyToken = false;
+    this.menuTokenInfo = false;
+    this.menuAbout = false;
+    this.menuBlog = false;
+  }
+
+  checkMenuVote(){
+    this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
+    this.menuWallet = false;
+    this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = true;
+    this.menuFarmPost = false;
+    this.menuHistory = false;
+    this.menuHelp = false;
+    this.menuBuyToken = false;
+    this.menuTokenInfo = false;
+    this.menuAbout = false;
+    this.menuBlog = false;
+  }
   checkMenuAdpool() {
     this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
     this.menuWallet = false;
     this.menuAdpool = true;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = false;
     this.menuHistory = false;
     this.menuHelp = false;
@@ -1629,6 +1676,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
     this.menuWallet = false;
     this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = false;
     this.menuHistory = true;
     this.menuHelp = false;
@@ -1641,6 +1690,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
     this.menuWallet = false;
     this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = false;
     this.menuHistory = false;
     this.menuHelp = true;
@@ -1654,6 +1705,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.isConnected) {
       this.menuWallet = true;
       this.menuAdpool = false;
+      this.menuProfile = false;
+      this.menuVote = false;
       this.menuFarmPost = false;
       this.menuHistory = false;
       this.menuHelp = false;
