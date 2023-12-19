@@ -35,6 +35,13 @@ export const environment = {
   sattContractAdress: '0x6fAc729f346A46fC0093126f237b4A520c40eb89',
   network: 'bsc-testnet',
 
+  testNetNetwork: {
+    chainIDHex:'0x61',
+    chainName: 'Binance Smart Chain Testnet',
+    rpcURL:'https://bsc-testnet.publicnode.com',
+    blockExplorerURL:'https://testnet.bscscan.com/',
+    currencySymbol:'tBNB'
+  },
   strategies: [
     {
       name: 'erc20-balance-of',

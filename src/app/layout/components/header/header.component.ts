@@ -285,6 +285,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               this.networkLabel = 'BitTorrent';
               this.networkLogo = 'btt';
               break;
+              case '0x61':
+                this.networkLabel = 'BNB Testnet';
+                this.networkLogo = 'bsc';
+                break;
             default:
               // ChainId not in the supported list
               alert('Unsupported network. Please connect to a supported network.');

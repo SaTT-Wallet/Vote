@@ -42,6 +42,13 @@ export const environment = {
       }
     }
   ],
+  testNetNetwork: {
+    chainIDHex:'0x61',
+    chainName: 'Binance Smart Chain Testnet',
+    rpcURL:'https://bsc-testnet.publicnode.com',
+    blockExplorerURL:'https://testnet.bscscan.com/',
+    currencySymbol:'tBNB'
+  },
   mainnetNetwork: {
     chainIDHex:'0x1',
     chainName: 'Ethereum Mainnet',
