@@ -93,15 +93,15 @@ export class ExternalWalletService {
     (await (provider as any).request({
       method: 'wallet_addEthereumChain',
       params: [{
-        chainId: network === 'bsc' ? env.bnbNetwork.chainIDHex : ( network === 'erc20' ? env.mainnetNetwork.chainIDHex : ( network === 'polygon' ? env.polygonNetwork.chainIDHex: env.bttNetwork.chainIDHex)),
-        chainName: network === 'bsc' ? env.bnbNetwork.chainName : ( network === 'erc20' ? env.mainnetNetwork.chainName : ( network === 'polygon' ? env.polygonNetwork.chainName: env.bttNetwork.chainName)),
+        chainId: network === 'bsc' ? env.bnbNetwork.chainIDHex : ( network === 'erc20' ? env.mainnetNetwork.chainIDHex :  network === 'bscT' ? env.testNetNetwork.chainIDHex : ( network === 'polygon' ? env.polygonNetwork.chainIDHex: env.bttNetwork.chainIDHex)),
+        chainName: network === 'bsc' ? env.bnbNetwork.chainName : ( network === 'erc20' ? env.mainnetNetwork.chainName :  network === 'bscT' ? env.testNetNetwork.chainName : ( network === 'polygon' ? env.polygonNetwork.chainName: env.bttNetwork.chainName)),
         nativeCurrency: {
-          name: network === 'bsc' ? env.bnbNetwork.currencySymbol : ( network === 'erc20' ? env.mainnetNetwork.currencySymbol : ( network === 'polygon' ? env.polygonNetwork.currencySymbol: env.bttNetwork.currencySymbol)),
-          symbol: network === 'bsc' ? env.bnbNetwork.currencySymbol : ( network === 'erc20' ? env.mainnetNetwork.currencySymbol : ( network === 'polygon' ? env.polygonNetwork.currencySymbol: env.bttNetwork.currencySymbol)),
+          name: network === 'bsc' ? env.bnbNetwork.currencySymbol : ( network === 'erc20' ? env.mainnetNetwork.currencySymbol : network === 'bscT' ? env.testNetNetwork.currencySymbol : ( network === 'polygon' ? env.polygonNetwork.currencySymbol: env.bttNetwork.currencySymbol)),
+          symbol: network === 'bsc' ? env.bnbNetwork.currencySymbol : ( network === 'erc20' ? env.mainnetNetwork.currencySymbol : network === 'bscT' ? env.testNetNetwork.currencySymbol : ( network === 'polygon' ? env.polygonNetwork.currencySymbol: env.bttNetwork.currencySymbol)),
           decimals: 18
         },
-        rpcUrls: [network === 'bsc' ? env.bnbNetwork.rpcURL : ( network === 'erc20' ? env.mainnetNetwork.rpcURL : ( network === 'polygon' ? env.polygonNetwork.rpcURL: env.bttNetwork.rpcURL)),],
-        blockExplorerUrls: [network === 'bsc' ? env.bnbNetwork.blockExplorerURL : ( network === 'erc20' ? env.mainnetNetwork.blockExplorerURL : ( network === 'polygon' ? env.polygonNetwork.blockExplorerURL: env.bttNetwork.blockExplorerURL)),],
+        rpcUrls: [network === 'bsc' ? env.bnbNetwork.rpcURL : ( network === 'erc20' ? env.mainnetNetwork.rpcURL : network === 'bscT' ? env.testNetNetwork.rpcURL : ( network === 'polygon' ? env.polygonNetwork.rpcURL: env.bttNetwork.rpcURL)),],
+        blockExplorerUrls: [network === 'bsc' ? env.bnbNetwork.blockExplorerURL : ( network === 'erc20' ? env.mainnetNetwork.blockExplorerURL : network === 'bscT' ? env.testNetNetwork.blockExplorerURL : ( network === 'polygon' ? env.polygonNetwork.blockExplorerURL: env.bttNetwork.blockExplorerURL)),],
       }]
     }));
   }

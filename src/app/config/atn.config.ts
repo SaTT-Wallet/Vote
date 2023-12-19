@@ -67,7 +67,7 @@ let networkList: {network: string,label: string,logo: string}[] = [
   {network:"Ethereum" , label: "erc20" ,logo: ""  },
   {network:"Polygon" , label: "polygon" ,logo: ""  },
   {network:"BitTorrent" , label: "btt" ,logo: ""  },
-  {network: "BNB Testnet", label: "bsc", logo:""}
+  {network: "BNB Testnet", label: "bscT", logo:""}
 ];
 
 // let networkList: {network: string,label: string,logo: string}[] = [
