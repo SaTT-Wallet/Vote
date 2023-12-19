@@ -55,12 +55,12 @@ export class ExternalWalletService {
       const timestamp = Date.now().toString();
 
       // Construct the message
-      const message = `authentication=true&address=${this.ethereum.selectedAddress}&ts=${timestamp}`;
+      
 
         
         const accounts = await this.ethereum.request({ method: 'eth_requestAccounts' });
         this.tokenStorageService.saveIdWallet(accounts[0])
-
+        const message = `authentication=true&address=${accounts[0]}&ts=${timestamp}`;
         const signature = await this.ethereum.request({
           method: 'personal_sign',
           params: [message, accounts[0]],
