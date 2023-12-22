@@ -38,7 +38,7 @@ export function app(): express.Express {
     ngExpressEngine({
       bootstrap: AppServerModule,
       inlineCriticalCss: false,
-      providers: [{ provide: 'document', useValue: fakeWindow.document }]
+      //providers: [{ provide: 'document', useValue: fakeWindow.document }]
     })
   );
   server.use(helmet.noSniff());
