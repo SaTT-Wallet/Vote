@@ -22,7 +22,7 @@ export function app(): express.Express {
   const loadedData = cheerio.load(template);
   const $ = loadedData('body');
 
-  const fakeWindow = {
+  /*const fakeWindow = {
     navigator: {},
     document: $.html(),
     Event: {},
@@ -30,7 +30,7 @@ export function app(): express.Express {
     KeyboardEvent: {},
     FocusEvent: {},
     PointerEvent: {}
-  };
+  };*/
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
   server.engine(
