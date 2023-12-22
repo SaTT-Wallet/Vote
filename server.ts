@@ -14,7 +14,7 @@ const Blob = require('blob-polyfill').Blob;
 import { AppServerModule } from './src/main.server';
 import { APP_BASE_HREF } from '@angular/common';
 import axios from 'axios';
-const win = domino.createWindow('<your-html-content>'); // Replace with your HTML content if needed
+const win = domino.createWindow('<!doctype html><html><body></body></html>'); // Replace with your HTML content if needed
 const document = win.document;
 
 // Assign the mock document and window to global variables
