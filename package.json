@@ -6,7 +6,13 @@
     "start": "NODE_OPTIONS=--max-old-space-size=8192 ng serve",
     "build": "NODE_OPTIONS=--max-old-space-size=8192 ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "dev:ssr": "ng run satt-token-atayen:serve-ssr",
+    "serve:ssr": "node dist/satt-token-atayen/server/main.js",
+    "build:ssr": "ng build  && ng run satt-token-atayen:server",
+    "build-dev:ssr": "ng build --configuration dev-ssr  && ng run satt-token-atayen:server:dev-ssr",
+    "prerender": "ng run satt-token-atayen:prerender",
+    "max-size": "export NODE_OPTIONS='--max-old-space-size=8192' && ng s"
   },
   "browserslist": [
     "extends browserslist-config-openmrs"
