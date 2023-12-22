@@ -14,7 +14,17 @@ const Blob = require('blob-polyfill').Blob;
 import { AppServerModule } from './src/main.server';
 import { APP_BASE_HREF } from '@angular/common';
 import axios from 'axios';
+const win = domino.createWindow('<your-html-content>'); // Replace with your HTML content if needed
+const document = win.document;
 
+// Assign the mock document and window to global variables
+global['window'] = win;
+global['document'] = document;
+global['HTMLElement'] = win.HTMLElement;
+global['navigator'] = win.navigator;
+global['Node'] = win.Node;
+global['Text'] = win.Text;
+global['Event'] = win.Event;
 export function app(): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/satt-token-atayen/browser');
