@@ -1,13 +1,22 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false,
+    "schematicCollections": [
+      "@ngrx/schematics"
+    ]
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Frontend": {
+    "satt-token-atayen": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
         }
       },
       "root": "",
@@ -17,38 +26,46 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": [
-              "ng2-validation",
-              "moment",
-              "lodash",
-              "file-saver",
-              "jszip",
-              "libphonenumber-js",
-              "buffer",
-              "@snapshot-labs/snapshot.js",
-              "bn.js",
-              "js-sha3",
-              "bech32",
-              "hash.js",
-              "babel-runtime/helpers/classCallCheck",
-              "babel-runtime/helpers/createClass",
-              "babel-runtime/core-js/get-iterator",
-              "babel-runtime/helpers/extends",
-              "babel-runtime/helpers/slicedToArray",
-              "crc-32",
-              "@ethereumjs/rlp",
-              "setimmediate",
-              "cross-fetch",
-              "events",
-              "@metamask/detect-provider"
-            ],
-            "outputPath": "dist/frontend",
+            "outputPath": "dist/satt-token-atayen/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets", "src/manifest.json"],
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "highcharts",
+              "big.js",
+              "sweetalert2",
+              "moment",
+              "chart.js",
+              "form-data",
+              "google-libphonenumber",
+              "jszip",
+              "babel-runtime/helpers/classCallCheck",
+              "file-saver",
+              "ng2-validation",
+              "babel-runtime/helpers/extends",
+              "babel-runtime/helpers/slicedToArray",
+              "babel-runtime/helpers/createClass",
+              "babel-runtime/core-js/get-iterator",
+              "firebase",
+              "@firebase/app",
+              "@firebase/database",
+              "@firebase/firestore",
+              "@firebase/functions",
+              "@firebase/performance",
+              "@firebase/remote-config",
+              "@firebase/component",
+              "@firebase/auth",
+              "@firebase/util"
+            ],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.json",
+              "src/firebase-messaging-sw.js"
+            ],
             "styles": [
               "node_modules/intl-tel-input/build/css/intlTelInput.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -62,22 +79,53 @@
               "node_modules/intro.js/introjs.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/ngx-sharebuttons/themes/circles.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              {
+                "input": "src/app/styles/common.scss",
+                "inject": false,
+                "bundleName": "external-module"
+              }
             ],
-            "scripts": []
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/app/styles/common.scss"
+              ]
+            },
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/popper.js/dist/umd/popper.min.js",
+              "node_modules/intro.js/intro.js",
+              "node_modules/intl-tel-input/build/js/intlTelInput.min.js",
+              "node_modules/jquery/dist/jquery.min.js"
+            ]
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "30kb",
-                  "maximumError": "35kb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "2mb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "all"
@@ -89,18 +137,42 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "dev-ssr": {
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "10mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2mb",
+                  "maximumError": "2mb"
+                }
+              ],
+              "outputHashing": "all"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "production"
         },
+
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Frontend:build:production"
+              "browserTarget": "satt-token-atayen:build:production"
             },
             "development": {
-              "browserTarget": "Frontend:build:development"
+              "browserTarget": "satt-token-atayen:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -108,24 +180,97 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Frontend:build"
+            "browserTarget": "satt-token-atayen:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/satt-token-atayen/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {
+
+              "optimization": false,
+
+              "sourceMap": true,
+
+              "extractLicenses": false,
+              "vendorChunk": true
+
+            },
+            "dev-ssr": {
+              "outputHashing": "media"
+            }
+          },
+          "defaultConfiguration": "production"
+
+
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "satt-token-atayen:build:development",
+              "serverTarget": "satt-token-atayen:server:development"
+            },
+            "production": {
+              "browserTarget": "satt-token-atayen:build:production",
+              "serverTarget": "satt-token-atayen:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "satt-token-atayen:build:production",
+              "serverTarget": "satt-token-atayen:server:production"
+            },
+            "development": {
+              "browserTarget": "satt-token-atayen:build:development",
+              "serverTarget": "satt-token-atayen:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
-  },
-  "cli": {
-    "analytics": "55b3472c-1863-462c-9e95-ab9658cfd884"
   }
 }
