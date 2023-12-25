@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ExternalWalletService } from '../../../core/services/vote/external-wallet.service';
 import { FormControl, FormGroup, FormBuilder, NgForm, Validators, FormArray } from '@angular/forms';
 import { Editor, Toolbar } from 'ngx-editor';
@@ -17,6 +17,7 @@ import { marked } from 'marked';
 import { Proposal } from '@app/models/proposal.model';
 import { NotificationService } from '@app/core/services/notification/notification.service';
 import { SnapshotService } from '@app/vote/snapshot.service';
+import { DOCUMENT } from '@angular/common';
 
 declare global {
   interface Window {
@@ -98,7 +99,7 @@ export class CreateProposalComponent implements OnInit, OnDestroy {
     ['link']
   ];
 
-  constructor(public notificationService: NotificationService, private spinner: NgxSpinnerService, private snapshotService: SnapshotService, public externalWalletService: ExternalWalletService, private http: HttpClient, private fb: FormBuilder, private router: Router) {
+  constructor(public notificationService: NotificationService, @Inject(DOCUMENT) private document: Document,private spinner: NgxSpinnerService, private snapshotService: SnapshotService, public externalWalletService: ExternalWalletService, private http: HttpClient, private fb: FormBuilder, private router: Router) {
     // this.charactersRemaining = this.editorConfig.charCounterMax;
   }
 
@@ -326,37 +327,37 @@ export class CreateProposalComponent implements OnInit, OnDestroy {
 
   showConnectDialog() {
     this.isConnectDialog = true;
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideConnectDialog() {
     this.isConnectDialog = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   showInstall() {
     this.isNotInstalled = true;
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideInstall() {
     this.isNotInstalled = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   showVPDialog() {
     this.isVPDialog = true;
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideVPDialog() {
     this.isVPDialog = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   showNetworkHasChanged() {
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideNetworkHasChanged() {
     this.externalWalletService.networkHasChanged = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   Disconnect() {
