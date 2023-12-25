@@ -14,17 +14,7 @@ const Blob = require('blob-polyfill').Blob;
 import { AppServerModule } from './src/main.server';
 import { APP_BASE_HREF } from '@angular/common';
 import axios from 'axios';
-const win = domino.createWindow('<!doctype html><html><body></body></html>'); // Replace with your HTML content if needed
-const document = win.document;
 
-// Assign the mock document and window to global variables
-global['window'] = win;
-global['document'] = document;
-global['HTMLElement'] = win.HTMLElement;
-global['navigator'] = win.navigator;
-global['Node'] = win.Node;
-global['Text'] = win.Text;
-global['Event'] = win.Event;
 export function app(): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/satt-token-atayen/browser');
@@ -32,7 +22,7 @@ export function app(): express.Express {
   const loadedData = cheerio.load(template);
   const $ = loadedData('body');
 
-  /*const fakeWindow = {
+  const fakeWindow = {
     navigator: {},
     document: $.html(),
     Event: {},
@@ -40,7 +30,7 @@ export function app(): express.Express {
     KeyboardEvent: {},
     FocusEvent: {},
     PointerEvent: {}
-  };*/
+  };
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
   server.engine(
@@ -48,7 +38,7 @@ export function app(): express.Express {
     ngExpressEngine({
       bootstrap: AppServerModule,
       inlineCriticalCss: false,
-      //providers: [{ provide: 'document', useValue: fakeWindow.document }]
+      providers: [{ provide: 'document', useValue: fakeWindow.document }]
     })
   );
   server.use(helmet.noSniff());
@@ -133,4 +123,5 @@ const moduleFilename = (mainModule && mainModule.filename) || '';
 if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
   run();
 }
-export * from './src/main.server'
+
+export * from './src/main.server';
