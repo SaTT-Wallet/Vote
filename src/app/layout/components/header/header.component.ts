@@ -337,7 +337,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         // }
       });
 
-    if (isPlatformBrowser(this.platformId)) {
+    /*if (isPlatformBrowser(this.platformId)) {
       this.mediaQueryList = window.matchMedia(this.query);
       this.mediaQueryList2 = window.matchMedia(this.query2);
 
@@ -345,7 +345,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         let vh = window.innerHeight * 0.01;
         this.document.documentElement.style.setProperty('--vh', `${vh}px`);
       });
-    }
+    }*/
 
     translate.addLangs(['en', 'fr']);
     if (this.tokenStorageService.getLocale()) {
