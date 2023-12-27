@@ -1,6 +1,7 @@
 import { Big } from 'big.js';
 import { environment as env } from '../../environments/environment.prod';
-const sattUrl = "https://localhost:3015";
+const sattUrl = "https://api-preprod2.satt-token.com";
+//const sattUrl = "https://localhost:3015"
 const ipfsURL = env.ipfsURL;
 const walletUrl = 'http://localhost:4200/#/';
 const bscan = env.bscan;
@@ -75,7 +76,8 @@ let networkList: {network: string,label: string,logo: string}[] = [
   {network:"BNB Smart Chain" , label: "bsc" ,logo: ""  },
   {network:"Ethereum" , label: "erc20" ,logo: ""  },
   {network:"Polygon" , label: "polygon" ,logo: ""  },
-  {network:"BitTorrent" , label: "btt" ,logo: ""  }
+  {network:"BitTorrent" , label: "btt" ,logo: ""  },
+  {network: "BNB Testnet", label: "bscT", logo:""}
 ];
 
 // let networkList: {network: string,label: string,logo: string}[] = [

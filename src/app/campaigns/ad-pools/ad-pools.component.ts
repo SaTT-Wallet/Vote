@@ -39,6 +39,7 @@ import { AuthStoreService } from '@app/core/services/Auth/auth-store.service';
 import { AuthService } from '@app/core/services/Auth/auth.service';
 import { ConvertFromWei } from '@app/shared/pipes/wei-to-sa-tt.pipe';
 import { ShowNumbersRule } from '@app/shared/pipes/showNumbersRule';
+import Cookies from 'js-cookie';
 @Component({
   selector: 'app-ad-pools',
   templateUrl: './ad-pools.component.html',
@@ -47,7 +48,7 @@ import { ShowNumbersRule } from '@app/shared/pipes/showNumbersRule';
 export class AdPoolsComponent implements OnInit, OnDestroy {
   campaignsList: Campaign[] = [];
   campaignsList2: Campaign[] = [];
-
+  filteredCampaigns: Campaign[] = [];
   show: boolean = true;
   picUserUpdated: boolean = false;
   user!: User;
@@ -172,6 +173,7 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
     this.campaignsListStoreService.loadingCampaign$
       .pipe(takeUntil(this.onDestoy$))
       .subscribe((res) => {
+        
         if (res) {
           this.isLoading = true;
         } else {
@@ -210,12 +212,13 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (campaigns: Campaign[]) => {
-            
             if (campaigns.length === 0) {
               this.isLoading = false;
             }
+            //const selectedNetwork = Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : 'polygon'))
+            //const isMatchingNetwork = (campaign: any) => campaign.currency.type.toString().toLowerCase() === selectedNetwork;
             this.campaignsList = campaigns;
-            this.campaignsList2 = campaigns;
+            this.campaignsList2 = [...this.campaignsList];
             this.campaignsList?.forEach((element: Campaign) => {
               if (element.currency.name === 'SATTPOLYGON')
                 element.currency.name = 'MATIC';
@@ -236,6 +239,7 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
               }
             });
             this.campaignsListStoreService.emitPageScroll();
+            this.filteredCampaigns = this.campaignsList
             // this.campaignsList = campaigns.filter(
             //   (campaign: Campaign) => campaign.isDraft === false
             // );
@@ -253,7 +257,14 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
 
     //this.campaignsListStoreService.loadNextPage({}, true);
   }
-
+  filterCampaigns(): Campaign[] {
+    const selectedNetwork = Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : 'polygon'))
+    console.log({selectedNetwork})
+    this.filteredCampaigns = this.campaignsList.filter(
+      (campaign) => campaign.currency.type.toLowerCase() === selectedNetwork
+    );
+    return this.filteredCampaigns;
+  }
   ngOnDestroy(): void {
     this.onDestoy$.next('');
     this.onDestoy$.complete();

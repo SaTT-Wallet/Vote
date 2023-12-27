@@ -85,9 +85,9 @@
               aria-expanded="false"
             >
               <img src="assets/Images/connected-wallet.png" />
-              <span class="span-userName ps-2 pe-2">{{
+              <span class="span-userName ps-2 pe-2">'{{
                 formattedCreator
-              }}</span>
+              }}'</span>
               <i class="chevron fa fa-fw"></i>
             </a>
             <ul
@@ -170,11 +170,11 @@
           >
         </li>
 
-        <li class="li-menu" id="intro11">
+        <li [ngClass]="{ 'is-visited': menuProfile }" class="li-menu" id="intro11">
           <a class="vote" [routerLink]="['/social-networks']"><span>Profile</span> </a>
         </li>
 
-        <li class="li-menu" id="intro11">
+        <li [ngClass]="{ 'is-visited': menuVote }" class="li-menu" id="intro11">
           <a class="vote" [routerLink]="['/vote']"><span>Vote</span> </a>
         </li>
       </ul>

@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  API_URL: 'https://localhost:3015',
+  API_URL: 'https://api-preprod2.satt-token.com',
   url: 'https://dapp.satt.com/',
   ipfsURL: 'https://ipfs.io/ipfs/',
   url_subgraph_bsc:
@@ -23,11 +23,11 @@ export const environment = {
   space_name: "atayen.eth",
   bsc_node: 'https://bsc-dataseed1.binance.org/',
 
-  chainIDDecimal: '1',
+  chainIDDecimal: '97',
   chainIDHex: '0x38',
   chainName: 'Binance Smart Chain Mainnet',
   currencySymbol: 'BNB',
-  rpcURL: 'wss://bsc-testnet.publicnode.com',
+  rpcURL: 'https://bsc-testnet.publicnode.com',
   blockExplorerURL: 'https://bscscan.com/',
   sattContractAdress: '0x448bee2d93be708b54ee6353a7cc35c4933f1156',
   network: 'bsc',
@@ -50,7 +50,41 @@ export const environment = {
       }
     }
   ],
-  
+  testNetNetwork: {
+    chainIDHex:'0x61',
+    chainName: 'Binance Smart Chain Testnet',
+    rpcURL:'https://bsc-testnet.publicnode.com',
+    blockExplorerURL:'https://testnet.bscscan.com/',
+    currencySymbol:'tBNB'
+  },
+  mainnetNetwork: {
+    chainIDHex:'0x1',
+    chainName: 'Ethereum Mainnet',
+    rpcURL:'https://ethereum.publicnode.com',
+    blockExplorerURL:'https://etherscan.io/',
+    currencySymbol: 'ETH'
+  },
+  bnbNetwork: {
+    chainIDHex:'0x38',
+    chainName: 'Binance Smart Chain Mainnet',
+    rpcURL:'https://bsc-dataseed.binance.org/',
+    blockExplorerURL:'https://bscscan.com/',
+    currencySymbol:'BNB'
+  },
+  polygonNetwork: {
+    chainIDHex:'0x89',
+    chainName: 'Polygon Mainnet',
+    rpcURL:'https://polygon-pokt.nodies.app',
+    blockExplorerURL:'https://polygonscan.com/',
+    currencySymbol:'MATIC'
+  },
+  bttNetwork: {
+    chainIDHex:'0xc7',
+    chainName: 'BitTorrent Chain Mainnet',
+    rpcURL:'https://rpc.bittorrentchain.io',
+    blockExplorerURL:'https://bttcscan.com/',
+    currencySymbol:'BTT'
+  },
   core : [
     '0x74bb5cbff3738eca2307fbea15b0ff85c4fddd41',
     '0x1c04ee5fb9a916ea47a4497fd62dbc45c54f42a8'

@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   //API_URL: 'https://localhost:3015',
   //url:"http://localhost:4200/",
-  url: 'https://testnet.satt.atayen.us/',
+  url: 'https://.satt.atayen.us/',
   ipfsURL: 'https://ipfs.io/ipfs/',
   //https://api-preprod2.satt-token.com
 
@@ -18,7 +18,7 @@ export const environment = {
   WEB3_URL_BTT : 'https://pre-rpc.bt.io/',
   WEB3_URL_POLYGON : 'https://polygon-mumbai.blockpi.network/v1/rpc/public',
 
-  API_URL: 'https://localhost:3015',
+  API_URL: 'https://api-preprod2.satt-token.com',
   // 'https://api-preprod.satt-token.com:3014',
 
   url_subgraph_bsc:
@@ -31,15 +31,42 @@ export const environment = {
   space_name: 'atayensatt.eth',
   bsc_node: 'https://bsc-testnet.publicnode.com/',
 
-  chainIDDecimal: '97',
-  chainIDHex: '0x61',
-  chainName: 'Binance Smart Chain Testnet',
-  currencySymbol: 'TBNB',
-  rpcURL: 'https://bsc-testnet.publicnode.com',
-  blockExplorerURL: 'https://testnet.bscscan.com/',
-  sattContractAdress: '0x6fAc729f346A46fC0093126f237b4A520c40eb89',
-  network: 'bsc-testnet',
 
+  testNetNetwork: {
+    chainIDHex:'0x61',
+    chainName: 'Binance Smart Chain Testnet',
+    rpcURL:'https://bsc-testnet.publicnode.com',
+    blockExplorerURL:'https://testnet.bscscan.com/',
+    currencySymbol:'tBNB'
+  },
+  mainnetNetwork: {
+    chainIDHex:'0x1',
+    chainName: 'Ethereum Mainnet',
+    rpcURL:'https://ethereum.publicnode.com',
+    blockExplorerURL:'https://etherscan.io/',
+    currencySymbol: 'ETH'
+  },
+  bnbNetwork: {
+    chainIDHex:'0x38',
+    chainName: 'Binance Smart Chain Mainnet',
+    rpcURL:'https://bsc-dataseed.binance.org/',
+    blockExplorerURL:'https://bscscan.com/',
+    currencySymbol:'BNB'
+  },
+  polygonNetwork: {
+    chainIDHex:'0x89',
+    chainName: 'Polygon Mainnet',
+    rpcURL:'https://polygon-pokt.nodies.app',
+    blockExplorerURL:'https://polygonscan.com/',
+    currencySymbol:'MATIC'
+  },
+  bttNetwork: {
+    chainIDHex:'0xc7',
+    chainName: 'BitTorrent Chain Mainnet',
+    rpcURL:'https://rpc.bittorrentchain.io',
+    blockExplorerURL:'https://bttcscan.com/',
+    currencySymbol:'BTT'
+  },
   strategies: [
     {
       name: 'erc20-balance-of',

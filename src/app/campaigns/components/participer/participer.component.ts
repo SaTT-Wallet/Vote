@@ -1491,138 +1491,160 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
     let password = this.sendform.get('password')?.value;
     this.loadingButton = true;
     this.showButtonSend = false;
-
-    this.applyPassword = true;
-    this.CampaignService.applyLink(
-      campaign,
-      application,
-      this.campaigndata.title,
-      password,
-      this.campaigndata.hash
-    )
-      .pipe(takeUntil(this.isDestroyedSubject))
-      .subscribe(
-        (data: any) => {
-          this.linkNetorwkMutch = true;
-          this.linked = false;
-          this.sendform.get('url')?.setValue('', { onlySelf: true });
-          this.sendform.get('url')?.clearValidators();
-          this.sendform.get('password')?.setValue('', { onlySelf: true });
-          // this.sendform.get('password')?.clearValidators();
-          this.loadingButton = false;
-          this.showButtonSend = true;
-          // if (data['error']) {
-          //   this.balanceNotEnough = false;
-
-          // } else {
-          this.notifyLink(data?.data?._id);
-          if (data?.data?.applyerSignature?.signature) {
-            this.transactionHash = data?.data?.applyerSignature?.signature;
-            
-            this.error = '';
-            this.success = data?.data?.applyerSignature?.signature;
-            this.loadingButton = false;
-          }
-          this.router.navigate([], {
-            queryParams: {
-              successMessage: 'linkSubmitted'
-            }
-          });
-          // }
-        },
-        (error) => {
-          this.loadingButton = false;
-          this.showButtonSend = true;
-          if(error.error.code === 401 && error.error.error === "Limit participation reached") {
-            this.errorMessageLimitParticipation = error.error.error;
-          }
-          if (
-            error.error.code === 402 &&
-            error.error.error === 'Returned error: already known'
-          ) {
-            this.balanceNotEnough = false;
-          }
-
-          if (error.error.code === 500) {
-            if (
-              error.error.error ===
-              'Key derivation failed - possibly wrong password'
-            ) {
-              this.error = 'wrong_password';
-              this.success = '';
+    window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts: any) => {
+      const message = application.idPost + this.campaigndata.hash;
+      window.ethereum.request({
+        method: 'personal_sign',
+        params: [message, accounts[0]],
+      }).then((signature:any) => {
+        this.CampaignService.applyLink(
+          campaign,
+          application,
+          this.campaigndata.title,
+          password,
+          this.campaigndata.hash,
+          signature
+        )
+          .pipe(takeUntil(this.isDestroyedSubject))
+          .subscribe(
+            (data: any) => {
+              if(data.message === 'success') {
+                this.transactionHash = data.data.applyerSignature;
+                
+                this.error = '';
+                this.success = data.data.applyerSignature;
+                this.loadingButton = false;
+                this.router.navigate([], {
+                  queryParams: {
+                    successMessage: 'linkSubmitted'
+                  }
+                })
+              }
+              /*this.linkNetorwkMutch = true;
+              this.linked = false;
+              this.sendform.get('url')?.setValue('', { onlySelf: true });
+              this.sendform.get('url')?.clearValidators();
+              this.sendform.get('password')?.setValue('', { onlySelf: true });
+              // this.sendform.get('password')?.clearValidators();
               this.loadingButton = false;
-            } else {
-              this.error = 'Default';
-              this.errorDescription = 'Default paragraphe';
-              this.success = '';
-              this.loadingButton = false;
-            }
-          } else if (error.error.code === 402) {
-            if (
-              error.error.error === 'Account resource insufficient error.' ||
-              error.error.error ===
-                'Contract validate error : account does not exist' ||
-              error.error.error ===
-                'Returned error: replacement transaction underpriced' ||
-              error.error.error ===
-                'Returned error: insufficient funds for gas * price + value'
-            ) {
-              this.gazproblem = true;
-              this.error = 'out_of_gas_error';
+              this.showButtonSend = true;
+              // if (data['error']) {
+              //   this.balanceNotEnough = false;
+    
+              // } else {
+              
+              if (data?.data?.applyerSignature?.signature) {
+                this.transactionHash = data?.data?.applyerSignature?.signature;
+                
+                this.error = '';
+                this.success = data?.data?.applyerSignature?.signature;
+                this.loadingButton = false;
+              }
               this.router.navigate([], {
                 queryParams: {
-                  errorMessage: 'error'
+                  successMessage: 'linkSubmitted'
                 }
-              });
-              if (this.networkWallet === 'BEP20') {
-                this.error = 'out_of_gas_bnb';
-                this.success = '';
-              } else if (this.networkWallet === 'ERC20') {
-                this.error = 'out_of_gas_eth';
-                this.success = '';
-              } else if (this.networkWallet === 'BTTC') {
-                this.error = 'out_of_gas_btt';
-                this.success = '';
-              } else if (this.networkWallet === 'TRON') {
-                this.error = 'out_of_gas_tron';
-                this.success = '';
-              } else if (this.networkWallet === 'MATIC') {
-                this.error = 'out_of_gas_matic';
-                this.success = '';
-              } else if (this.networkWallet === 'BTTC') {
-                this.error = 'out of gas';
-                this.success = '';
+              });*/
+              // }
+            },
+            (error) => {
+              this.loadingButton = false;
+              this.showButtonSend = true;
+              if(error.error.code === 401 && error.error.error === "Limit participation reached") {
+                this.errorMessageLimitParticipation = error.error.error;
+              }
+              if (
+                error.error.code === 402 &&
+                error.error.error === 'Returned error: already known'
+              ) {
+                this.balanceNotEnough = false;
+              }
+    
+              if (error.error.code === 500) {
+                if (
+                  error.error.error ===
+                  'Key derivation failed - possibly wrong password'
+                ) {
+                  this.error = 'wrong_password';
+                  this.success = '';
+                  this.loadingButton = false;
+                } else {
+                  this.error = 'Default';
+                  this.errorDescription = 'Default paragraphe';
+                  this.success = '';
+                  this.loadingButton = false;
+                }
+              } else if (error.error.code === 402) {
+                if (
+                  error.error.error === 'Account resource insufficient error.' ||
+                  error.error.error ===
+                    'Contract validate error : account does not exist' ||
+                  error.error.error ===
+                    'Returned error: replacement transaction underpriced' ||
+                  error.error.error ===
+                    'Returned error: insufficient funds for gas * price + value'
+                ) {
+                  this.gazproblem = true;
+                  this.error = 'out_of_gas_error';
+                  this.router.navigate([], {
+                    queryParams: {
+                      errorMessage: 'error'
+                    }
+                  });
+                  if (this.networkWallet === 'BEP20') {
+                    this.error = 'out_of_gas_bnb';
+                    this.success = '';
+                  } else if (this.networkWallet === 'ERC20') {
+                    this.error = 'out_of_gas_eth';
+                    this.success = '';
+                  } else if (this.networkWallet === 'BTTC') {
+                    this.error = 'out_of_gas_btt';
+                    this.success = '';
+                  } else if (this.networkWallet === 'TRON') {
+                    this.error = 'out_of_gas_tron';
+                    this.success = '';
+                  } else if (this.networkWallet === 'MATIC') {
+                    this.error = 'out_of_gas_matic';
+                    this.success = '';
+                  } else if (this.networkWallet === 'BTTC') {
+                    this.error = 'out of gas';
+                    this.success = '';
+                  }
+                }
+              } else if (error.error.code === 401) {
+                if (error.error.error === 'Link already sent') {
+                  this.error = 'link_already_exist';
+                  this.success = '';
+                  this.loadingButton = false;
+                  this.router.navigate([], {
+                    queryParams: {
+                      errorMessage: 'error'
+                    }
+                  });
+                } else if (error.error.error === 'Wallet v2 not found') {
+                  this.error = 'wallet not found';
+                  this.success = '';
+                  this.loadingButton = false;
+                } else if (error.error.code === 'Limit participation reached'){
+                  this.error = 'Limit_participation_reached';
+                  this.success = '';
+                  this.loadingButton = false;
+                  this.router.navigate([], {
+                    queryParams: {
+                      errorMessage: 'error'
+                    }
+                  });
+                }
+              } else {
+                this.error = 'error-message';
               }
             }
-          } else if (error.error.code === 401) {
-            if (error.error.error === 'Link already sent') {
-              this.error = 'link_already_exist';
-              this.success = '';
-              this.loadingButton = false;
-              this.router.navigate([], {
-                queryParams: {
-                  errorMessage: 'error'
-                }
-              });
-            } else if (error.error.error === 'Wallet v2 not found') {
-              this.error = 'wallet not found';
-              this.success = '';
-              this.loadingButton = false;
-            } else if (error.error.code === 'Limit participation reached'){
-              this.error = 'Limit_participation_reached';
-              this.success = '';
-              this.loadingButton = false;
-              this.router.navigate([], {
-                queryParams: {
-                  errorMessage: 'error'
-                }
-              });
-            }
-          } else {
-            this.error = 'error-message';
-          }
-        }
-      );
+          );
+      });
+    });
+    
+    this.applyPassword = true;
+    
   }
 
   parentFunction(network: any) {

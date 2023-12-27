@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import axios from 'axios';
 import { Console } from 'console';
 import { environment as env } from '../../../../../../environments/environment.prod';
@@ -8,6 +8,7 @@ import { ExternalWalletService } from '@app/core/services/vote/external-wallet.s
 import { SnapshotService } from '@app/vote/snapshot.service';
 import { NotificationService } from '@app/core/services/notification/notification.service';
 import Cookies from 'js-cookie';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-cast-vote',
@@ -35,7 +36,7 @@ export class CastVoteComponent implements OnInit {
   constructor(
     // private location: Location,
     public notificationService: NotificationService,
-    private snapshotService: SnapshotService, public externalWalletService: ExternalWalletService,) { }
+    private snapshotService: SnapshotService, public externalWalletService: ExternalWalletService,@Inject(DOCUMENT) private document: Document,) { }
 
   async ngOnInit(): Promise<void> {
     await this.loadChoices(this.proposalID);
@@ -50,47 +51,47 @@ export class CastVoteComponent implements OnInit {
 
   showConnectDialog() {
     this.isConnectDialog = true;
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideConnectDialog() {
     this.isConnectDialog = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   showConfirmVote() {
     this.isConfirmVote = true;
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideConfirmVote() {
     this.isConfirmVote = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   showVPDialog() {
     this.hideConfirmVote();
     this.isVPDialog = true;
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideVPDialog() {
     this.isVPDialog = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   showNetworkHasChanged() {
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideNetworkHasChanged() {
     this.externalWalletService.networkHasChanged = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   showInstall() {
     this.isNotInstalled = true;
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideInstall() {
     this.isNotInstalled = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   async changeNetwork() {

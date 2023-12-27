@@ -63,6 +63,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VoteService } from '@app/core/services/vote/vote.service';
 import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
 import Cookies from 'js-cookie';
+import detectEthereumProvider from '@metamask/detect-provider';
 
 const bscan = environment.bscanaddr;
 const etherscan = environment.etherscanaddr;
@@ -156,6 +157,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   public getScreenHeight: any;
   seen: boolean = false;
   menuAdpool: boolean = false;
+  menuProfile: boolean = false;
+  menuVote: boolean = false;
   menuFarmPost: boolean = false;
   menuHistory: boolean = false;
   menuHelp: boolean = false;
@@ -255,7 +258,67 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
             }); 
         }
       }
-    })
+    });
+
+    if(window.ethereum) {
+      if (window.ethereum) {
+       
+  
+        // Listen for network changes
+        window.ethereum.on('chainChanged', (chainId: string) => {
+         
+        
+          switch (chainId) {
+            case '0x1':
+              this.networkLabel = 'Ethereum';
+              this.networkLogo = 'erc20';
+              break;
+            case '0x38':
+              this.networkLabel = 'BNB Smart Chain';
+              this.networkLogo = 'bsc';
+              break;
+            case '0x89':
+              this.networkLabel = 'Polygon';
+              this.networkLogo = 'polygon';
+              break;
+            case '0xc7':
+              this.networkLabel = 'BitTorrent';
+              this.networkLogo = 'btt';
+              break;
+              case '0x61':
+                this.networkLabel = 'BNB Testnet';
+                this.networkLogo = 'bsc';
+                break;
+            default:
+              // ChainId not in the supported list
+              alert('Unsupported network. Please connect to a supported network.');
+              const network = {
+                label: "bsc",
+                logo: "assets/Images/bsc.svg",
+                network: "BNB Smart Chain"
+              }
+              detectEthereumProvider().then((provider) => {
+                this.externalWalletService.changeNetwork(provider, network.label).then((val) => {
+                  this.networkLabel = network.network;
+                  this.networkLogo = network.label;
+                  Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
+                  Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
+                })
+              });
+              // Optionally, you can disconnect the user or take other actions
+              
+          }
+        
+          //this.networkLabel = networkLabel;
+          //this.networkLogo = networkLogo;
+        
+          Cookies.set('networkSelected', this.networkLabel, { secure: true, sameSite: 'Lax' });
+          Cookies.set('networkSelectedLogo', this.networkLogo, { secure: true, sameSite: 'Lax' });
+        });
+      } else {
+        console.error('MetaMask not detected.');
+      }
+    }
     
     
     breakpointObserver
@@ -274,7 +337,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         // }
       });
 
-    if (isPlatformBrowser(this.platformId)) {
+    /*if (isPlatformBrowser(this.platformId)) {
       this.mediaQueryList = window.matchMedia(this.query);
       this.mediaQueryList2 = window.matchMedia(this.query2);
 
@@ -282,7 +345,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         let vh = window.innerHeight * 0.01;
         this.document.documentElement.style.setProperty('--vh', `${vh}px`);
       });
-    }
+    }*/
 
     translate.addLangs(['en', 'fr']);
     if (this.tokenStorageService.getLocale()) {
@@ -343,6 +406,15 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.router.url.includes('welcome')) {
           this.checkMenuAdpool();
         }
+
+        if(this.router.url.includes('social-networks')){
+          this.checkSocialNetwork();
+        }
+
+        if(this.router.url.includes('vote')){
+          this.checkMenuVote();
+        }
+        
         if (
           this.router.url.includes('buy-token') ||
           this.router.url.includes('edit')
@@ -397,18 +469,28 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showNetwork = !this.showNetwork;
   }
 
-  displayNetwork(e: any){
-    this.networkLabel = e.network;
-    this.networkLogo = e.label;
-    Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
-    Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
-    window.dispatchEvent(new Event('networkSelectedChanged'));
-
+   displayNetwork(e: any){
+    console.log({e})
+    console.log({networkLabel: this.networkLogo, e:e.label})
+    if(this.networkLogo != e.label) {
+      detectEthereumProvider().then((provider) => {
+        this.externalWalletService.changeNetwork(provider, e.label).then((val) => {
+          this.networkLabel = e.network;
+          this.networkLogo = e.label;
+          Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
+          Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
+        })
+      });
+    } 
+     
+    
+    
   }
 
   controllingNetwork(){
       try {
-        this.networkLabel = Cookies.get('networkSelected') || 'BNB SMART CHAIN' ;
+        
+        this.networkLabel = Cookies.get('networkSelected')  || 'BNB SMART CHAIN' ;
         this.networkLogo = Cookies.get('networkSelectedLogo') || 'bsc'
       } catch (error) {
         console.error('Error retrieving or setting cookie:', error);
@@ -1513,6 +1595,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   checkMenuFarmPost() {
     this.menuWallet = false;
     this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = true;
     this.menuHistory = false;
     this.menuHelp = false;
@@ -1524,6 +1608,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   checkMenuBuyToken() {
     this.menuWallet = false;
     this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = false;
     this.menuHistory = false;
     this.menuHelp = false;
@@ -1546,10 +1632,42 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (isPlatformBrowser(this.platformId))
       window.open('https://satt-token.com/blog/', '_blank');
   }
+
+  checkSocialNetwork(){
+    this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
+    this.menuWallet = false;
+    this.menuAdpool = false;
+    this.menuProfile = true;
+    this.menuVote = false;
+    this.menuFarmPost = false;
+    this.menuHistory = false;
+    this.menuHelp = false;
+    this.menuBuyToken = false;
+    this.menuTokenInfo = false;
+    this.menuAbout = false;
+    this.menuBlog = false;
+  }
+
+  checkMenuVote(){
+    this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
+    this.menuWallet = false;
+    this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = true;
+    this.menuFarmPost = false;
+    this.menuHistory = false;
+    this.menuHelp = false;
+    this.menuBuyToken = false;
+    this.menuTokenInfo = false;
+    this.menuAbout = false;
+    this.menuBlog = false;
+  }
   checkMenuAdpool() {
     this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
     this.menuWallet = false;
     this.menuAdpool = true;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = false;
     this.menuHistory = false;
     this.menuHelp = false;
@@ -1562,6 +1680,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
     this.menuWallet = false;
     this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = false;
     this.menuHistory = true;
     this.menuHelp = false;
@@ -1574,6 +1694,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
     this.menuWallet = false;
     this.menuAdpool = false;
+    this.menuProfile = false;
+    this.menuVote = false;
     this.menuFarmPost = false;
     this.menuHistory = false;
     this.menuHelp = true;
@@ -1587,6 +1709,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.isConnected) {
       this.menuWallet = true;
       this.menuAdpool = false;
+      this.menuProfile = false;
+      this.menuVote = false;
       this.menuFarmPost = false;
       this.menuHistory = false;
       this.menuHelp = false;
@@ -1710,7 +1834,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       if (accounts.length > 0) {
         this.walletConnected = true;
         this.walletId = accounts[0];
-        this.formattedCreator = `${this.walletId.substr(0, 4)}...${this.walletId.substr(-3)}`;
+        this.formattedCreator = `${this.walletId.substring(0, 6)}...${this.walletId.substring(this.walletId.length - 3)}`;
         // this.vp = await this.snapshotService.getVotingPower(this.walletId);
       }
 

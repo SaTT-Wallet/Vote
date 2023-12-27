@@ -29,8 +29,8 @@ const routes: Routes = [
         path: 'vote',
         loadChildren: () => import('../vote/vote.module').then((m) => m.VoteModule)
       },
-      { path: 'social-networks', component: SocialNetworksComponent },
-
+      { path: 'social-networks', pathMatch: 'full',component: SocialNetworksComponent },
+      
     ]
   }
 ];

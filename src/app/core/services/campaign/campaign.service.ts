@@ -199,9 +199,10 @@ export class CampaignHttpApiService {
     application: any,
     title: string,
     password: any,
-    hash: string
+    hash: string,
+    signature: any
   ) {
-    return this.http.post(sattUrl + '/campaign/apply', {
+    return this.http.post(sattUrl + '/external/apply', {
       idCampaign: campaign,
       typeSN: application.typeSN,
       idPost: application.idPost,
@@ -209,6 +210,7 @@ export class CampaignHttpApiService {
       title,
       pass: password,
       hash,
+      signature,
       linkedinId: application.linkedinId,
       version: localStorage.getItem('wallet_version'),
       ...(application.typeSN === 5 && {

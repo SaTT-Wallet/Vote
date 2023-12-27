@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2, ElementRef, Inject } from '@angular/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { environment as env } from '../../../../environments/environment.prod';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import { ApiprofilService } from '@app/apiprofil.service';
 import { ExternalWalletService } from './external-wallet.service';
 import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
+import { DOCUMENT } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +25,7 @@ export class VoteService {
 
   private previousWalletId!: string;
 
-  constructor(public externalWalletService: ExternalWalletService,private router: Router, public apiprofilService:ApiprofilService, public modalService: NgbModal, public tokenStorageService: TokenStorageService) { }
+  constructor(public externalWalletService: ExternalWalletService,private router: Router, @Inject(DOCUMENT) private document: Document,public apiprofilService:ApiprofilService, public modalService: NgbModal, public tokenStorageService: TokenStorageService) { }
 
   showConnectDialog(content?: any) {
     this.modalService.open(content)
@@ -35,20 +36,20 @@ export class VoteService {
   }
 
   showNetworkHasChanged() {
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideNetworkHasChanged() {
     this.externalWalletService.networkHasChanged = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   showInstall() {
     this.isNotInstalled = true;
-    document.body.classList.add('popup-visible');
+    this.document.body.classList.add('popup-visible');
   }
   hideInstall() {
     this.isNotInstalled = false;
-    document.body.classList.remove('popup-visible');
+    this.document.body.classList.remove('popup-visible');
   }
 
   async changeNetwork() {
@@ -135,7 +136,7 @@ export class VoteService {
             this.router.navigateByUrl('/farm-posts');
           }
         }
-        this.formattedCreator = `${this.walletId.substr(0, 4)}...${this.walletId.substr(-3)}`;     
+        this.formattedCreator = `${this.walletId.substring(0, 7)}...${this.walletId.substring(this.walletId.length - 3)}`;     
       
 
       
