@@ -14,23 +14,24 @@ const Blob = require('blob-polyfill').Blob;
 import { AppServerModule } from './src/main.server';
 import { APP_BASE_HREF } from '@angular/common';
 import axios from 'axios';
+const template = readFileSync(join(process.cwd(), 'dist/satt-token-atayen/browser', 'index.html')).toString();
+const win = domino.createWindow(template);
 
+(global as any).window = win;
+(global as any).document = win.document;
+(global as any).navigator = win.navigator;
+(global as any).Event = win.Event;
+(global as any).KeyboardEvent = win.KeyboardEvent;
+(global as any).MouseEvent = win.MouseEvent;
+(global as any).FocusEvent = win.FocusEvent;
 export function app(): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/satt-token-atayen/browser');
-  const template = readFileSync(join(distFolder, 'index.html')).toString();
-  const loadedData = cheerio.load(template);
-  const $ = loadedData('body');
+ 
+  
 
-  const fakeWindow = {
-    navigator: {},
-    document: $.html(),
-    Event: {},
-    MouseEvent: {},
-    KeyboardEvent: {},
-    FocusEvent: {},
-    PointerEvent: {}
-  };
+
+  
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
   server.engine(
@@ -38,7 +39,6 @@ export function app(): express.Express {
     ngExpressEngine({
       bootstrap: AppServerModule,
       inlineCriticalCss: false,
-      providers: [{ provide: 'document', useValue: fakeWindow.document }]
     })
   );
   server.use(helmet.noSniff());
