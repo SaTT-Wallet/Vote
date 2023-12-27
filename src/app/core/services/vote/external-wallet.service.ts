@@ -10,7 +10,7 @@ import { TokenStorageService } from '../tokenStorage/token-storage-service.servi
 declare let window: any;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExternalWalletService {
   public ethereum!: any;
@@ -23,8 +23,10 @@ export class ExternalWalletService {
   vp: any;
   latest_acc: string = '';
 
-
-  constructor(private snapshotService: SnapshotService, private tokenStorageService :TokenStorageService) {
+  constructor(
+    private snapshotService: SnapshotService,
+    private tokenStorageService: TokenStorageService
+  ) {
     this.detectMetaMask();
     const { ethereum } = <any>window;
     this.ethereum = ethereum;
@@ -46,38 +48,51 @@ export class ExternalWalletService {
   }
 
   async connectMetamask(): Promise<void> {
+    debugger;
     const provider = await detectEthereumProvider();
-    
+
     if (provider && provider.isMetaMask) {
       try {
         // Generate a unique nonce for each connection
-      
-      const timestamp = Date.now().toString();
 
-      // Construct the message
-      
+        const timestamp = Date.now().toString();
 
-        
-        const accounts = await this.ethereum.request({ method: 'eth_requestAccounts' });
-        this.tokenStorageService.saveIdWallet(accounts[0])
+        // Construct the message
+
+        const accounts = await this.ethereum.request({
+          method: 'eth_requestAccounts',
+        });
+        this.tokenStorageService.saveIdWallet(accounts[0]);
         const message = `authentication=true&address=${accounts[0]}&ts=${timestamp}`;
         const signature = await this.ethereum.request({
           method: 'personal_sign',
           params: [message, accounts[0]],
         });
-  
+
         // Save the signature and address to local storage
-        Cookies.set('metamaskSignature', signature, { secure: true, sameSite: 'Lax' });
-        Cookies.set('metamaskAddress', accounts[0], { secure: true, sameSite: 'Lax' });
-        Cookies.set('metamaskNonce', message, { secure: true, sameSite: 'Lax' });
-        
+        Cookies.set('metamaskSignature', signature, {
+          secure: true,
+          sameSite: 'Lax',
+        });
+        Cookies.set('metamaskAddress', accounts[0], {
+          secure: true,
+          sameSite: 'Lax',
+        });
+        Cookies.set('metamaskNonce', message, {
+          secure: true,
+          sameSite: 'Lax',
+        });
+
         // Rest of your code
-        await this.ethereum.request({ method: 'wallet_requestPermissions', params: [{ eth_accounts: {} }] });
+        await this.ethereum.request({
+          method: 'wallet_requestPermissions',
+          params: [{ eth_accounts: {} }],
+        });
         await this.changeToBinance(provider);
         await this.addTokenToBinance(provider);
         this.connect = true;
         this.isWalletConnected = true;
-        this.tokenStorageService.setIsAuth('true')
+        this.tokenStorageService.setIsAuth('true');
       } catch (error) {
         console.error('Error connecting with MetaMask:', error);
         // Handle errors as needed
@@ -87,48 +102,122 @@ export class ExternalWalletService {
       // throw new Error('Please install MetaMask!');
     }
   }
-  async changeNetwork(provider:any, network: any) {
-    
-
-    (await (provider as any).request({
+  async changeNetwork(provider: any, network: any) {
+    await (provider as any).request({
       method: 'wallet_addEthereumChain',
-      params: [{
-        chainId: network === 'bsc' ? env.bnbNetwork.chainIDHex : ( network === 'erc20' ? env.mainnetNetwork.chainIDHex :  network === 'bscT' ? env.testNetNetwork.chainIDHex : ( network === 'polygon' ? env.polygonNetwork.chainIDHex: env.bttNetwork.chainIDHex)),
-        chainName: network === 'bsc' ? env.bnbNetwork.chainName : ( network === 'erc20' ? env.mainnetNetwork.chainName :  network === 'bscT' ? env.testNetNetwork.chainName : ( network === 'polygon' ? env.polygonNetwork.chainName: env.bttNetwork.chainName)),
-        nativeCurrency: {
-          name: network === 'bsc' ? env.bnbNetwork.currencySymbol : ( network === 'erc20' ? env.mainnetNetwork.currencySymbol : network === 'bscT' ? env.testNetNetwork.currencySymbol : ( network === 'polygon' ? env.polygonNetwork.currencySymbol: env.bttNetwork.currencySymbol)),
-          symbol: network === 'bsc' ? env.bnbNetwork.currencySymbol : ( network === 'erc20' ? env.mainnetNetwork.currencySymbol : network === 'bscT' ? env.testNetNetwork.currencySymbol : ( network === 'polygon' ? env.polygonNetwork.currencySymbol: env.bttNetwork.currencySymbol)),
-          decimals: 18
+      params: [
+        {
+          chainId:
+            network === 'bsc'
+              ? env.bnbNetwork.chainIDHex
+              : network === 'erc20'
+              ? env.mainnetNetwork.chainIDHex
+              : network === 'bscT'
+              ? env.testNetNetwork.chainIDHex
+              : network === 'polygon'
+              ? env.polygonNetwork.chainIDHex
+              : env.bttNetwork.chainIDHex,
+          chainName:
+            network === 'bsc'
+              ? env.bnbNetwork.chainName
+              : network === 'erc20'
+              ? env.mainnetNetwork.chainName
+              : network === 'bscT'
+              ? env.testNetNetwork.chainName
+              : network === 'polygon'
+              ? env.polygonNetwork.chainName
+              : env.bttNetwork.chainName,
+          nativeCurrency: {
+            name:
+              network === 'bsc'
+                ? env.bnbNetwork.currencySymbol
+                : network === 'erc20'
+                ? env.mainnetNetwork.currencySymbol
+                : network === 'bscT'
+                ? env.testNetNetwork.currencySymbol
+                : network === 'polygon'
+                ? env.polygonNetwork.currencySymbol
+                : env.bttNetwork.currencySymbol,
+            symbol:
+              network === 'bsc'
+                ? env.bnbNetwork.currencySymbol
+                : network === 'erc20'
+                ? env.mainnetNetwork.currencySymbol
+                : network === 'bscT'
+                ? env.testNetNetwork.currencySymbol
+                : network === 'polygon'
+                ? env.polygonNetwork.currencySymbol
+                : env.bttNetwork.currencySymbol,
+            decimals: 18,
+          },
+          rpcUrls: [
+            network === 'bsc'
+              ? env.bnbNetwork.rpcURL
+              : network === 'erc20'
+              ? env.mainnetNetwork.rpcURL
+              : network === 'bscT'
+              ? env.testNetNetwork.rpcURL
+              : network === 'polygon'
+              ? env.polygonNetwork.rpcURL
+              : env.bttNetwork.rpcURL,
+          ],
+          blockExplorerUrls: [
+            network === 'bsc'
+              ? env.bnbNetwork.blockExplorerURL
+              : network === 'erc20'
+              ? env.mainnetNetwork.blockExplorerURL
+              : network === 'bscT'
+              ? env.testNetNetwork.blockExplorerURL
+              : network === 'polygon'
+              ? env.polygonNetwork.blockExplorerURL
+              : env.bttNetwork.blockExplorerURL,
+          ],
         },
-        rpcUrls: [network === 'bsc' ? env.bnbNetwork.rpcURL : ( network === 'erc20' ? env.mainnetNetwork.rpcURL : network === 'bscT' ? env.testNetNetwork.rpcURL : ( network === 'polygon' ? env.polygonNetwork.rpcURL: env.bttNetwork.rpcURL)),],
-        blockExplorerUrls: [network === 'bsc' ? env.bnbNetwork.blockExplorerURL : ( network === 'erc20' ? env.mainnetNetwork.blockExplorerURL : network === 'bscT' ? env.testNetNetwork.blockExplorerURL : ( network === 'polygon' ? env.polygonNetwork.blockExplorerURL: env.bttNetwork.blockExplorerURL)),],
-      }]
-    }));
+      ],
+    });
   }
   async changeToBinance(provider: any) {
+    debugger;
     const chainId = await this.ethereum.request({ method: 'eth_chainId' });
-    if (chainId === env.chainIDDecimal || chainId === env.chainIDHex) {
 
-    } else {
-      (await (provider as any).request({
-        method: 'wallet_addEthereumChain',
-        params: [{
-          chainId: env.chainIDHex,
-          chainName: env.chainName,
-          nativeCurrency: {
-            name: env.currencySymbol,
-            symbol: env.currencySymbol,
-            decimals: 18
-          },
-          rpcUrls: [env.rpcURL],
-          blockExplorerUrls: [env.blockExplorerURL],
-        }]
-      }));
+    switch (chainId) {
+        case env.testNetNetwork.chainIDHex:
+            await this.addChain(provider, env.testNetNetwork);
+            break;
+        case env.bnbNetwork.chainIDHex:
+            await this.addChain(provider, env.bnbNetwork);
+            break;
+        case env.polygonNetwork.chainIDHex:
+            await this.addChain(provider, env.polygonNetwork);
+            break;
+        case env.bttNetwork.chainIDHex:
+            await this.addChain(provider, env.bttNetwork);
+            break;
+        // Add more cases as needed
+        default:
+            console.error('Unsupported chain ID:', chainId);
+            break;
     }
-  }
+}
 
-
-
+private async addChain(provider: any, network: any) {
+    await (provider as any).request({
+        method: 'wallet_addEthereumChain',
+        params: [
+            {
+                chainId: network.chainIDHex,
+                chainName: network.chainName,
+                nativeCurrency: {
+                    name: network.currencySymbol,
+                    symbol: network.currencySymbol,
+                    decimals: 18,
+                },
+                rpcUrls: [network.rpcURL],
+                blockExplorerUrls: [network.blockExplorerURL],
+            },
+        ],
+    });
+}
 
   async addTokenToBinance(provider: any) {
     const token = {
@@ -142,7 +231,10 @@ export class ExternalWalletService {
     };
     try {
       const accounts = await this.ethereum.request({ method: 'eth_accounts' });
-      const tokenBalance = await this.getTokenBalance(token.options.address, accounts[0]);
+      const tokenBalance = await this.getTokenBalance(
+        token.options.address,
+        accounts[0]
+      );
       // console.log(tokenBalance)
       if (tokenBalance > 0) {
         // console.log('SATT already exists in wallet');
@@ -169,20 +261,25 @@ export class ExternalWalletService {
     const web3 = new Web3(this.ethereum);
     const contract = new web3.eth.Contract(abi.SATT as any, tokenAddress);
     const balance = await (contract.methods.balanceOf as any)(account).call();
-    return Number(balance) / 1e+18;
+    return Number(balance) / 1e18;
   }
-
-
-
 
   async checkChangedNetworkOrChainID() {
     if (this.isMetaMaskInstalled) {
-      window.ethereum.request({ method: 'eth_chainId' })
+      window.ethereum
+        .request({ method: 'eth_chainId' })
         .then((chainId: any) => {
-          console.log({chainId})
-          if (this.isWalletConnected && chainId !== env.chainIDDecimal && chainId !== env.chainIDHex) {
+          console.log({ chainId });
+          if (
+            this.isWalletConnected &&
+            chainId !== env.chainIDDecimal &&
+            chainId !== env.chainIDHex
+          ) {
             this.networkHasChanged = true;
-          } else if (this.isWalletConnected && (chainId === env.chainIDDecimal || chainId === env.chainIDHex)) {
+          } else if (
+            this.isWalletConnected &&
+            (chainId === env.chainIDDecimal || chainId === env.chainIDHex)
+          ) {
             this.networkHasChanged = false;
           }
         })
@@ -191,9 +288,16 @@ export class ExternalWalletService {
         });
 
       window.ethereum.on('chainChanged', (chainId: any) => {
-        if (this.isWalletConnected && chainId !== env.chainIDDecimal && chainId !== env.chainIDHex) {
+        if (
+          this.isWalletConnected &&
+          chainId !== env.chainIDDecimal &&
+          chainId !== env.chainIDHex
+        ) {
           this.networkHasChanged = true;
-        } else if (this.isWalletConnected && (chainId === env.chainIDDecimal || chainId === env.chainIDHex)) {
+        } else if (
+          this.isWalletConnected &&
+          (chainId === env.chainIDDecimal || chainId === env.chainIDHex)
+        ) {
           this.networkHasChanged = false;
         }
       });
@@ -202,7 +306,8 @@ export class ExternalWalletService {
 
   checkChangedAccounts() {
     if (this.isMetaMaskInstalled) {
-      window.ethereum.request({ method: 'eth_accounts' })
+      window.ethereum
+        .request({ method: 'eth_accounts' })
         .then(async (accounts: any) => {
           await this.handleAccountsChanged(accounts);
         })
@@ -220,17 +325,19 @@ export class ExternalWalletService {
     if (accounts.length === 0) {
       this.connect = false;
       this.isWalletConnected = false;
-      this.acc = []
-      this.tokenStorageService.setIsAuth('false')
+      this.acc = [];
+      this.tokenStorageService.setIsAuth('false');
     } else {
       this.isWalletConnected = true;
       this.acc = accounts;
       if (this.latest_acc !== this.acc[0]) {
-        this.vp = await this.snapshotService.getVotingPower(this.acc[0].toString());
+        this.vp = await this.snapshotService.getVotingPower(
+          this.acc[0].toString()
+        );
         this.latest_acc = this.acc[0];
       }
     }
-    if ((accounts.length !== 0) && accounts[0] !== this.currentAccount) {
+    if (accounts.length !== 0 && accounts[0] !== this.currentAccount) {
       this.currentAccount = accounts[0];
     }
   }
@@ -254,8 +361,7 @@ export class ExternalWalletService {
       this.isWalletConnected = true;
     }
     return this.acc;
-  }
-
+  };
 
   async disconnectMetamask(): Promise<void> {
     // window.ethereum.on('disconnect', (error: any) => {
@@ -264,6 +370,6 @@ export class ExternalWalletService {
     this.connect = false;
     this.isWalletConnected = false;
     this.acc = [];
-    this.tokenStorageService.setIsAuth('false')
+    this.tokenStorageService.setIsAuth('false');
   }
 }

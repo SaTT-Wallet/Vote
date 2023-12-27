@@ -19,6 +19,7 @@ import {
   takeUntil
 } from 'rxjs/operators';
 import { Observable, of, Subject } from 'rxjs';
+import Cookies from 'js-cookie';
 
 import {
   ICampaignResponse,
@@ -50,8 +51,8 @@ export class CampaignHttpApiService {
   upload(file: File, id: any) {
     const formData: FormData = new FormData();
     formData.append('cover', file);
-
-    return this.http.post(sattUrl + '/campaign/ipfs/' + id, formData);
+    formData.append('userId', String(Number(Cookies.get('userId')))); 
+    return this.http.post(sattUrl + '/external/externalUploadPictureToIPFS/' + id, formData);
   }
   getPromById(id: string) {
     return this.http.get(`${sattUrl}/campaign/prom/stats/${id}`).pipe(
@@ -171,7 +172,7 @@ export class CampaignHttpApiService {
   ): Observable<IApiResponse<ICampaignResponse>> {
     return this.http
       .post<IApiResponse<ICampaignResponse>>(
-        `${sattUrl}/campaign/save`,
+        `${sattUrl}/external/createCampaign`,
         draftCampaign
       )
       .pipe(shareReplay(1));
@@ -225,32 +226,6 @@ export class CampaignHttpApiService {
   modifytKit(kits: any, campaignId: any) {
     let formData = new FormData();
 
-    // console.log(kits)
-    // for(let key in kits){
-    //   console.log(key)
-    //   console.log(kits[key])
-
-    //   if(key === 'url'){
-    //     formData.append("link", kits[key]);
-    //   }
-    //   if  (key === 'file'){
-    //     formData.append("file", kits[key]);
-    //   }
-    // }
-
-    //     kits.forEach((element: any) => {
-    // console.log(element)
-    // if (element.new) {
-
-    //         if (element.link) {
-    //           formData.append("link", element.link);
-
-    //         } else {
-    //           formData.append("file", element.file);
-    //          }
-    //       }
-    //     });
-
     kits.forEach((element: any, index: any, array: any) => {
       if (index === array.length - 1) {
         if (element.new) {
@@ -263,40 +238,23 @@ export class CampaignHttpApiService {
       }
     });
 
-    //   for (var i = 0, len = kits.length; i < len; i++) {
-    //     console.log(kits[i])
-
-    // if (kits[i].new){
-    //   if (kits[i].link) {
-    //     formData.append("link", kits[i].link);
-
-    //   } else {
-    //     formData.append("file", kits[i].file);
-    //    }
-    // }
-
-    //     }
 
     formData.append('campaign', campaignId);
 
-    // var data={link,campaign:Kits[0].campaign}
 
-    // formData.append('data', JSON.stringify(data));
 
     return this.http
-      .post(sattUrl + '/campaign/addKits', formData, {
+      .post(sattUrl + '/external/externalAddKits', formData, {
         reportProgress: true,
         observe: 'events'
       })
       .pipe(
-        catchError(() => {
-          //TODO: handle errors with services.
-          //console.log("error saving kits");
+        catchError((error) => {
+          console.error('Error occurred:', error);
           return of({
-            error:
-              'an error ocured when trying to save your data please try again.'
+            error: 'An error occurred when trying to save your data. Please try again.'
           });
-        }),
+        }),        
         shareReplay(1)
       );
   }
@@ -315,13 +273,12 @@ export class CampaignHttpApiService {
    */
   updateOneById(
     values: any,
-    id: string
+    campaignId: string
   ): Observable<IApiResponse<ICampaignResponse> | null> {
     return this.http
       .put<IApiResponse<ICampaignResponse>>(
-        `${sattUrl}/campaign/update/${id}`,
-
-        values
+        `${sattUrl}/external/externalUpdate/${campaignId}`,
+        { values, userId: Number(Cookies.get('userId')) } 
       )
       .pipe(
         catchError(() => of(null)),
@@ -329,7 +286,8 @@ export class CampaignHttpApiService {
         shareReplay(1)
       );
   }
-
+  
+  
   approvalERC20(erc20: any) {
     return this.http.post(sattUrl + '/campaign/erc20/approval', {
       tokenAddress: erc20.addr,

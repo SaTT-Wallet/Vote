@@ -54,33 +54,8 @@ export class AuthStoreService {
  
 
   public getAccount() {
-    return this.auth.verifyAccount().pipe(
-      tap( (response) => {
-        console.log({response})
-        const hasWalletV2 = response.data.hasWalletV2 || false
-        if(!!response.data.migrated && response.data.migrated) this.tokenStorageService.setItem('wallet_version', 'v2');
-        else {
-          this.walletFacade.checkUserIsNew().subscribe((res:any) => {
-            if(res.data) this.tokenStorageService.setItem('wallet_version', 'v2');
-            else this.tokenStorageService.setItem('wallet_version', 'v1');
-          }, (err) => {
-            hasWalletV2 ? this.tokenStorageService.setItem('wallet_version', 'v2') : this.tokenStorageService.setItem('wallet_version', 'v1');
-          })
-          
-          
-          
-          /*this.cryptofetchServiceService.getTotalBalance().subscribe((res:any) => {
-            const balance = parseFloat(res.data.Total_balance)
-            
-            if(balance > 0) this.tokenStorageService.setItem('wallet_version', 'v1')
-            else hasWalletV2 ? this.tokenStorageService.setItem('wallet_version', 'v2') : this.tokenStorageService.setItem('wallet_version', 'v1')
-          });*/
-          
-        }
-        
-        this.setAccount(response);
-      })
-    );
+    this.setAccount(this.tokenStorageService.getIdWallet());
+    
   }
 
   clearStore() {

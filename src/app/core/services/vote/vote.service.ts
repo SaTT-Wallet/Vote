@@ -70,6 +70,7 @@ export class VoteService {
       if (this.externalWalletService.isMetaMaskInstalled) {
         this.provider = await this.externalWalletService.connectMetamask();
 
+
       } else {
         this.showInstall();
       }

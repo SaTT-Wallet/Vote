@@ -980,7 +980,7 @@ export class CryptoListComponent implements OnInit, OnDestroy {
               } else if (crypto.network === 'BEP20') {
                 if (isPlatformBrowser(this.platformId))
                   window.open(
-                    'https://pancakeswap.finance/swap#/swap?inputCurrency=USDT&outputCurrency=0x448bee2d93be708b54ee6353a7cc35c4933f1156',
+                    'https://pancakeswap.finance/swap#/swap?inputCurrency=USDT&outputCurrency=0x6fAc729f346A46fC0093126f237b4A520c40eb89',
                     '_blank'
                   );
 

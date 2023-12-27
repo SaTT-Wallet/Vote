@@ -71,7 +71,7 @@ export class AuthService {
   }
 
   verifyAccount(): Observable<IresponseAccount> {
-    return this.http.get<IresponseAccount>(sattUrl + '/profile/account');
+    return this.http.get<IresponseAccount>(sattUrl + '/external/externalAccount');
   }
 
   updatePassword(oldpass: any, newpass: any) {

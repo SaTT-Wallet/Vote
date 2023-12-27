@@ -47,6 +47,8 @@ import { IApiResponse } from '@app/core/types/rest-api-responses';
 import { ICampaignResponse } from '@app/core/campaigns-list-response.interface';
 import { environment } from '@environments/environment';
 import { DraftMaximumParticipationComponent} from '../draft-maximum-participation/draft-maximum-participation.component';
+import Cookies from 'js-cookie';
+import { CampaignsService } from '@app/campaigns/services/campaigns.service';
 enum FormStatus {
   Saving = 'saving',
   Saved = 'saved',
@@ -116,6 +118,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     public translate: TranslateService,
     private toastr: ToastrService,
     private router: Router,
+    private campaignsService:CampaignsService,
     private fileService: FilesService,
     public modalService: NgbModal,
     private fetchservice: CryptofetchServiceService,
@@ -237,6 +240,8 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     }
   }
   saveAndLaunchCampaign() {
+
+    console.log("this.campaignDatathis.campaignData",this.campaignData)
       this.getCampaignData();
       this.checkValidation();
       if (
@@ -248,49 +253,15 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     ) {
       
       this.alertRequired = false;
-      this.router.navigate(['home/check-password'], {
-        queryParams: { id: this.draftId, network: this.campaignData.currency.type }
-      });
+      this.campaignsService.createPriceFundAll(this.campaignData)
+      // this.router.navigate(['home/check-password'], {
+      //   queryParams: { id: this.draftId, network: this.campaignData.currency.type }
+      // });
     } else {
       this.alertRequired = true;
     }
   
-    /*================================================
-     to activate legal KYC uncomment below api call
-    =================================================*/
-    // this.fileService
-    //   .getListUserLegal()
-    //   .pipe(
-    //     map((data: any) =>
-    //       Object.keys(data.legal).map((key) => ({
-    //         value: data.legal[key],
-    //       }))
-    //     )
-    //   )
-    //   .subscribe((items) => {
-    //     if (
-    //       items.length > 1 &&
-    //       items.reduce((acc: any, item: any) => {
-    //         return acc && item.value["validate"] === true;
-    //       }, true)
-    //     ) {
-    //       if (
-    //         this.validFormParam &&
-    //         this.validFormPresentation &&
-    //         this.validFormBudgetRemun
-    //       ) {
-    //         this.alertRequired = false;
-    //         this.router.navigate(["home/check-password"], {
-    //           queryParams: { id: this.draftId },
-    //         });
-    //       } else {
-    //         this.alertRequired = true;
-    //       }
-    //     } else {
-    //       this.modalService.open(this.checkUserLegalKYCModal);
-    //     }
-    //   });
-    /* ==================================================== */
+  
   }
   goToView() {
     // this.router.navigate(['home/campaign/', this.draftId]);
@@ -399,7 +370,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           const campaign = new Campaign(c.data);
           campaign.ownedByUser =
             Number(campaign.ownerId) ===
-            Number(this.localeStorageService.getIdUser());
+            Number(Cookies.get('userId'));
           
           
           return campaign;
@@ -407,12 +378,12 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
         takeUntil(this.isDestroyed$)
       )
       .subscribe((c: Campaign) => {
-        if (!c.isOwnedByUser) {
-          this.router.navigateByUrl('/ad-pools');
-        }
-        if (c.isOwnedByUser) {
-          this.isLoading = false;
-        }
+         if (!c.isOwnedByUser) {
+           this.router.navigateByUrl('/ad-pools');
+         }
+         if (c.isOwnedByUser) {
+           this.isLoading = false;
+         }
         this.campaignData = c;
       });
   }

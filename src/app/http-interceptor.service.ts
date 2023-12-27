@@ -26,6 +26,10 @@ export class HttpInterceptorService implements HttpInterceptor {
       '/external/socialAccounts',
       '/external/campaign/filterLinksExternal',
       '/external/link/verify',
+      '/external/createCampaign',
+      '/external/verify-token',
+      '/external/externalAccount',
+      '/external/externalUpdate',
       '/external/apply'
     ];
 

@@ -286,21 +286,7 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
   }
 
   private onBoarding() {
-    let address = this.tokenStorageService.getIdWallet();
-    if (address) {
-      this.authStoreService
-        .getAccount()
-        .pipe(takeUntil(this.onDestoy$))
-        .subscribe((response: any) => {
-          if (
-            (response.data.onBoarding === false ||
-              response.data.onBoarding === '') &&
-            this.router.url === '/ad-pools'
-          ) {
-            this.startSteps();
-          }
-        });
-    }
+
   }
 
   private startSteps() {

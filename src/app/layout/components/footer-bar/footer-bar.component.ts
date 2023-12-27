@@ -20,7 +20,6 @@ export class FooterBarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.sidebarService)
   }
   goToBuy() {
     if (isPlatformBrowser(this.platformId))

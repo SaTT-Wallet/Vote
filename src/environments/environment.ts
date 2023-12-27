@@ -12,6 +12,12 @@ export const environment = {
 
   // API_URL:  'https://api-preprod2.satt-token.com',
 
+  WEB3_URL : 'https://goerli.infura.io/v3/f1d98cca429e48d29087a4a2deb587c1',
+  WEB3_URL_BEP20 : 'https://bsc-testnet.publicnode.com',
+  WEB3_URL_TRON : 'https://api.shasta.trongrid.io/jsonrpc',
+  WEB3_URL_BTT : 'https://pre-rpc.bt.io/',
+  WEB3_URL_POLYGON : 'https://polygon-mumbai.blockpi.network/v1/rpc/public',
+
   API_URL: 'https://api-preprod2.satt-token.com',
   // 'https://api-preprod.satt-token.com:3014',
 
@@ -19,21 +25,12 @@ export const environment = {
     'https://api.thegraph.com/subgraphs/name/atayen/satt-testnet',
   url_subgraph_ether:
     'https://api.thegraph.com/subgraphs/name/atayen/satt-testnet-ether',
-  url_subgraph_vote:
-    'https://testnet.snapshot.org/graphql',
+  url_subgraph_vote: 'https://testnet.snapshot.org/graphql',
 
   snapshot_hub: 'https://testnet.snapshot.org',
   space_name: 'atayensatt.eth',
-  bsc_node: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+  bsc_node: 'https://bsc-testnet.publicnode.com/',
 
-  chainIDDecimal: '97',
-  chainIDHex: '0x61',
-  chainName: 'Binance Smart Chain Testnet',
-  currencySymbol: 'TBNB',
-  rpcURL: 'https://data-seed-prebsc-1-s1.binance.org:8545',
-  blockExplorerURL: 'https://testnet.bscscan.com/',
-  sattContractAdress: '0x6fAc729f346A46fC0093126f237b4A520c40eb89',
-  network: 'bsc-testnet',
 
   testNetNetwork: {
     chainIDHex:'0x61',
@@ -42,28 +39,54 @@ export const environment = {
     blockExplorerURL:'https://testnet.bscscan.com/',
     currencySymbol:'tBNB'
   },
+  mainnetNetwork: {
+    chainIDHex:'0x1',
+    chainName: 'Ethereum Mainnet',
+    rpcURL:'https://ethereum.publicnode.com',
+    blockExplorerURL:'https://etherscan.io/',
+    currencySymbol: 'ETH'
+  },
+  bnbNetwork: {
+    chainIDHex:'0x38',
+    chainName: 'Binance Smart Chain Mainnet',
+    rpcURL:'https://bsc-dataseed.binance.org/',
+    blockExplorerURL:'https://bscscan.com/',
+    currencySymbol:'BNB'
+  },
+  polygonNetwork: {
+    chainIDHex:'0x89',
+    chainName: 'Polygon Mainnet',
+    rpcURL:'https://polygon-pokt.nodies.app',
+    blockExplorerURL:'https://polygonscan.com/',
+    currencySymbol:'MATIC'
+  },
+  bttNetwork: {
+    chainIDHex:'0xc7',
+    chainName: 'BitTorrent Chain Mainnet',
+    rpcURL:'https://rpc.bittorrentchain.io',
+    blockExplorerURL:'https://bttcscan.com/',
+    currencySymbol:'BTT'
+  },
   strategies: [
     {
       name: 'erc20-balance-of',
       params: {
         address: '0x6fAc729f346A46fC0093126f237b4A520c40eb89',
         symbol: 'DAI',
-        decimals: 18
-      }
-    }
+        decimals: 18,
+      },
+    },
   ],
 
-   
-  core : [
+  core: [
     '0x74bb5cbff3738eca2307fbea15b0ff85c4fddd41',
-    '0x1c04ee5fb9a916ea47a4497fd62dbc45c54f42a8'
+    '0x1c04ee5fb9a916ea47a4497fd62dbc45c54f42a8',
   ],
 
-  
   addresses: {
     smartContracts: {
       campaignERC20: '0xbc27de58DDCEd7A2BB911BE2E18D0FA1A49fF7D3',
-      campaignBEP20: '0x79Ab8dd7267F45AdF846F0dE0732759e3456Bee3',
+      campaignBEP20: '0x21F27868d2E3Bbc2E3cced9c5233BA68439C03cf',
       campaignPOLYGON: '0xD6Cb96a00b312D5930FC2E8084A98ff2Daa5aD2e',
       campaignBTT: '0x261491739e36090FC80fF1569B7E5FFe26070d77',
       campaignTRON: 'THUD3VAxyTEmMCBEjd2AcSujzbgPSu39p9',
@@ -81,8 +104,8 @@ export const environment = {
       DAI: '0x7d6550Bb3946c0BB0701c75baBE2f679E01F3f3E',
       BUSD: '0xE6baB06eb943e9b6D475fB229E3E15F6E49a5461',
       WTRX: 'TRpHXiD9PRoorNh9Lx4NeJUAP7NcG5zFwi',
-      WBTT: '0x0000000000000000000000000000000000001010'
-    }
+      WBTT: '0x0000000000000000000000000000000000001010',
+    },
   },
   domainName: 'https://testnet.satt.atayen.us',
   telegramBot: 'TestnetAtayenBot',
@@ -94,7 +117,7 @@ export const environment = {
     storageBucket: 'satt-token.appspot.com',
     messagingSenderId: '284190209745',
     appId: '1:284190209745:web:dc01085f6a6dabfcc837f0',
-    measurementId: 'G-DSJK01CZ0X'
+    measurementId: 'G-DSJK01CZ0X',
   },
   fcmredirectUrl: 'http://localhost:4200/#/home',
   bscan: 'https://testnet.bscscan.com/tx/',
@@ -132,7 +155,7 @@ export const environment = {
     SATTBEP20: 'SATTBEP20',
     TRX: 'tron',
     MATIC: 'MATIC',
-    BTT: 'BTT'
+    BTT: 'BTT',
   },
   typeSN: {
     facebook: 1,
@@ -140,7 +163,7 @@ export const environment = {
     instagram: 3,
     twitter: 4,
     linkedin: 5,
-    tiktok: 6
+    tiktok: 6,
   },
   oracleType: {
     facebook: 'facebook',
@@ -148,7 +171,7 @@ export const environment = {
     instagram: 'instagram',
     twitter: 'twitter',
     linkedin: 'linkedin',
-    tiktok: 'tiktok'
+    tiktok: 'tiktok',
   },
   urlSocialMedia: {
     urlTwitter: 'https://www.twitter.com/',
@@ -157,9 +180,8 @@ export const environment = {
     urlInstagram: 'https://www.instagram.com/',
     urlLinkedinCompany: 'https://www.linkedin.com/company/',
     urlTiktok: 'https://www.tiktok.com/',
-    urlthreadsAccount: 'https://threads.net/@'
-
-  }
+    urlthreadsAccount: 'https://threads.net/@',
+  },
   // gmtId: 'GTM-5XW23QX'
 
   /*  API_URL: 'https://api2.satt-token.com',

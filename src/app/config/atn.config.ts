@@ -8,6 +8,7 @@ const bscan = env.bscan;
 const etherscan = env.etherscan;
 const polygonscan = env.polygonscan;
 const bttscan = env.bttscan;
+const GAS_LIMIT=1000000;
 
 const polygonscanAddr = env.polygonscanAddr;
 const bttscanAddr = env.bttscanAddr;
@@ -26,6 +27,14 @@ const campaignSmartContractTRON = env.addresses.smartContracts.campaignTRON;
 
 const id_campaign_to_participate = '61139d487048d8251bf91401';
 
+const contractAbi = [
+  "function createPriceFundAll(string dataUrl, uint64 startDate, uint64 endDate, uint256[] ratios, address token, uint256 amount, uint64 limit) public returns (bool)"
+
+];
+
+const contractTokenAbi =[
+  'function approve(address spender, uint256 amount) external returns (bool)'
+];
 //let pattContact = /^0x[a-fA-F0-9]{40}$|^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/;
 let pattContact = /^0x[a-fA-F0-9]{40}$|^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$|T[A-Za-z1-9]{33}$/;
 let tronPattContact = /T[A-Za-z1-9]{33}$/;
@@ -932,5 +941,5 @@ export {
   cryptoList,
   tronscanAddr,
   tronScan,
-  tronPattContact
+  tronPattContact, contractAbi,contractTokenAbi,GAS_LIMIT
 };
