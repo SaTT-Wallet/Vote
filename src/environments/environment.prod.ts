@@ -13,7 +13,7 @@ export const environment = {
 
     
   WEB3_URL : 'https://goerli.infura.io/v3/f1d98cca429e48d29087a4a2deb587c1',
-  WEB3_URL_BEP20 : 'https://data-seed-prebsc-2-s1.binance.org:8545',
+  WEB3_URL_BEP20 : 'https://bsc-testnet.publicnode.com',
   WEB3_URL_TRON : 'https://api.shasta.trongrid.io/jsonrpc',
   WEB3_URL_BTT : 'https://pre-rpc.bt.io/',
   WEB3_URL_POLYGON : 'https://polygon-mumbai.blockpi.network/v1/rpc/public',
@@ -27,7 +27,7 @@ export const environment = {
   chainIDHex: '0x38',
   chainName: 'Binance Smart Chain Mainnet',
   currencySymbol: 'BNB',
-  rpcURL: 'https://bsc-dataseed.binance.org/',
+  rpcURL: 'wss://bsc-testnet.publicnode.com',
   blockExplorerURL: 'https://bscscan.com/',
   sattContractAdress: '0x448bee2d93be708b54ee6353a7cc35c4933f1156',
   network: 'bsc',
@@ -58,7 +58,7 @@ export const environment = {
   addresses: {
     smartContracts: {
       campaignERC20: '0xf961c85517fe86244cb60889afc4a928068d49ef',
-      campaignBEP20: '0x72A423c42FFCB9d2d9F65921Ea4Fe42725cC63b4',
+      campaignBEP20: '0x21F27868d2E3Bbc2E3cced9c5233BA68439C03cf',
       campaignPOLYGON: '0xa01f80042512Cdf9355a66CBB1266240c0456513',
       campaignBTT: '0xa01f80042512Cdf9355a66CBB1266240c0456513',
       campaignTRON: 'TPeLf9WLzUD8tUoc7dtfGVqPUrnKGip2PN',

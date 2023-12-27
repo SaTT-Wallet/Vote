@@ -46,6 +46,7 @@ import { environment } from '@environments/environment.prod';
 import { ShowNumbersRule } from '@app/shared/pipes/showNumbersRule';
 import { ProfileService } from '@app/core/services/profile/profile.service';
 import { CampaignHttpApiService } from '@app/core/services/campaign/campaign.service';
+import Cookies from 'js-cookie';
 
 @Component({
   selector: 'app-participer',
@@ -294,38 +295,39 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
     if(social === 'threads') {
       this.router.navigate(['/social-networks']);
     } else {
+      const userId = Cookies.get('userId');
       var linkFacebook: string =
       sattUrl +
       '/profile/addChannel/facebook/' +
-      this.tokenStorageService.getIdUser() +
+      userId+
       '?redirect=' +
       this.router.url;
 
     var linkGoogle: string =
       sattUrl +
       '/profile/addChannel/youtube/' +
-      this.tokenStorageService.getIdUser() +
+      userId +
       '?redirect=' +
       this.router.url;
 
     var linkTwitter: string =
       sattUrl +
       '/profile/addChannel/twitter/' +
-      this.tokenStorageService.getIdUser() +
+      userId+
       '?redirect=' +
       this.router.url;
 
     var linkLinkedin: string =
       sattUrl +
       '/profile/addChannel/linkedin/' +
-      this.tokenStorageService.getIdUser() +
+      userId+
       '?redirect=' +
       this.router.url;
 
     var linkTiktok: string =
       sattUrl +
       '/profile/addChannel/tiktok/' +
-      this.tokenStorageService.getIdUser() +
+      userId +
       '?redirect=' +
       this.router.url;
 
@@ -383,7 +385,7 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
     this.tokenStorageService.saveUrlCampaign(this.sendform.get('url')?.value);
     this.showButtonSend = false;
     let myApplication: any = {};
-
+    this.linked = false;
     let media = this.sendform.get('url')?.value || '';
 
     if (

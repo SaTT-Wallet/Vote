@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
@@ -20,6 +21,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment as env } from './../../../../environments/environment';
 import { Subject, of } from 'rxjs';
 import { catchError, filter, takeUntil } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-dropdown-crypto-network',
@@ -32,7 +34,32 @@ export class DropdownCryptoNetworkComponent
   @Output() selectedCrypto: EventEmitter<any> = new EventEmitter();
   @ViewChild('tokenModal', { static: false })
   private tokenModal!: TemplateRef<any>;
-  @Input() selectedNetworkValue: string = 'ERC20';
+  @Input()
+  set selectedNetworkValue(value: string) {
+    switch (value) {
+      case 'BNB Smart Chain':
+        this._selectedNetworkValue = 'BEP20';
+        break;
+      case 'Ethereum':
+        this._selectedNetworkValue = 'ERC20';
+        break;
+      case 'Polygon':
+        this._selectedNetworkValue = 'POLYGON';
+        break;
+      case 'BitTorrent':
+        this._selectedNetworkValue = 'BTTC';
+        break;
+      default:
+        this._selectedNetworkValue = value;
+        break;
+    }
+  }
+  get selectedNetworkValue(): string {
+    return this._selectedNetworkValue;
+  }
+  private _selectedNetworkValue: string = this.cookieService.get('networkSelected');
+
+
   cryptoPicName: string = 'SATT';
   cryptoSymbol: string = 'SATT';
   cryptoList$ = this.walletFacade.cryptoList$;
@@ -84,6 +111,32 @@ export class DropdownCryptoNetworkComponent
   tokenList: any = [];
   cryptoImageSearched: any;
 
+
+  @HostListener('window:storage', ['$event'])
+  onStorageChange(event: StorageEvent): void {
+    if (event.key === 'networkSelected') {
+      this.handleNetworkChange();
+
+      const newValue = event.newValue;
+      if (newValue && newValue !== this._selectedNetworkValue) {
+        // Update _selectedNetworkValue when the cookie changes
+        this._selectedNetworkValue = newValue;
+        // Handle any other logic related to the change
+        console.log('New selected network:sssss', newValue);
+      }
+    }
+  }
+  
+  private handleNetworkChange(): void {
+    const newValue = this.cookieService.get('networkSelected');
+    if (newValue) {
+      this.selectedNetworkValue = newValue;
+      console.log("this.selectedNetworkValuethis.selectedNetworkValue",newValue)
+
+      this._selectedNetworkValue = this.selectedNetworkValue;
+    }
+  }
+
   reset(e: any) {
     e.target.value = '';
     this.filterList = this.cryptoList;
@@ -116,7 +169,7 @@ export class DropdownCryptoNetworkComponent
   selectCustomToken() {
     let pattern = /^0x[a-fA-F0-9]{40}$|^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$|T[A-Za-z1-9]{33}$/;
     if(pattern.test(this.smartContract)) {
-      this.walletFacade.checkToken(this.selectedNetworkValue, this.smartContract).subscribe((res:any) => {
+      this.walletFacade.checkToken(this._selectedNetworkValue, this.smartContract).subscribe((res:any) => {
         if(res.message === "Token found") {
           let crypto = {
             contract: this.smartContract,
@@ -163,11 +216,11 @@ export class DropdownCryptoNetworkComponent
   tokenToSelect(crypto: any) {
     this.walletFacade
       .getBalanceByToken({
-        network: this.selectedNetworkValue.toLowerCase(),
-        walletAddress: this.selectedNetworkValue === 'TRON' ? window.localStorage.getItem('tron-wallet') : window.localStorage.getItem('wallet_id'),
-        smartContract: (this.selectedNetworkValue === 'ERC20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENERC20 :  ( (this.selectedNetworkValue === 'BEP20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENBEP20 :crypto.contract),
+        network: this._selectedNetworkValue.toLowerCase(),
+        walletAddress: this._selectedNetworkValue === 'TRON' ? window.localStorage.getItem('tron-wallet') : window.localStorage.getItem('wallet_id'),
+        smartContract: (this._selectedNetworkValue === 'ERC20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENERC20 :  ( (this._selectedNetworkValue === 'BEP20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENBEP20 :crypto.contract),
         isNative:
-         ((crypto.key === 'ETH' && this.selectedNetworkValue === 'ERC20') || (crypto.key === 'BNB' && this.selectedNetworkValue === 'BEP20') || (crypto.key === 'BTT' && this.selectedNetworkValue === 'BTTC') || (crypto.key === 'TRX' && this.selectedNetworkValue === 'TRON') || (crypto.key === 'MATIC' && this.selectedNetworkValue === 'POLYGON'))
+         ((crypto.key === 'ETH' && this._selectedNetworkValue === 'ERC20') || (crypto.key === 'BNB' && this._selectedNetworkValue === 'BEP20') || (crypto.key === 'BTT' && this._selectedNetworkValue === 'BTTC') || (crypto.key === 'TRX' && this._selectedNetworkValue === 'TRON') || (crypto.key === 'MATIC' && this._selectedNetworkValue === 'POLYGON'))
             ? true
             : false
       })
@@ -190,18 +243,18 @@ export class DropdownCryptoNetworkComponent
               {
                 AddedToken: !!crypto.value.AddedToken ? crypto.AddedToken : true,
                 balance: 0,
-                contract: (this.selectedNetworkValue === 'ERC20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENERC20 :  ( (this.selectedNetworkValue === 'BEP20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENBEP20 :crypto.contract),
+                contract: (this._selectedNetworkValue === 'ERC20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENERC20 :  ( (this._selectedNetworkValue === 'BEP20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENBEP20 :crypto.contract),
                 contrat: '',
                 decimal: 18,
                 key: crypto.key,
-                network: this.selectedNetworkValue,
+                network: this._selectedNetworkValue,
                 picUrl: true,
                 price: crypto.value.price,
                 quantity: this.quantity,
                 symbol: crypto.key,
                 total_balance: this.quantity * crypto.value.price,
-                type: this.selectedNetworkValue,
-                typetab: this.selectedNetworkValue,
+                type: this._selectedNetworkValue,
+                typetab: this._selectedNetworkValue,
                 undername: crypto.value.name,
                 undername2: crypto.value.name,
                 variation: 0
@@ -227,18 +280,18 @@ export class DropdownCryptoNetworkComponent
             {
               AddedToken: !!crypto.value.AddedToken ? crypto.AddedToken : true,
               balance: 0,
-              contract: (this.selectedNetworkValue === 'ERC20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENERC20 :  ( (this.selectedNetworkValue === 'BEP20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENBEP20 :crypto.contract),
+              contract: (this._selectedNetworkValue === 'ERC20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENERC20 :  ( (this._selectedNetworkValue === 'BEP20' && crypto.key === 'SATT') ? env.addresses.smartContracts.SATT_TOKENBEP20 :crypto.contract),
               contrat: '',
               decimal: 18,
               key: crypto.key,
-              network: this.selectedNetworkValue,
+              network: this._selectedNetworkValue,
               picUrl: true,
               price: crypto.value.price,
               quantity: this.quantity,
               symbol: crypto.key,
               total_balance: this.quantity * crypto.value.price,
-              type: this.selectedNetworkValue,
-              typetab: this.selectedNetworkValue,
+              type: this._selectedNetworkValue,
+              typetab: this._selectedNetworkValue,
               undername: crypto.value.name,
               undername2: crypto.value.name,
               variation: 0
@@ -264,7 +317,7 @@ export class DropdownCryptoNetworkComponent
     private route: ActivatedRoute,
     public router: Router,
     private cdref: ChangeDetectorRef,
-
+    private cookieService: CookieService,
     private Fetchservice: CryptofetchServiceService
   ) {
 
@@ -294,6 +347,7 @@ export class DropdownCryptoNetworkComponent
 
   ngOnInit(): void {
     this.getCryptoImage();
+    this.handleNetworkChange()
     this.routerSub = this.route.queryParams
       .pipe(takeUntil(this.onDestoy$))
       .subscribe((p: any) => {
@@ -307,7 +361,7 @@ export class DropdownCryptoNetworkComponent
             }
 
             this.cryptoSymbol = p.id;
-            this.selectedNetworkValue = p.network;
+            this._selectedNetworkValue = p.network;
             if (p.pic === 'false') {
               this.addedTokenNopic = true;
             }
@@ -315,7 +369,7 @@ export class DropdownCryptoNetworkComponent
             this.isCryptoRouter = false;
             // this.cryptoPicName = 'SATT';
             // this.cryptoSymbol = 'SATT';
-            // this.selectedNetworkValue = 'ERC20';
+            this._selectedNetworkValue = this.selectedNetworkValue;
           }
         }
       });
@@ -330,6 +384,8 @@ export class DropdownCryptoNetworkComponent
     this.defaultcurrpolygon = ListTokens['MATIC'].name;
     this.defaultcurrbtt = ListTokens['BTT'].name;
     this.defaultcurrtron = ListTokens['TRX'].name;
+    window.addEventListener('networkSelectedChanged', this.handleNetworkChange.bind(this));
+
   }
 
   getCryptoList() {
@@ -358,7 +414,7 @@ export class DropdownCryptoNetworkComponent
     if(typeof cryptoData.networkSupported !== 'string') {
       for(const value of cryptoData.networkSupported) {
         if (
-          this.selectedNetworkValue === 'ERC20' &&
+          this._selectedNetworkValue === 'ERC20' &&
           value.platform.name === 'Ethereum'
           ) {
             campaignCryptoSet.add({
@@ -366,13 +422,13 @@ export class DropdownCryptoNetworkComponent
               value: this.res[key],
               contract: value.contract_address
             });
-          } else if(key === 'BNB' && this.selectedNetworkValue === 'BEP20') {
+          } else if(key === 'BNB' && this._selectedNetworkValue === 'BEP20') {
             campaignCryptoSet.add({
               key,
               value: this.res[key],
               contract: null
           })
-          } else if(key === 'BTT' && this.selectedNetworkValue === 'BTTC') {
+          } else if(key === 'BTT' && this._selectedNetworkValue === 'BTTC') {
             campaignCryptoSet.add({
               key,
               value: this.res[key],
@@ -382,7 +438,7 @@ export class DropdownCryptoNetworkComponent
           value.platform.name
             .toString()
             .toLowerCase()
-            .includes(this.selectedNetworkValue.toString().toLowerCase()) &&
+            .includes(this._selectedNetworkValue.toString().toLowerCase()) &&
             campaignCryptoSet.add({
               key,
               value: this.res[key],
@@ -416,7 +472,7 @@ export class DropdownCryptoNetworkComponent
     if(pattern.test(event.target.value)) {
       this.loadingCustomToken = true;
       this.smartContract = event.target.value;
-      this.walletFacade.checkToken(this.selectedNetworkValue, event.target.value).subscribe((res:any) => {
+      this.walletFacade.checkToken(this._selectedNetworkValue, event.target.value).subscribe((res:any) => {
         if(res.message === "Token found") {
           this.customTokenNotFound = false;
           this.tokenDecimal = res.data.decimals;
@@ -476,7 +532,7 @@ export class DropdownCryptoNetworkComponent
             this.cryptoFromComponent = [crypto];
             this.cryptoSymbol = this.cryptoFromComponent[0].symbol;
 
-            this.selectedNetworkValue = this.cryptoFromComponent[0].network;
+            this._selectedNetworkValue = this.cryptoFromComponent[0].network;
             if (this.cryptoFromComponent[0].AddedToken) {
               this.cryptoPicName = this.cryptoFromComponent[0].picUrl;
             } else {
@@ -510,7 +566,7 @@ export class DropdownCryptoNetworkComponent
               }
 
               if (crypto.symbol === 'SATT' || crypto.symbol === 'SATTBEP20') {
-                if (crypto.network === this.selectedNetworkValue) {
+                if (crypto.network === this._selectedNetworkValue) {
                   if (!this.router.url.startsWith('/campaign'))
                     this.selectedCrypto.emit(crypto);
                 }
@@ -613,7 +669,7 @@ export class DropdownCryptoNetworkComponent
       this.router.navigate([], { queryParams: [] });
     }
     this.token = '';
-    this.selectedNetworkValue = network;
+    this._selectedNetworkValue = network;
     
     if (this.router.url.startsWith('/campaign')) {
       this.campaignCryptoList = [];
@@ -624,7 +680,7 @@ export class DropdownCryptoNetworkComponent
     if(typeof cryptoData.networkSupported !== 'string') {
       for(const value of cryptoData.networkSupported) {
         if (
-          this.selectedNetworkValue === 'ERC20' &&
+          this._selectedNetworkValue === 'ERC20' &&
           value.platform.name === 'Ethereum'
           ) {
             campaignCryptoSet.add({
@@ -632,13 +688,13 @@ export class DropdownCryptoNetworkComponent
               value: this.res[key],
               contract: value.contract_address
             });
-          } else if(key === 'BNB' && this.selectedNetworkValue === 'BEP20') {
+          } else if(key === 'BNB' && this._selectedNetworkValue === 'BEP20') {
             campaignCryptoSet.add({
               key,
               value: this.res[key],
               contract: null
           })
-          } else if(key === 'BTT' && this.selectedNetworkValue === 'BTTC') {
+          } else if(key === 'BTT' && this._selectedNetworkValue === 'BTTC') {
             campaignCryptoSet.add({
               key,
               value: this.res[key],
@@ -648,7 +704,7 @@ export class DropdownCryptoNetworkComponent
           value.platform.name
             .toString()
             .toLowerCase()
-            .includes(this.selectedNetworkValue.toString().toLowerCase()) &&
+            .includes(this._selectedNetworkValue.toString().toLowerCase()) &&
             campaignCryptoSet.add({
               key,
               value: this.res[key],
@@ -660,7 +716,7 @@ export class DropdownCryptoNetworkComponent
       }      
       this.campaignCryptoList = Array.from(campaignCryptoSet);
       const crypto = this.campaignCryptoList.find((element: any) => {
-        switch(this.selectedNetworkValue) {
+        switch(this._selectedNetworkValue) {
           case 'BEP20': 
             return element.key === 'BNB';
           case 'ERC20': 
@@ -725,9 +781,16 @@ export class DropdownCryptoNetworkComponent
     this.onDestoy$.complete();
   }
 
+
+  
+  
   ngOnChanges(changes: SimpleChanges): void {
-    
     if (changes.cryptoFromDraft && this.router.url.includes('edit')) {
+      if (changes.hasOwnProperty('_selectedNetworkValue')) {
+        const newNetworkValue = changes._selectedNetworkValue.currentValue;
+        console.log('New selected network:', newNetworkValue);
+        // Do something with the new value, if needed
+      }
       if (this.cryptoFromDraft) {
         if (this.router.url.startsWith('/campaign')) {
           this.cryptoSymbolCampaign = this.cryptoFromDraft;
@@ -741,7 +804,7 @@ export class DropdownCryptoNetworkComponent
           if (this.cryptoFromComponent) {
             this.isCryptoRouter = false;
             this.cryptoSymbol = this.cryptoFromComponent[0].symbol;
-            this.selectedNetworkValue = this.cryptoFromComponent[0].network;
+            this._selectedNetworkValue = this.cryptoFromComponent[0].network;
             if (this.cryptoFromComponent[0].AddedToken) {
               this.isAddedToken = true;
               this.token = this.cryptoFromComponent[0].AddedToken;
@@ -752,7 +815,7 @@ export class DropdownCryptoNetworkComponent
               this.cryptoPicName = this.cryptoFromComponent[0].undername2;
             }
             this.cryptoSymbol = this.cryptoFromComponent[0].symbol;
-            this.selectedNetworkValue = this.cryptoFromComponent[0].network;
+            this._selectedNetworkValue = this.cryptoFromComponent[0].network;
             this.cdref.detectChanges();
           }
         }
@@ -761,7 +824,7 @@ export class DropdownCryptoNetworkComponent
       if (this.cryptoFromComponent) {
         this.isCryptoRouter = false;
         this.cryptoSymbol = this.cryptoFromComponent.symbol;
-        this.selectedNetworkValue = this.cryptoFromComponent.network;
+        this._selectedNetworkValue = this.cryptoFromComponent.network;
         if (this.cryptoFromComponent.AddedToken) {
           this.isAddedToken = true;
           this.token = this.cryptoFromComponent.AddedToken;
@@ -772,7 +835,7 @@ export class DropdownCryptoNetworkComponent
           this.cryptoPicName = this.cryptoFromComponent.undername2;
         }
         this.cryptoSymbol = this.cryptoFromComponent.symbol;
-        this.selectedNetworkValue = this.cryptoFromComponent.network;
+        this._selectedNetworkValue = this.cryptoFromComponent.network;
         this.cdref.detectChanges();
       }
     }

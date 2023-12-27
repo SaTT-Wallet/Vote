@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { sattUrl } from '@config/atn.config';
-import { share } from 'rxjs/operators';
-import { Observable, Subject,of } from 'rxjs';
+import { catchError, map, share } from 'rxjs/operators';
+import { Observable, Subject,from,of, throwError } from 'rxjs';
 import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
 import { IResponseWallet } from '@app/core/iresponse-wallet';
 import {
@@ -104,71 +104,78 @@ return of(responseWallet);
     return this.http.get(`${sattUrl}/wallet/checkUserWalletV2`);
   }
 
-  getBalanceByToken(payload: any): any {
-    const { network, walletAddress, isNative, smartContract } = payload;
+  
+  getBalanceByToken(payload: any): Observable<any> {
+    const { network, walletAddress, smartContract } = payload;
 
-    // Choose the appropriate Web3 URL based on the network
-    let web3Url;
-    switch (network) {
-      case 'erc20':
-        web3Url = environment.WEB3_URL;
-        break;
-      case 'bep20':
-        web3Url = environment.WEB3_URL_BEP20;
-        break;
-      case 'tron':
-        web3Url = environment.WEB3_URL_TRON;
-        break;
-      case 'bttc':
-        web3Url = environment.WEB3_URL_BTT;
-        break;
-      case 'polygon':
-        web3Url = environment.WEB3_URL_POLYGON;
-        break;
-      default:
-        console.error('Unsupported network:', network);
-        return {
-          code: 500,
-          message: 'error',
-          data: null,
-        };
-    }
+    const getWeb3Url = (networkName: string): string => {
+      switch (networkName.toLowerCase()) {
+        case 'bnb smart chain':
+        case 'bep20':
+          return environment.WEB3_URL_BEP20;
+        case 'ethereum':
+        case 'erc20':
+          return environment.WEB3_URL;
+        case 'polygon':
+        case 'polygon':
+          return environment.WEB3_URL_POLYGON;
+        case 'bttc':
+        case 'bittorrent':
+          return environment.WEB3_URL_BTT;
+        default:
+          return '';
+      }
+    };
 
-    // Create a new Web3 instance with the selected URL
-    this.web3 = new Web3(new Web3.providers.HttpProvider(web3Url));
+    const web3Url = getWeb3Url(network);
 
-    // Create a data payload for the balanceOf function
-    const data = this.web3.eth.abi.encodeFunctionSignature('balanceOf(address)') +
-                 this.web3.eth.abi.encodeParameters(['address'], [walletAddress]).slice(2);
-
-    // Use eth.call to get the balance without ABI
-    return this.web3.eth.call({
-      to: smartContract,
-      data: data,
-    }).then((rawBalance: any) => {
-      const balanceHex = this.web3.utils.isHexStrict(rawBalance) ? rawBalance : '0x0';
-
-      // Convert the balance from hex to decimal
-      const balanceDecimal = this.web3.utils.hexToNumberString(balanceHex);
-
-      // Return the result in the specified format
-      return {
-        code: 200,
-        message: 'success',
-        data: Number(balanceDecimal),
-      };
-    }).catch((error: any) => {
-      console.error('Error getting balance:', error);
-
-      // Return an error response in the specified format
-      return {
+    if (!web3Url) {
+      console.error('Unsupported network:', network);
+      return throwError({
         code: 500,
         message: 'error',
         data: null,
-      };
-    });
-  }
-  
+      });
+    }
+
+    this.web3 = new Web3(new Web3.providers.HttpProvider(web3Url));
+
+    const data = this.web3.eth.abi.encodeFunctionSignature('balanceOf(address)') +
+                 this.web3.eth.abi.encodeParameters(['address'], [walletAddress]).slice(2);
+
+    return from(this.web3.eth.call({
+      to: smartContract,
+      data: data,
+    })).pipe(
+      map((rawBalance: any) => {
+        const balanceHex = this.web3.utils.isHexStrict(rawBalance) ? rawBalance : '0x0';
+        
+        if (balanceHex === '0x' || balanceHex === '0x0') {
+          return {
+            code: 200,
+            message: 'success',
+            data: 0,
+          };
+        }
+
+        const balanceDecimal = this.web3.utils.hexToNumberString(balanceHex);
+        return {
+          code: 200,
+          message: 'success',
+          data: Number(balanceDecimal),
+        };
+      }),
+      catchError((error: any) => {
+        console.error('Error getting balance:', error);
+        return throwError({
+          code: 500,
+          message: 'error',
+          data: null,
+        });
+      })
+    );
+}
+
 
   createNewWalletV2(password: string) {
     return this.http.post(`${sattUrl}/wallet/create/v2`, { pass: password });

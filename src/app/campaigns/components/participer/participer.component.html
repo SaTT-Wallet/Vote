@@ -514,22 +514,9 @@
                 "
               ></ngx-tweet>
             </div>
-            <div>
-              <span class="titre_pass"> {{ 'ur_pass' | translate }} </span>
-              <!-- <span class="titre_pass">
-                &nbsp;&nbsp;(Gas fees : ${{ networkGas }})
-              </span> -->
-            </div>
+            
 
-            <div class="div_input position-relative mt-1">
-              <img class="ps-1" src="/assets/Images/Kep-password.svg" />
-              <input
-                class="input-amount pass-hide"
-                autocomplete="off"
-                type="text"
-                formControlName="password"
-              />
-            </div>
+            
             <div class="error_container errors">
               <span class="error1" *ngIf="errorMessage">{{
                 errorMessage | translate | capitalizePhrase
@@ -580,15 +567,16 @@
               <button
               class="send-button "
               (click)="applyCampaign()"
-              [disabled]="sendform.invalid"
+              [disabled]="!linked"
             >
-          
+              
               <span *ngIf="!loadingButton">{{ 'Send' | translate }}</span>
               <div class="spinner-border" role="status" *ngIf="loadingButton">
                 <span class="sr-only">Loading...</span>
               </div>
               </button>
-                <button class="butt_back2" (click)="goBack(campaignId)" >
+              
+              <button class="butt_back2" (click)="goBack(campaignId)" >
                   <span >
                     < {{ 'send.back_to_wallet' | translate }}
                   </span>

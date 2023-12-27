@@ -20,7 +20,7 @@ import { NotificationService } from '@core/services/notification/notification.se
 import { TokenStorageService } from '@core/services/tokenStorage/token-storage-service.service';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { walletUrl, ListTokens, sattUrl } from '@config/atn.config';
+import { walletUrl, ListTokens, sattUrl , networkList} from '@config/atn.config';
 import { User } from '@app/models/User';
 import { SidebarService } from '@core/services/sidebar/sidebar.service';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -62,6 +62,7 @@ import { Title } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VoteService } from '@app/core/services/vote/vote.service';
 import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
+import Cookies from 'js-cookie';
 
 const bscan = environment.bscanaddr;
 const etherscan = environment.etherscanaddr;
@@ -120,6 +121,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   bepGaz: any;
   showNotifications: boolean = false;
   newNotification: boolean = false;
+  networkLabel: any = "BNB Smart chain";
+  networkLogo: any = "bsc"
+  networkList: any = networkList;
+  showNetwork: any = false;
   isSeen: number = 0;
   btcCode: string = '';
   btcCodeV2: string = '';
@@ -387,7 +392,45 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       this.seeNotification();
     }
   }
+
+  toggleNetworkList() {
+    this.showNetwork = !this.showNetwork;
+  }
+
+  displayNetwork(e: any){
+    this.networkLabel = e.network;
+    this.networkLogo = e.label;
+    Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
+    Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
+    window.dispatchEvent(new Event('networkSelectedChanged'));
+
+  }
+
+  controllingNetwork(){
+      try {
+        this.networkLabel = Cookies.get('networkSelected') || 'BNB SMART CHAIN' ;
+        this.networkLogo = Cookies.get('networkSelectedLogo') || 'bsc'
+      } catch (error) {
+        console.error('Error retrieving or setting cookie:', error);
+        this.networkLabel = 'bnb smart chain';
+      }
+  }
+
   ngOnInit(): void {
+    this.controllingNetwork();
+  
+
+    // this.networkList = [
+    //   {network:"BNB Smart Chain" , label: "bsc" ,logo: ""  },
+    //   {network:"Ethereum" , label: "erc20" ,logo: ""  },
+    //   {network:"Polygon" , label: "polygon" ,logo: ""  },
+    //   {network:"BitTorrent" , label: "btt" ,logo: ""  }
+    // ]
+
+    this.networkList.forEach((item: { network: string, label: string, logo: string }) => {
+      item.logo = `assets/Images/${item.label}.svg`;
+    });
+    
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
 

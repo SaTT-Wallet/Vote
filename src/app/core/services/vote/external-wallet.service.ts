@@ -45,9 +45,11 @@ export class ExternalWalletService {
     }
   }
 
+
+  
   async connectMetamask(): Promise<void> {
     const provider = await detectEthereumProvider();
-    
+
     if (provider && provider.isMetaMask) {
       try {
         // Generate a unique nonce for each connection

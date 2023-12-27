@@ -58,6 +58,7 @@ import { CampaignsService } from '@app/campaigns/facade/campaigns.facade';
 import { CampaignHttpApiService } from '@app/core/services/campaign/campaign.service';
 import { environment } from '@environments/environment';
 import { TokenStorageService } from '@app/core/services/tokenStorage/token-storage-service.service';
+import { CookieService } from 'ngx-cookie-service';
 
 enum ERemunerationType {
   Publication = 'publication',
@@ -190,6 +191,8 @@ export class RemunerationComponent implements OnInit, OnDestroy {
     private walletFacade: WalletFacadeService,
     private showNumbersRule: ShowNumbersRule,
     private renderer: Renderer2,
+    private cookieService: CookieService,
+
     private campaignService: CampaignHttpApiService,
     private tokenStorageService: TokenStorageService,
     @Inject(DOCUMENT) private document: Document,
@@ -252,7 +255,7 @@ export class RemunerationComponent implements OnInit, OnDestroy {
 
 
     this.campaignService.getOneById(this.draftData.id).subscribe((res: any) => {
-      this.selectedNetworkValue = res.data.token.type;
+      this.selectedNetworkValue = this.cookieService.get('networkSelected');
      
         this.res = this.cryptodata;
         const campaignCryptoSet = new Set();
@@ -261,7 +264,7 @@ export class RemunerationComponent implements OnInit, OnDestroy {
           if(typeof cryptoData.networkSupported !== 'string') {
             for(const value of cryptoData.networkSupported) {
               if (
-                this.selectedNetworkValue === 'ERC20' &&
+                this.selectedNetworkValue === 'Ethereum' &&
                 value.platform.name === 'Ethereum'
                 ) {
                   campaignCryptoSet.add({
@@ -269,13 +272,13 @@ export class RemunerationComponent implements OnInit, OnDestroy {
                     value: this.res[key],
                     contract: value.contract_address
                   });
-                } else if(key === 'BNB' && this.selectedNetworkValue === 'BEP20') {
+                } else if(key === 'BNB' && this.selectedNetworkValue === 'BNB Smart Chain') {
                   campaignCryptoSet.add({
                     key,
                     value: this.res[key],
                     contract: null
                 })
-                } else if(key === 'BTT' && this.selectedNetworkValue === 'BTTC') {
+                } else if(key === 'BTT' && this.selectedNetworkValue === 'BitTorrent') {
                   campaignCryptoSet.add({
                     key,
                     value: this.res[key],
@@ -371,6 +374,7 @@ export class RemunerationComponent implements OnInit, OnDestroy {
   }
  
   ngOnChanges(changes: SimpleChanges): void {
+    
     if (changes.draftData && changes.draftData.currentValue) {
       this.form?.patchValue(
         {
@@ -530,7 +534,6 @@ export class RemunerationComponent implements OnInit, OnDestroy {
   }
 
   saveForm() {
-    
     this.form.valueChanges
       .pipe(
         tap(() => {
@@ -984,6 +987,7 @@ export class RemunerationComponent implements OnInit, OnDestroy {
   }
 
   handleAmountEntries(form: AbstractControl, control: string) {
+    console.log("controlecontrole",form)
     form
       .get(control)
       ?.setValue(this.replaceNonAlphanumeric(form.get(control)?.value), {

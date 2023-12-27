@@ -30,8 +30,6 @@ export class HttpInterceptorService implements HttpInterceptor {
       '/external/verify-token',
       '/external/externalAccount',
       '/external/externalUpdate',
-      '/external/externalIpfs'
-
     ];
 
     // Check if the request URL matches any of the specified URLs

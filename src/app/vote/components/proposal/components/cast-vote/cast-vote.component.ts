@@ -7,6 +7,7 @@ import Web3 from 'web3';
 import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
 import { SnapshotService } from '@app/vote/snapshot.service';
 import { NotificationService } from '@app/core/services/notification/notification.service';
+import Cookies from 'js-cookie';
 
 @Component({
   selector: 'app-cast-vote',
@@ -110,6 +111,7 @@ export class CastVoteComponent implements OnInit {
     if (walletType === 'metamask') {
       if (this.externalWalletService.isMetaMaskInstalled) {
         this.provider = await this.externalWalletService.connectMetamask();
+
       } else {
         this.showInstall();
       }

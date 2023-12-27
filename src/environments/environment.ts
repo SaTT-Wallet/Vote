@@ -13,7 +13,7 @@ export const environment = {
   // API_URL:  'https://api-preprod2.satt-token.com',
 
   WEB3_URL : 'https://goerli.infura.io/v3/f1d98cca429e48d29087a4a2deb587c1',
-  WEB3_URL_BEP20 : 'https://data-seed-prebsc-2-s1.binance.org:8545',
+  WEB3_URL_BEP20 : 'https://bsc-testnet.publicnode.com',
   WEB3_URL_TRON : 'https://api.shasta.trongrid.io/jsonrpc',
   WEB3_URL_BTT : 'https://pre-rpc.bt.io/',
   WEB3_URL_POLYGON : 'https://polygon-mumbai.blockpi.network/v1/rpc/public',
@@ -29,13 +29,13 @@ export const environment = {
 
   snapshot_hub: 'https://testnet.snapshot.org',
   space_name: 'atayensatt.eth',
-  bsc_node: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+  bsc_node: 'https://bsc-testnet.publicnode.com/',
 
   chainIDDecimal: '97',
   chainIDHex: '0x61',
   chainName: 'Binance Smart Chain Testnet',
   currencySymbol: 'TBNB',
-  rpcURL: 'https://data-seed-prebsc-1-s1.binance.org:8545',
+  rpcURL: 'https://bsc-testnet.publicnode.com',
   blockExplorerURL: 'https://testnet.bscscan.com/',
   sattContractAdress: '0x6fAc729f346A46fC0093126f237b4A520c40eb89',
   network: 'bsc-testnet',
@@ -59,7 +59,7 @@ export const environment = {
   addresses: {
     smartContracts: {
       campaignERC20: '0xbc27de58DDCEd7A2BB911BE2E18D0FA1A49fF7D3',
-      campaignBEP20: '0x79Ab8dd7267F45AdF846F0dE0732759e3456Bee3',
+      campaignBEP20: '0x21F27868d2E3Bbc2E3cced9c5233BA68439C03cf',
       campaignPOLYGON: '0xD6Cb96a00b312D5930FC2E8084A98ff2Daa5aD2e',
       campaignBTT: '0x261491739e36090FC80fF1569B7E5FFe26070d77',
       campaignTRON: 'THUD3VAxyTEmMCBEjd2AcSujzbgPSu39p9',

@@ -66,7 +66,6 @@
           Connect Wallet
         </button>
       </div>
-
       <ul
         class="d-md-block d-xl-none d-lg-none d-sm-block navbar-nav"
         *ngIf="
@@ -183,10 +182,12 @@
       <ul
         class="right_nav_side navbar-nav right-menu"
         *ngIf="
-          externalWalletService.isWalletConnected &&
+          
+        externalWalletService.isWalletConnected &&
           externalWalletService.connect
         "
       >
+      
         <!------------------------------------------------------------------------->
         <li class="li-menu-profil">
           <div class="dropdown2" id="myDropdown" id="intro4">
@@ -202,6 +203,7 @@
               <span class="span-userName ps-2 pe-2">{{
                 voteService.formattedCreator
               }}</span>
+             
               <i class="chevron fa fa-fw"></i>
             </a>
             <ul
@@ -259,6 +261,31 @@
         <!-- <button type="button" class="button-connect d-none d-md-block">
           <a class="" [routerLink]="['/auth/login']">Connect</a>
         </button> -->
+        <div>
+          <button (click)="toggleNetworkList()"class="network_btn" [ngClass]="{'margin_right' : externalWalletService.isWalletConnected && externalWalletService.connect}">
+            <img class="network_logo" [src]="'assets/Images/' + networkLogo + '.svg'"  alt="">
+            <span class="network_label">{{networkLabel | uppercase}}</span>
+            <ng-container *ngIf="!showNetwork; else arrowUp">
+            <i style="color: white; position: relative; top:0.2em;" class="bi bi-chevron-down"></i>
+          </ng-container>
+          <ng-template #arrowUp>
+            <i style="color: white; position: relative; top:0.2em;" class="bi bi-chevron-up"></i>
+          </ng-template>
+            <ul class="network_list" [ngClass] = "{'show': showNetwork}">
+              <li (click)="displayNetwork(el)" *ngFor="let el of networkList; last as isLast first as isFirst">
+                <!-- *ngIf="showNetwork" -->
+                  <ng-container>
+                    <div class="network_list_container" [class.is_first]="isFirst" [class.is_last]="isLast">
+                      <img class="network_list_logo" [src]="el.logo" alt="">
+                      <p class="network_list_label">{{el.network}}  </p>
+                      <!-- <p [ngClass]="'bold'" class="network_list_label" (click)="toggleAddressVisibility(el)">&nbsp;Adress: {{el.adress}}</p> -->
+                    </div>
+                    </ng-container>
+                </li>
+            </ul>
+          </button>
+        </div>
+        
         <div *ngIf="!externalWalletService.connect">
           <button class="button-connect" (click)="voteService.showConnectDialog(connectModal)">
             <img src="assets/Images/connected-wallet.png" />

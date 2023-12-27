@@ -17,6 +17,7 @@ import { marked } from 'marked';
 import { Proposal } from '@app/models/proposal.model';
 import { NotificationService } from '@app/core/services/notification/notification.service';
 import { SnapshotService } from '@app/vote/snapshot.service';
+import Cookies from 'js-cookie';
 
 declare global {
   interface Window {
@@ -277,6 +278,7 @@ export class CreateProposalComponent implements OnInit, OnDestroy {
     if (walletType === 'metamask') {
       if (this.externalWalletService.isMetaMaskInstalled) {
         this.provider = await this.externalWalletService.connectMetamask();
+
       } else {
         // this.isNotInstalled = true;
         this.showInstall();

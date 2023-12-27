@@ -392,7 +392,7 @@ export class CryptoInfoComponent implements OnInit, AfterViewInit {
   openInBSCScan() {
     if (this.cryptoName === 'SaTT') {
       window.open(
-        'https://bscscan.com/token/0x448BEE2d93Be708b54eE6353A7CC35C4933F1156',
+        'https://bscscan.com/token/0x6fAc729f346A46fC0093126f237b4A520c40eb89',
         '_blank'
       );
     } else {
