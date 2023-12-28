@@ -32,6 +32,7 @@ import { Subject } from 'rxjs';
 import { Big } from 'big.js';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '@environments/environment';
+import { CampaignsService } from '@app/campaigns/services/campaigns.service';
 @Component({
   selector: 'app-farm-post-card',
   templateUrl: './farm-post-card.component.html',
@@ -61,6 +62,7 @@ export class FarmPostCardComponent implements OnInit {
     private router: Router,
     private notificationService: NotificationService,
     private campaignService: CampaignHttpApiService,
+    private campaign: CampaignsService,
     private participationService: ParticipationListStoreService,
     private activatedRoute: ActivatedRoute,
     public modalService: NgbModal,
@@ -203,42 +205,9 @@ export class FarmPostCardComponent implements OnInit {
   }
 
   getMyGains(prom: any) {
-    let x = prom.campaign.ratio?.length ? false : true;
-    this.blockchainActions.onActionButtonClick({
-      data: {
-        prom,
-        bounty: x
-      },
-      action: EButtonActions.GET_MY_GAINS
-    });
-
-    /************   FETCH NETWORK OF CAMPAIGN     ***********/
-
-    let network = '';
-    this.campaignService.getOneById(prom.campaign._id).subscribe(
-      (res) => {
-        network = res.data.token.type;
-        this.router.navigate(
-          [`/campaign/${prom.campaign._id}/recover-my-gains`],
-          {
-            queryParams: {
-              prom_hash: prom.hash,
-              id: prom.campaign._id,
-              network: network
-            }
-          }
-        );
-      },
-      (err: any) => {
-        this.router.navigate(
-          [`/campaign/${prom.campaign._id}/recover-my-gains`],
-          {
-            queryParams: { prom_hash: prom.hash, id: prom.campaign._id }
-          }
-        );
-      }
-    );
+   this.campaign.getGain(prom)
   }
+  
   validateLink(prom: any) {
     this.blockchainActions.onActionButtonClick({
       data: { prom, campaignId: prom.campaign._id, fromNotification: false },
