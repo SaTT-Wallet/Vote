@@ -1492,7 +1492,7 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
     this.loadingButton = true;
     this.showButtonSend = false;
     window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts: any) => {
-      const message = application.idPost + this.campaigndata.hash;
+      const message = `method=apply&idPost=${application.idPost}&hashCampaign=${this.campaigndata.hash}`;
       window.ethereum.request({
         method: 'personal_sign',
         params: [message, accounts[0]],
@@ -1503,13 +1503,14 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
           this.campaigndata.title,
           password,
           this.campaigndata.hash,
-          signature
+          signature,
+          message
         )
           .pipe(takeUntil(this.isDestroyedSubject))
           .subscribe(
             (data: any) => {
               if(data.message === 'success') {
-                this.transactionHash = data.data.applyerSignature;
+                this.transactionHash = data.data.applyerSignature.signature;
                 
                 this.error = '';
                 this.success = data.data.applyerSignature;
