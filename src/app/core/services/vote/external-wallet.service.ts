@@ -48,7 +48,6 @@ export class ExternalWalletService {
   }
 
   async connectMetamask(): Promise<void> {
-    debugger;
     const provider = await detectEthereumProvider();
 
     if (provider && provider.isMetaMask) {
@@ -177,7 +176,6 @@ export class ExternalWalletService {
     });
   }
   async changeToBinance(provider: any) {
-    debugger;
     const chainId = await this.ethereum.request({ method: 'eth_chainId' });
 
     switch (chainId) {
