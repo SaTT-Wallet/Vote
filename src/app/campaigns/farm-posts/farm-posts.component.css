@@ -62,7 +62,7 @@
 
 .link {
     border-style: solid;
-    border-color: #00cc9e;
+    border-color: transparent;
     border-radius: 33px;
     -webkit-border-radius: 33px;
     -moz-border-radius: 33px;
