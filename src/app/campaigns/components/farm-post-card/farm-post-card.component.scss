@@ -43,6 +43,14 @@
   width: 100%;
   right: 0px;
 }
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Add styles for the spinner, e.g., width, height, animation, etc. */
+}
+
 
 .click-overlay {
   position: absolute;

@@ -8,9 +8,9 @@ export const environment = {
   //url:"http://localhost:4200/",
   url: 'https://.satt.atayen.us/',
   ipfsURL: 'https://ipfs.io/ipfs/',
-  //https://api-preprod2.satt-token.com
+  //https://localhost:3015/
 
-  // API_URL:  'https://api-preprod2.satt-token.com',
+  // API_URL:  'https://localhost:3015/',
 
   WEB3_URL : 'https://goerli.infura.io/v3/f1d98cca429e48d29087a4a2deb587c1',
   WEB3_URL_BEP20 : 'https://bsc-testnet.publicnode.com',

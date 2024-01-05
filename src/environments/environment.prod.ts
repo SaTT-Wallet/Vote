@@ -140,8 +140,8 @@ export const environment = {
   DEV-ENV
 */
   /*
-  API_URL: 'https://api-preprod2.satt-token.com',
-  // 'https://api-preprod2.satt-token.com:3015',
+  API_URL: 'https://localhost:3015/',
+  // 'https://localhost:3015/:3015',
   //'https://localhost:3015',
   //https://api-preprod.satt-token.com:3014
   addresses: {
