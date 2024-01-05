@@ -193,13 +193,9 @@ export class CampaignsService {
       const response3 = await this.campaignHttpApiService.recoverEarningsExternal(data.hash, data.campaignHash, response2, receiptgain1).toPromise();
       console.log(response3);
   
-      const receiptgain2 = await ctr.getGains(data.hash, {
-        from: this.tokenStorageService.getIdWallet(),
-        gasLimit: gas,
-        gasPrice: gasPrice,
-      });
+
       
-      return receiptgain2
+      return response3
     } catch (error) {
       console.log('error', error);
       throw error;
