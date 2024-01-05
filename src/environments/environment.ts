@@ -8,9 +8,9 @@ export const environment = {
   //url:"http://localhost:4200/",
   url: 'https://.satt.atayen.us/',
   ipfsURL: 'https://ipfs.io/ipfs/',
-  //https://api-preprod2.satt-token.com
+  //https://localhost:3015/
 
-  // API_URL:  'https://api-preprod2.satt-token.com',
+  // API_URL:  'https://localhost:3015/',
 
   WEB3_URL : 'https://goerli.infura.io/v3/f1d98cca429e48d29087a4a2deb587c1',
   WEB3_URL_BEP20 : 'https://bsc-testnet.publicnode.com',
@@ -18,7 +18,7 @@ export const environment = {
   WEB3_URL_BTT : 'https://pre-rpc.bt.io/',
   WEB3_URL_POLYGON : 'https://polygon-mumbai.blockpi.network/v1/rpc/public',
 
-  API_URL: 'https://api-preprod2.satt-token.com',
+  API_URL: 'https://localhost:3015',
   // 'https://api-preprod.satt-token.com:3014',
 
   url_subgraph_bsc:

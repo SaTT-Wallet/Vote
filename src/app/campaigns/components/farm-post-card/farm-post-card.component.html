@@ -615,7 +615,14 @@
           *ngIf="prom.type === 'harvest' && !isOwner && prom.campaign.remuneration !== 'publication'"
           [ngClass]="{ graybtn: !harvestAvailable }"
         >
-        <span class="btn-participe-gain" *ngIf="harvestAvailable === true">
+
+
+        <div *ngIf="showSpinner" class="spinner">
+          <img src="../../../../assets/Images/Spinner.gif" width="50" height="50" />
+
+        </div>
+        
+        <span class="btn-participe-gain" *ngIf="harvestAvailable === true && !showSpinner">
             <img
               class="hourglass mb-3"
               src="/assets/Images/newImages/recover-hand.svg"
@@ -656,7 +663,14 @@
           *ngIf="prom.type === 'harvest' && !isOwner && prom.campaign.remuneration === 'publication'"
           [ngClass]="{ graybtn: prom.campaign.type === 'apply' || !harvestAvailable }"
         >
-        <span class="btn-participe-gain" *ngIf=" harvestAvailable">
+
+
+        <div *ngIf="showSpinner" class="spinner">
+          <img src="../../../../assets/Images/Spinner.gif" width="50" height="50" />
+
+        </div>
+        
+        <span class="btn-participe-gain" *ngIf=" harvestAvailable && !showSpinner">
           <img
               class="hourglass mb-3"
               src="/assets/Images/newImages/recover-hand.svg"

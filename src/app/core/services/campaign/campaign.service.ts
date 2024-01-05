@@ -110,6 +110,48 @@ export class CampaignHttpApiService {
       hash
     });
   }
+
+
+    /**
+   * Recover earnings of the accepted campaign medias.
+   * @param id prom identifier
+   * @param password Wallet password.
+   * @returns {Observable} a http client observable.
+   */
+    checkHarvestExternal(
+      idProm: string,
+      hash: any
+    ): Observable<any> {
+      return this.http.post(sattUrl +'/external/checkHarvest', {
+        idProm,
+        hash
+      });
+    }
+    externalAnswerExternal(
+      idProm: string,
+      hash: any,
+      tx : any
+    ): Observable<any> {
+      return this.http.post(sattUrl +'/external/externalAnswer', {
+        idProm,
+        hash,
+        tx
+      });
+    }
+
+    recoverEarningsExternal(
+      idProm: string,
+      hash: any,
+      data : any,
+      tx : any
+    ): Observable<any> {
+      return this.http.post(sattUrl +'/external/externalGains', {
+        idProm,
+        hash,
+        data,
+        tx
+      });
+    }
   generateBrief(title: string) {
     
     

@@ -16,14 +16,16 @@ import Cookies from 'js-cookie';
 import web3 from 'web3/lib/commonjs/web3';
 import { config } from 'process';
 import { campaignABI } from '../../abi/campaignABI';
-
+import { CampaignHttpApiService } from '@app/core/services/campaign/campaign.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CampaignsService {
-  
-  constructor(public tokenStorageService: TokenStorageService) {}
+  constructor(
+    public tokenStorageService: TokenStorageService,
+    public campaignHttpApiService: CampaignHttpApiService
+  ) {}
 
   dateToUnixTimestamp(dateStr: string): number {
     // Parse the input date string
@@ -37,7 +39,6 @@ export class CampaignsService {
 
   async createPriceFundAll(data: any) {
     try {
-
       const inputData = [
         'https://ropsten.etherscan.io/token/0x2bef0d7531f0aae08adc26a0442ba8d0516590d0', // dataUrl
         this.dateToUnixTimestamp(data.startDate), // startDate
@@ -137,24 +138,19 @@ export class CampaignsService {
     }
   }
 
-
-
-
- 
-  async  getGain(data: any) {
-    debugger
+  async getGain(data: any): Promise<any>  {
     try {
       const contractAddresses = {
         Ethereum: campaignSmartContractERC20,
         'BNB Testnet': campaignSmartContractBEP20,
+        'BNB Smart Chain': campaignSmartContractBEP20,
         Polygon: campaignSmartContractPOLYGON,
         BitTorrent: campaignSmartContractBTT,
       } as { [key: string]: string };
   
-      
       const provider = await detectEthereumProvider();
       if (!provider) {
-        throw new Error("Ethereum provider not detected.");
+        throw new Error('Ethereum provider not detected.');
       }
   
       const ethersProvider = new ethers.providers.Web3Provider(provider);
@@ -162,41 +158,52 @@ export class CampaignsService {
   
       let networkSelected = Cookies.get('networkSelected');
       if (!networkSelected || !contractAddresses[networkSelected]) {
-        throw new Error("Invalid or missing network selection.");
+        throw new Error('Invalid or missing network selection.');
       }
   
       const contractAddress = contractAddresses[networkSelected];
       const abiString = JSON.stringify(campaignABI);
       const parsedABI = JSON.parse(abiString);
-      
-      const ctr = new ethers.Contract(contractAddress,parsedABI, signer);
+      const ctr = new ethers.Contract(contractAddress, parsedABI, signer);
   
       const gas = 200000;
       const gasPrice = await ethersProvider.getGasPrice();
+  
+      const response1 = await this.campaignHttpApiService.checkHarvestExternal(data.hash, data.campaignHash).toPromise();
+      console.log(response1);
+  
       const transactionPromise =await ctr.updatePromStats(data.hash, {
         from: this.tokenStorageService.getIdWallet(),
         gasLimit: gas,
         gasPrice: gasPrice,
-    });
-    
-
-     let receiptgain = await ctr.getGains(data.hash, {
-      from: this.tokenStorageService.getIdWallet(),
-      gasLimit: gas,
-      gasPrice: gasPrice,
-   });
-     
-    
+      });
+      const transactionReceipt = await transactionPromise.wait();
+      const events = transactionReceipt.events;
+      console.log(events);
   
-      return {
-        transactionHash: receiptgain.transactionHash,
-        idProm: data.idProm,
-        events: receiptgain.events,
-      };
+      const response2 = await this.campaignHttpApiService.externalAnswerExternal(data.hash, data.campaignHash, events).toPromise();
+      console.log(response2);
   
+      const receiptgain1 = await ctr.getGains(data.hash, {
+        from: this.tokenStorageService.getIdWallet(),
+        gasLimit: gas,
+        gasPrice: gasPrice,
+      });
+  
+      const response3 = await this.campaignHttpApiService.recoverEarningsExternal(data.hash, data.campaignHash, response2, receiptgain1).toPromise();
+      console.log(response3);
+  
+      const receiptgain2 = await ctr.getGains(data.hash, {
+        from: this.tokenStorageService.getIdWallet(),
+        gasLimit: gas,
+        gasPrice: gasPrice,
+      });
+      
+      return receiptgain2
     } catch (error) {
-      console.log("errror",error)
+      console.log('error', error);
       throw error;
     }
   }
+  
 }

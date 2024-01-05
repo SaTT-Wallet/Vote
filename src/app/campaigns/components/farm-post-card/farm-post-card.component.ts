@@ -7,7 +7,7 @@ import {
   OnInit,
   Output,
   PLATFORM_ID,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 import { BlockchainActionsService } from '@core/services/blockchain-actions.service';
 import { TokenStorageService } from '@core/services/tokenStorage/token-storage-service.service';
@@ -21,7 +21,7 @@ import { ParticipationListStoreService } from '@campaigns/services/participation
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import {
   atLastOneChecked,
-  requiredDescription
+  requiredDescription,
 } from '@app/helpers/form-validators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -36,7 +36,7 @@ import { CampaignsService } from '@app/campaigns/services/campaigns.service';
 @Component({
   selector: 'app-farm-post-card',
   templateUrl: './farm-post-card.component.html',
-  styleUrls: ['./farm-post-card.component.scss']
+  styleUrls: ['./farm-post-card.component.scss'],
 })
 export class FarmPostCardComponent implements OnInit {
   @Input() prom: any;
@@ -79,7 +79,7 @@ export class FarmPostCardComponent implements OnInit {
         reason2: new UntypedFormControl(null),
         reason3: new UntypedFormControl(null),
         reason4: new UntypedFormControl(null),
-        description: new UntypedFormControl(null)
+        description: new UntypedFormControl(null),
       },
       [atLastOneChecked(), requiredDescription()]
     );
@@ -89,23 +89,29 @@ export class FarmPostCardComponent implements OnInit {
     const harvestDate: number = this.prom.lastHarvestDate;
     const today: number = Math.floor(new Date().getTime() / 1000);
     const timestampAcceptedDate: number = this.prom.acceptedDate;
-  
+
     const currentTime = Math.floor(new Date().getTime() / 1000);
     const timeUntilHarvest = harvestDate + 84600 - currentTime; // Corrected calculation
     const timeUntilAccepted = timestampAcceptedDate + 86400 - currentTime; // Corrected calculation
     const endTimeCampaign = this.prom.campaign.endDate - currentTime;
-  
+
     if (this.prom.campaign.remuneration === 'publication') {
       if (endTimeCampaign > 0) {
         const hours = Math.floor(endTimeCampaign / 3600);
         const minutes = Math.floor((endTimeCampaign % 3600) / 60);
-  
+
         if (hours > 24) {
           const days = Math.floor(hours / 24);
           const remainingHours = hours % 24;
-          this.harvestAvailableIn = `${days} day${days > 1 ? 's' : ''} ${remainingHours} hour${remainingHours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`;
+          this.harvestAvailableIn = `${days} day${
+            days > 1 ? 's' : ''
+          } ${remainingHours} hour${
+            remainingHours > 1 ? 's' : ''
+          } ${minutes} minute${minutes > 1 ? 's' : ''}`;
         } else {
-          this.harvestAvailableIn = `${hours} hour${hours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`;
+          this.harvestAvailableIn = `${hours} hour${
+            hours > 1 ? 's' : ''
+          } ${minutes} minute${minutes > 1 ? 's' : ''}`;
         }
         this.harvestAvailable = false;
       }
@@ -125,7 +131,7 @@ export class FarmPostCardComponent implements OnInit {
       }
     }
   }
-  
+
   safeImageUrl(base64Image: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       `data:image/png;base64, ${base64Image}`
@@ -139,7 +145,7 @@ export class FarmPostCardComponent implements OnInit {
       this.isFarmingRouter = false;
     }
 
-    this.showSpinner = true;
+    // this.showSpinner = true;
     this.notificationService.notifications$
       .pipe(
         map((payload) => JSON.parse(payload.data.obj)),
@@ -155,7 +161,7 @@ export class FarmPostCardComponent implements OnInit {
           return {
             ...prom,
             safeURL: this.participationService.generatePostThumbnail(prom),
-            link: this.participationService.generatePostLink(prom)
+            link: this.participationService.generatePostLink(prom),
           };
         }),
         takeUntil(this.isDestroyed)
@@ -204,21 +210,29 @@ export class FarmPostCardComponent implements OnInit {
     }
   }
 
-  getMyGains(prom: any) {
-   this.campaign.getGain(prom)
+  async getMyGains(prom: any) {
+    try {
+      this.showSpinner = true; 
+      this.ref.detectChanges();
+      await  this.campaign.getGain(prom);
+      this.showSpinner = false; 
+    } catch (error) {
+      this.showSpinner = false; 
+      console.error(error);
+    }
   }
-  
+
   validateLink(prom: any) {
     this.blockchainActions.onActionButtonClick({
       data: { prom, campaignId: prom.campaign._id, fromNotification: false },
-      action: EButtonActions.VALIDATE_LINK
+      action: EButtonActions.VALIDATE_LINK,
     });
     this.router.navigate(['verify-link'], {
       queryParams: {
         campaign_id: prom.campaign._id,
-        network: ListTokens[prom.campaign.currency].type
+        network: ListTokens[prom.campaign.currency].type,
       },
-      relativeTo: this.activatedRoute
+      relativeTo: this.activatedRoute,
     });
   }
   closeModal(content: any) {
