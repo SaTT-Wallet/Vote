@@ -18,7 +18,7 @@ export const environment = {
   WEB3_URL_BTT : 'https://pre-rpc.bt.io/',
   WEB3_URL_POLYGON : 'https://polygon-mumbai.blockpi.network/v1/rpc/public',
 
-  API_URL: 'https://localhost:3015',
+  API_URL: 'https://api-preprod2.satt-token.com',
   // 'https://api-preprod.satt-token.com:3014',
 
   url_subgraph_bsc:

@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  API_URL: 'https://localhost:3015',
+  API_URL: 'https://api-preprod2.satt-token.com',
   url: 'https://dapp.satt.com/',
   ipfsURL: 'https://ipfs.io/ipfs/',
   url_subgraph_bsc:
