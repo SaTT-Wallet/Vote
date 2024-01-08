@@ -289,6 +289,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.networkLabel = 'BNB Testnet';
                 this.networkLogo = 'bsc';
                 break;
+              case '0x2803':
+                this.networkLabel = 'Arthera';
+                this.networkLogo = 'arthera';
+              break;
             default:
               // ChainId not in the supported list
               alert('Unsupported network. Please connect to a supported network.');
@@ -470,8 +474,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
    displayNetwork(e: any){
-    console.log({e})
-    console.log({networkLabel: this.networkLogo, e:e.label})
+    
     if(this.networkLogo != e.label) {
       detectEthereumProvider().then((provider) => {
         this.externalWalletService.changeNetwork(provider, e.label).then((val) => {

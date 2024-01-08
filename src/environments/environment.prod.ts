@@ -85,6 +85,13 @@ export const environment = {
     blockExplorerURL:'https://bttcscan.com/',
     currencySymbol:'BTT'
   },
+  artheraNetwork: {
+    chainIDHex:'0x2803',
+    chainName: 'Arthera',
+    rpcURL:'https://rpc-test.arthera.net',
+    blockExplorerURL:'https://explorer-test.arthera.net/',
+    currencySymbol:'AA'
+  },
   core : [
     '0x74bb5cbff3738eca2307fbea15b0ff85c4fddd41',
     '0x1c04ee5fb9a916ea47a4497fd62dbc45c54f42a8'
