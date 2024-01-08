@@ -258,8 +258,7 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
     //this.campaignsListStoreService.loadNextPage({}, true);
   }
   filterCampaigns(): Campaign[] {
-    const selectedNetwork = Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : 'polygon'))
-    console.log({selectedNetwork})
+    const selectedNetwork = Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : ( Cookies.get('networkSelected') === 'Arthera' ? 'arthera':'polygon')))
     this.filteredCampaigns = this.campaignsList.filter(
       (campaign) => campaign.currency.type.toLowerCase() === selectedNetwork
     );

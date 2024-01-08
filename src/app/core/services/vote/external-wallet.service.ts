@@ -102,6 +102,7 @@ export class ExternalWalletService {
     }
   }
   async changeNetwork(provider: any, network: any) {
+    console.log({network})
     await (provider as any).request({
       method: 'wallet_addEthereumChain',
       params: [
@@ -115,6 +116,8 @@ export class ExternalWalletService {
               ? env.testNetNetwork.chainIDHex
               : network === 'polygon'
               ? env.polygonNetwork.chainIDHex
+              : network === 'arthera' 
+              ? env.artheraNetwork.chainIDHex
               : env.bttNetwork.chainIDHex,
           chainName:
             network === 'bsc'
@@ -125,6 +128,8 @@ export class ExternalWalletService {
               ? env.testNetNetwork.chainName
               : network === 'polygon'
               ? env.polygonNetwork.chainName
+              : network === 'arthera'
+              ? env.artheraNetwork.chainName 
               : env.bttNetwork.chainName,
           nativeCurrency: {
             name:
@@ -136,6 +141,8 @@ export class ExternalWalletService {
                 ? env.testNetNetwork.currencySymbol
                 : network === 'polygon'
                 ? env.polygonNetwork.currencySymbol
+                : network === 'arthera'
+                ? env.artheraNetwork.currencySymbol
                 : env.bttNetwork.currencySymbol,
             symbol:
               network === 'bsc'
@@ -146,6 +153,8 @@ export class ExternalWalletService {
                 ? env.testNetNetwork.currencySymbol
                 : network === 'polygon'
                 ? env.polygonNetwork.currencySymbol
+                : network === 'arthera'
+                ? env.artheraNetwork.currencySymbol
                 : env.bttNetwork.currencySymbol,
             decimals: 18,
           },
@@ -158,6 +167,8 @@ export class ExternalWalletService {
               ? env.testNetNetwork.rpcURL
               : network === 'polygon'
               ? env.polygonNetwork.rpcURL
+              : network === 'arthera'
+              ? env.artheraNetwork.rpcURL
               : env.bttNetwork.rpcURL,
           ],
           blockExplorerUrls: [
@@ -169,6 +180,8 @@ export class ExternalWalletService {
               ? env.testNetNetwork.blockExplorerURL
               : network === 'polygon'
               ? env.polygonNetwork.blockExplorerURL
+              : network === 'arthera'
+              ? env.artheraNetwork.blockExplorerURL
               : env.bttNetwork.blockExplorerURL,
           ],
         },
