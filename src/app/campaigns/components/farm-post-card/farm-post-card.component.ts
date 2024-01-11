@@ -229,6 +229,7 @@ export class FarmPostCardComponent implements OnInit {
 
       await this.loadNextPageRecursively(0);
       this.getPartPic();
+      
       this.ref.detectChanges();
 
       this.showSpinner = false;
@@ -254,6 +255,30 @@ export class FarmPostCardComponent implements OnInit {
   
       if (foundItem) {
         this.prom = foundItem
+        let currencyName = this.prom.campaign.currency;
+        this.intervalId = setInterval(() => {
+          this.countDownTimer();
+        }, 1000);
+        if (currencyName === 'SATTBEP20') currencyName = 'SATT';
+    
+        let etherInWei = ListTokens[currencyName].decimals;
+        let sum = new Big(this.prom.sum).div(etherInWei).toFixed(0);
+        let payedAmount = new Big(this.prom.payedAmount).div(etherInWei).toFixed(0);
+        this.sumInUSD = this.walletFacade.getCryptoPriceList().pipe(
+          map((response: any) => response.data),
+          //tap((_) => console.log('value sumInUSD => ', _)),
+          map((crypto: any) =>
+            (crypto[currencyName].price * Number(sum)).toFixed(2)
+          )
+        );
+        this.payedAmoundInUSD = this.walletFacade.getCryptoPriceList().pipe(
+          map((response: any) => response.data),
+          //tap((_) => console.log('value payedAmoundInUSD=> ', _)),
+          map((crypto: any) =>
+            (crypto[currencyName].price * Number(payedAmount)).toFixed(2)
+          )
+        );
+        
       } else if (pageCount < this.count) {
         await this.loadNextPageRecursively(pageCount + 1);
       } else {
