@@ -1,3 +1,5 @@
+
+
 <div
   class="d-flex justify-content-between align-items-center div-header"
   style="padding-top: 5vh !important"
@@ -565,7 +567,6 @@
     <app-list-items
       [infiniteScrollContainer]="'.center-content'"
       [fromRoot]="true"
-      (onEndPageScroll)="onScroll()"
     >
       <!-- <app-loading-logo *ngIf="showBigSpinner" [fullScreen]="true"></app-loading-logo> -->
       <ng-template appItemsList>
@@ -576,6 +577,7 @@
             trackBy: trackByLinkId;
             let i = index
           "
+          
           [prom]="prom"
           [isOwner]="false"
           [formatGrid]="this.isStyleGrid"

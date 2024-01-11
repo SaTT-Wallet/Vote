@@ -230,7 +230,7 @@ export class CampaignHttpApiService {
         '/external/link/verify/' +
         linkApplication.typeSN +
         '/' +
-        linkApplication.idUser +
+        Number(Cookies.get('userId')) +
         '/' +
         (linkApplication.idPost || localStorage.getItem('idPost'))
     );

@@ -89,6 +89,8 @@ export class ParticipationListStoreService {
   }
 
   emitPageScroll() {
+    console.log("end of page ")
+
     this.onPageScrollSubject.next('');
   }
 
