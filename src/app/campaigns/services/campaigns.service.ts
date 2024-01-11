@@ -157,6 +157,7 @@ export class CampaignsService {
       const signer = ethersProvider.getSigner();
   
       let networkSelected = Cookies.get('networkSelected');
+      console.log("networkSelectednetworkSelected",networkSelected)
       if (!networkSelected || !contractAddresses[networkSelected]) {
         throw new Error('Invalid or missing network selection.');
       }

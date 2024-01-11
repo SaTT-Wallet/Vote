@@ -10,7 +10,10 @@
     width: 100%;
 }
 
-
+#scrollableContent {
+    height: 200px; /* or any other value */
+    overflow-y: scroll;
+  }
 /* .div-header {
     width: 98%;
 } */

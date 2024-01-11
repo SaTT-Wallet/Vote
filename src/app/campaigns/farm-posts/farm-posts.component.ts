@@ -111,12 +111,42 @@ export class FarmPostsComponent implements OnInit {
     this.ParticipationListService.loadLinks()
       .pipe(takeUntil(this.isDestroyed))
       .subscribe();
+
+      window.addEventListener('scroll', this.onWindowScroll.bind(this), true);
+
   }
   setQuery() {
     this.ParticipationListService.setQueryParams({ campaignId: '', state: '' });
   }
 
+  private debounceTimeout: any;
+
+  onWindowScroll(): void {
+    clearTimeout(this.debounceTimeout);
+    this.debounceTimeout = setTimeout(async () => {
+      // Your existing scroll logic here
+      const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  
+      // Define a threshold (e.g., 50 pixels from the bottom)
+      const threshold = 50;
+  
+      // Check if the user has scrolled close to the bottom of the page
+      if (scrollPosition + viewportHeight >= documentHeight - threshold) {
+  
+       await this.ParticipationListService.loadNextPage(10, false, 2)
+          .pipe(takeUntil(this.isDestroyed))
+          .subscribe();
+      }
+    }, 100);  // Adjust the delay (e.g., 100ms) as needed
+  }
+  
+  
+  
+
 getLink(): void {
+  
   this.route.queryParamMap
     .pipe(takeUntil(this.isDestroyed))
     .subscribe((queryParams) => {
@@ -188,14 +218,15 @@ getLink(): void {
     this.isDestroyed.complete();
     this.subscription?.unsubscribe();
     this.walletIdSubscription.unsubscribe();
+    window.removeEventListener('scroll', this.onWindowScroll.bind(this), true);
 
     //this.ParticipationListService.clearDataFarming();
   }
 
   onScroll() {
-    /*
+   
     this.ParticipationListService.emitPageScroll();
-*/
+
   }
 
   toggleFilter() {

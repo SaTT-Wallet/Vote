@@ -19,6 +19,8 @@ import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { CampaignHttpApiService } from '@core/services/campaign/campaign.service';
 import { ParticipationListStoreService } from '@campaigns/services/participation-list-store.service';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { Page } from '@app/models/page.model';
+
 import {
   atLastOneChecked,
   requiredDescription,
@@ -33,6 +35,7 @@ import { Big } from 'big.js';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '@environments/environment';
 import { CampaignsService } from '@app/campaigns/services/campaigns.service';
+import _ from 'lodash';
 @Component({
   selector: 'app-farm-post-card',
   templateUrl: './farm-post-card.component.html',
@@ -49,20 +52,25 @@ export class FarmPostCardComponent implements OnInit {
   showLoadingSpinner: boolean = false;
   isFarmingRouter: boolean = false;
   showDetails: boolean = false;
+  listLinks: Participation[] = [];
+
   sumInUSD: any;
   payedAmoundInUSD: any;
   private isDestroyed = new Subject();
   intervalId!: any;
   harvestAvailableIn: any = 0;
   harvestAvailable: boolean = true;
+  count: number | undefined;
 
   constructor(
     private tokenStorageService: TokenStorageService,
     private blockchainActions: BlockchainActionsService,
+    public ParticipationListService: ParticipationListStoreService,
     private router: Router,
     private notificationService: NotificationService,
     private campaignService: CampaignHttpApiService,
     private campaign: CampaignsService,
+
     private participationService: ParticipationListStoreService,
     private activatedRoute: ActivatedRoute,
     public modalService: NgbModal,
@@ -210,18 +218,52 @@ export class FarmPostCardComponent implements OnInit {
     }
   }
 
-  async getMyGains(prom: any) {
+  async getMyGains(promg: any) {
     try {
-      this.showSpinner = true; 
+      
+      this.showSpinner = true;
       this.ref.detectChanges();
-      await  this.campaign.getGain(prom);
-      this.showSpinner = false; 
+      const result =await  this.campaign.getGain(promg);
+
+      if(result)
+
+      await this.loadNextPageRecursively(0);
+      this.getPartPic();
+      this.ref.detectChanges();
+
+      this.showSpinner = false;
     } catch (error) {
-      this.showSpinner = false; 
+      this.showSpinner = false;
       console.error(error);
     }
   }
-
+  
+  async loadNextPageRecursively(pageCount: number): Promise<void> {
+    
+    try {
+      const links = await this.campaignService.userParticipations(pageCount,10)
+        .pipe(takeUntil(this.isDestroyed))
+        .toPromise();
+  
+      this.showSpinner = false;
+      this.count = links.data.count / 10;
+      const data = Object.values(this.prom);
+  
+      // Find a match based on the condition
+      const foundItem = links.data.Links.find((linkItem: any) => linkItem._id === data[1]);
+  
+      if (foundItem) {
+        this.prom = foundItem
+      } else if (pageCount < this.count) {
+        await this.loadNextPageRecursively(pageCount + 1);
+      } else {
+        console.log("No matching item found in all pages");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+  
   validateLink(prom: any) {
     this.blockchainActions.onActionButtonClick({
       data: { prom, campaignId: prom.campaign._id, fromNotification: false },
