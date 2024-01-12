@@ -240,7 +240,6 @@ export class FarmPostCardComponent implements OnInit {
   }
   
   async loadNextPageRecursively(pageCount: number): Promise<void> {
-    debugger
     try {
       let basicTotalToEarn :string;
 
