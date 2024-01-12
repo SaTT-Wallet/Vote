@@ -88,7 +88,7 @@ export class ExternalWalletService {
           params: [{ eth_accounts: {} }],
         });
         await this.changeToBinance(provider);
-        await this.addTokenToBinance(provider);
+       
         this.connect = true;
         this.isWalletConnected = true;
         this.tokenStorageService.setIsAuth('true');
