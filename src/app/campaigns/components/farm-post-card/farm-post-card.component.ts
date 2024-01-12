@@ -223,12 +223,12 @@ export class FarmPostCardComponent implements OnInit {
       
       this.showSpinner = true;
       this.ref.detectChanges();
+
       const result =await  this.campaign.getGain(promg);
 
-      if(result)
+       if(result)
 
-      await this.loadNextPageRecursively(0);
-      this.getPartPic();
+       await this.loadNextPageRecursively(0);
       
       this.ref.detectChanges();
 
@@ -240,13 +240,14 @@ export class FarmPostCardComponent implements OnInit {
   }
   
   async loadNextPageRecursively(pageCount: number): Promise<void> {
-    
+    debugger
     try {
+      let basicTotalToEarn :string;
+
       const links = await this.campaignService.userParticipations(pageCount,10)
         .pipe(takeUntil(this.isDestroyed))
         .toPromise();
   
-      this.showSpinner = false;
       this.count = links.data.count / 10;
       const data = Object.values(this.prom);
   
@@ -254,7 +255,44 @@ export class FarmPostCardComponent implements OnInit {
       const foundItem = links.data.Links.find((linkItem: any) => linkItem._id === data[1]);
   
       if (foundItem) {
+        this.getPartPic();
+
         this.prom = foundItem
+
+        basicTotalToEarn = this.prom.totalToEarn
+
+        if (this.prom.totalToEarn && this.prom.payedAmount) {
+          if (
+            new Big(this.prom.totalToEarn).gte(
+              new Big(this.prom.payedAmount)
+            )
+          ) {
+            this.prom.totalToEarn = new Big(this.prom.totalToEarn)
+              .minus(new Big(this.prom.payedAmount))
+              .toFixed();
+          }
+
+          this.prom.sum =
+          this.prom?.totalToEarn &&
+          this.prom?.payedAmount &&
+            new Big(basicTotalToEarn).gt(this.prom?.payedAmount)
+              ? new Big(this.prom?.totalToEarn)
+                  .plus(this.prom?.payedAmount)
+                  .toFixed()
+              : new Big(this.prom?.totalToEarn).lte(this.prom?.payedAmount)
+              ? this.prom?.payedAmount
+              : this.prom?.totalToEarn;
+          if (
+            this.prom.isPayed === true &&
+            this.prom?.payedAmount !== '0'
+          ) {
+            this.prom.sum = this.prom?.payedAmount;
+          }
+        } else if (this.prom.totalToEarn && !this.prom.payedAmount) {
+          this.prom.sum = this.prom?.totalToEarn;
+        }
+
+
         let currencyName = this.prom.campaign.currency;
         this.intervalId = setInterval(() => {
           this.countDownTimer();
@@ -263,7 +301,9 @@ export class FarmPostCardComponent implements OnInit {
     
         let etherInWei = ListTokens[currencyName].decimals;
         let sum = new Big(this.prom.sum).div(etherInWei).toFixed(0);
-        let payedAmount = new Big(this.prom.payedAmount).div(etherInWei).toFixed(0);
+        let payedAmount = '0'
+        if(this.prom.payedAmount)
+        payedAmount = new Big(this.prom.payedAmount).div(etherInWei).toFixed(0);
         this.sumInUSD = this.walletFacade.getCryptoPriceList().pipe(
           map((response: any) => response.data),
           //tap((_) => console.log('value sumInUSD => ', _)),
