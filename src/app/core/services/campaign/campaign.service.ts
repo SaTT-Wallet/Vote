@@ -225,12 +225,13 @@ export class CampaignHttpApiService {
   }
 
   verifyLink(linkApplication: any) {
+    
     return this.http.get(
       sattUrl +
         '/external/link/verify/' +
         linkApplication.typeSN +
         '/' +
-        Number(Cookies.get('userId')) +
+        linkApplication.idUser +
         '/' +
         (linkApplication.idPost || localStorage.getItem('idPost'))
     );
