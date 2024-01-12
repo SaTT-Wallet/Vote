@@ -45,7 +45,7 @@
         class="cmp-img2"
       />
       <ng-container  *ngIf="prom.typeSN === 3 && prom.mediaUrl.includes('mp4')">
-        <video [src]="prom.mediaUrl" autoplay loop [muted]="true"></video>
+        <video [src]="prom?.mediaUrl"   [muted]="true"></video>
       </ng-container>
 
       <ng-container  *ngIf="prom.typeSN === 3 && !prom.mediaUrl.includes('mp4')">
