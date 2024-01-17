@@ -65,12 +65,12 @@ export function app(): express.Express {
   server.get('/campaign/**/verify-link', getStaticFiles);
 
   // All regular routes use the Universal engine
-  server.get('/campaign/**', (req, res) => {
-    res.render('index', {
-      req,
-      providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }]
-    });
-  });
+  // server.get('/campaign/**', (req, res) => {
+  //   res.render('index', {
+  //     req,
+  //     providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }]
+  //   });
+  // });
 
   server.use(express.json());
   server.get('/getBlogs', async (req, res) => {
