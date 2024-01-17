@@ -497,14 +497,14 @@ export class CampaignHttpApiService {
     if (!isOwnedByUser) {
       return this.http.get(
         sattUrl +
-          '/campaign/campaignPrompAll/' +
+          '/campaign/campaignPrompAllExt/' +
           campaignId +
           '?influencer=' +
           this.tokenStorageService.getIdWallet()
       );
     } else {
       return this.http.get(
-        sattUrl + '/campaign/campaignPrompAll/' + campaignId
+        sattUrl + '/campaign/campaignPrompAllExt/' + campaignId
       );
     }
   }
