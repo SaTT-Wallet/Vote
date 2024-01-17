@@ -82,7 +82,6 @@ export class VoteService {
     } else {
       throw new Error('Invalid wallet type');
     }
-    console.log(typeof window.ethereum !== 'undefined')
     if (typeof window.ethereum !== 'undefined') {
       this.web3 = new Web3Provider(window.ethereum);
       this.account = await this.web3.listAccounts();
@@ -94,11 +93,8 @@ export class VoteService {
   }
 
  createAccount(wallet:any):void {
-
-  console.log({wallet})
   this.apiprofilService.createUser(wallet.toLowerCase()).subscribe(
     (res:any) => {
-      console.log({res})
      Cookies.set('userId', res.data.UserId)
     }, (err:any) => {
       console.error(err)
@@ -113,7 +109,6 @@ export class VoteService {
       window.ethereum .on('accountsChanged', (accounts: string[]) => {
         if (accounts.length > 0) {
           const newAccount = accounts[0];
-          console.log("newAccountnewAccountnewAccount",newAccount)
           this.createAccount(newAccount)
         }
       });
