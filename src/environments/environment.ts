@@ -7,7 +7,7 @@ export const environment = {
   //API_URL: 'https://localhost:3015',
   //url:"http://localhost:4200/",
   url: 'https://.satt.atayen.us/',
-  ipfsURL: 'https://ipfs.io/ipfs/',
+  ipfsURL: 'https://ad-pools.infura-ipfs.io/ipfs/',
   //https://localhost:3015/
 
   // API_URL:  'https://localhost:3015/',
