@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   //API_URL: 'https://localhost:3015',
   //url:"http://localhost:4200/",
-  url: 'https://.satt.atayen.us/',
+  url: 'https://testnet.satt.atayen.us/',
   ipfsURL: 'https://ad-pools.infura-ipfs.io/ipfs/',
   //https://localhost:3015/
 
