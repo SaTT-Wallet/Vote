@@ -2,7 +2,7 @@ export const environment = {
   production: true,
 
   API_URL: 'https://api-preprod2.satt-token.com',
-  url: 'https://dapp.satt.com/',
+  url: 'https://app.satt.com/',
   ipfsURL: 'https://ad-pools.infura-ipfs.io/ipfs/',
   url_subgraph_bsc:
     'https://api.thegraph.com/subgraphs/name/atayen/satt--bsc-mainnet',
