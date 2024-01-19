@@ -25,10 +25,10 @@ const routes: Routes = [
       },
 
       { path: 'home', redirectTo: 'ad-pools', pathMatch: 'full' },
-      {
+      /*{
         path: 'vote',
         loadChildren: () => import('../vote/vote.module').then((m) => m.VoteModule)
-      },
+      },*/
       { path: 'social-networks', pathMatch: 'full',component: SocialNetworksComponent },
       
     ]

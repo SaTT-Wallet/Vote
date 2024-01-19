@@ -2405,8 +2405,18 @@ bottom: 77.54% ; */
   padding: 0.5em 1em;
   /* margin-right: 20px; */
 }
+.li-menu-vote {
+  border-radius: 19px;
+  padding: 0.5em 1em;
+  /* margin-right: 20px; */
+}
 
 .li-menu a {
+  display: block;
+  white-space: nowrap;
+}
+
+.li-menu-vote a {
   display: block;
   white-space: nowrap;
 }
