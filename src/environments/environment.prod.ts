@@ -74,14 +74,14 @@ export const environment = {
   polygonNetwork: {
     chainIDHex:'0x89',
     chainName: 'Polygon Mainnet',
-    rpcURL:'https://polygon-pokt.nodies.app',
+    rpcURL:'https://polygon-rpc.com/',
     blockExplorerURL:'https://polygonscan.com/',
     currencySymbol:'MATIC'
   },
   bttNetwork: {
     chainIDHex:'0xc7',
     chainName: 'BitTorrent Chain Mainnet',
-    rpcURL:'https://rpc.bittorrentchain.io',
+    rpcURL:'https://rpc.bt.io',
     blockExplorerURL:'https://bttcscan.com/',
     currencySymbol:'BTT'
   },
