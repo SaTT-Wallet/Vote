@@ -31,6 +31,8 @@ import axios from 'axios';
 import { environment as env } from '../../../../environments/environment';
 import { ShowNumbersRule } from '@app/shared/pipes/showNumbersRule';
 import { HttpClient } from '@angular/common/http';
+import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
+import { VoteService } from '@app/core/services/vote/vote.service';
 @Component({
   selector: 'app-farm-welcome',
   templateUrl: './farm-welcome.component.html',
@@ -74,7 +76,9 @@ export class FarmWelcomeComponent implements OnInit {
     private walletFacade: WalletFacadeService,
     private convertFromWeiTo: ConvertFromWei,
     private cryptoFetchService: CryptofetchServiceService,
-    private showNumbersRule: ShowNumbersRule
+    private showNumbersRule: ShowNumbersRule,
+    private externalWalletService: ExternalWalletService,
+    private voteService: VoteService
   ) {}
 
   ngOnInit(): void {
@@ -88,6 +92,10 @@ export class FarmWelcomeComponent implements OnInit {
       this.loadStatistics();
       this.loadNbrWallets();
       this.loadNbrTransactions();
+    }
+    if(!!window.ethereum) {
+      window.ethereum.selectedAddress ? console.log("Connected address:", window.ethereum.selectedAddress) : this.externalWalletService.connectMetamask().then(() => console.log('Connected !!!'))
+      
     }
     /*if (this.tokenStorageService.getToken()) {
       this.walletFacade.checkUserWalletV2()
