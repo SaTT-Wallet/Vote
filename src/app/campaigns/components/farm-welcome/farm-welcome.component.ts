@@ -78,7 +78,8 @@ export class FarmWelcomeComponent implements OnInit {
     private cryptoFetchService: CryptofetchServiceService,
     private showNumbersRule: ShowNumbersRule,
     private externalWalletService: ExternalWalletService,
-    private voteService: VoteService
+    private voteService: VoteService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -93,8 +94,15 @@ export class FarmWelcomeComponent implements OnInit {
       this.loadNbrWallets();
       this.loadNbrTransactions();
     }
-    if(!!window.ethereum) {
-      window.ethereum.selectedAddress ? console.log("Connected address:", window.ethereum.selectedAddress) : this.externalWalletService.connectMetamask().then(() => console.log('Connected !!!'))
+   
+    const specificParam = this.route.snapshot.queryParams['redirection'];
+    
+    if(!!window.ethereum && !!specificParam) {
+      setTimeout(() => {
+        (this.externalWalletService.isWalletConnected &&
+          this.externalWalletService.connect) ? console.log("Connected address:", window.ethereum.selectedAddress) : this.externalWalletService.connectMetamask().then(() => console.log('Connected !!!'))
+      }, 2000)
+      
       
     }
     /*if (this.tokenStorageService.getToken()) {
