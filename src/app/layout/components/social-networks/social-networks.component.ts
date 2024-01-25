@@ -454,7 +454,7 @@ export class SocialNetworksComponent implements OnInit {
         sattUrl +
         `/profile/addChannel/${social}/${userId}` +
         '?redirect=' +
-        this.router.url;
+        this.router.url + '?frontendApp=metamask';
   }
   onReditectLinkedin() {
     if (isPlatformBrowser(this.platformId))
