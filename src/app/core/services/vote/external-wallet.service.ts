@@ -17,6 +17,7 @@ export class ExternalWalletService {
   public isWalletConnected!: boolean;
   public connect: boolean = false;
   currentAccount: string = '';
+  networkLabel: any = "BNB Smart chain";
   acc: string | any[] = [];
   public isMetaMaskInstalled: boolean = false;
   networkHasChanged: boolean = false;
@@ -81,6 +82,10 @@ export class ExternalWalletService {
           secure: true,
           sameSite: 'Lax',
         });
+        Cookies.set('networkSelected',this.networkLabel, {
+          secure: true,
+          sameSite:'Lax',
+        } )
 
         // Rest of your code
         await this.ethereum.request({
