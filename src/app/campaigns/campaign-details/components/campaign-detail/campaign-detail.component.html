@@ -99,7 +99,7 @@
           class="top-bar-btn-apply btn-apply"
           (click)="goParticipate(campaign.id)"
           *ngIf="
-            !campaign.isOwnedByUser && campaign.isActive && isPlatformBrowser
+            !isOwnedByUser&& isActive && isPlatformBrowser
           "
         >
           {{ 'Apply_Now' | translate }}
@@ -109,7 +109,7 @@
           class="btn-edit-ad-pool top-bar-btn-apply"
           id="btn-edit-ad-pool"
           (click)="goToEditPage(campaign.id)"
-          *ngIf="campaign.isOwnedByUser && campaign.isActive"
+          *ngIf="isOwnedByUser&& isActive"
         >
           {{ 'editAdpool' | translate }}
         </button>
@@ -150,14 +150,14 @@
         <div
           class="div-pic-center-2"
           (click)="goParticipate(campaign.id)"
-          *ngIf="!campaign.isOwnedByUser && campaign.isActive"
+          *ngIf="!isOwnedByUser&& isActive"
         >
           <img src="assets/Images/person-check-filll.svg" width="32px" />
         </div>
         <span
           class="span-text pink-text"
           (click)="goParticipate(campaign.id)"
-          *ngIf="!campaign.isOwnedByUser && campaign.isActive"
+          *ngIf="!isOwnedByUser&& isActive"
           >Apply</span
         >
         <!------end div applay -->
@@ -165,19 +165,19 @@
         <div
           (click)="goToEditPage(campaign.id)"
           class="div-pic-center"
-          *ngIf="campaign.isOwnedByUser && campaign.isActive"
+          *ngIf="isOwnedByUser&& isActive"
         >
           <img src="assets/Images/config-icon-pink.svg" />
         </div>
         <span
           class="span-text pink-text"
-          *ngIf="campaign.isOwnedByUser && campaign.isActive"
+          *ngIf="isOwnedByUser&& isActive"
           >Manage</span
         >
         <!------end div manage -->
         <!------ div Finalize -->
         <div
-          *ngIf="campaign.isOwnedByUser && campaign.isDraft"
+          *ngIf="isOwnedByUser&& campaign.isDraft"
           class="div-pic-center"
           (click)="goToEditPage(campaign.id)"
         >
@@ -186,7 +186,7 @@
         <span
           (click)="goToEditPage(campaign.id)"
           class="span-text pink-text"
-          *ngIf="campaign.isOwnedByUser && campaign.isDraft"
+          *ngIf="isOwnedByUser&& campaign.isDraft"
           >Finalize</span
         >
         <!-- -----end div finalize -->
@@ -236,8 +236,8 @@
           class="div-pic"
           (click)="downloadFile()"
           *ngIf="
-            (!campaign.isOwnedByUser ||
-              (campaign.isOwnedByUser && !campaign.isDraft)) &&
+            (!isOwnedByUser||
+              (isOwnedByUser&& !campaign.isDraft)) &&
             this.kits.length !== 0
           "
         >
@@ -247,8 +247,8 @@
           class="div-pic"
           (click)="downloadFile()"
           *ngIf="
-            (!campaign.isOwnedByUser ||
-              (campaign.isOwnedByUser && !campaign.isDraft)) &&
+            (!isOwnedByUser||
+              (isOwnedByUser&& !campaign.isDraft)) &&
             this.kits.length === 0
           "
         >
@@ -259,8 +259,8 @@
           (click)="downloadFile()"
           class="span-text blue-text"
           *ngIf="
-            (!campaign.isOwnedByUser ||
-              (campaign.isOwnedByUser && !campaign.isDraft)) &&
+            (!isOwnedByUser||
+              (isOwnedByUser&& !campaign.isDraft)) &&
             this.kits.length !== 0
           "
           >AdPool kit</span
@@ -268,15 +268,15 @@
         <span
           class="span-text disabled-text"
           *ngIf="
-            (!campaign.isOwnedByUser ||
-              (campaign.isOwnedByUser && !campaign.isDraft)) &&
+            (!isOwnedByUser||
+              (isOwnedByUser&& !campaign.isDraft)) &&
             this.kits.length === 0
           "
           >AdPool kit</span
         >
         <!------ end div kit-->
         <!-- ------------ -->
-        <!-- <div class="div-pic" *ngIf="campaign.isOwnedByUser && campaign.isActive">
+        <!-- <div class="div-pic" *ngIf="isOwnedByUser&& isActive">
           <img src="assets/Images/blue-icons/icon_coins_blue.svg" />
         </div>
   
@@ -286,7 +286,7 @@
         <div
           (click)="deleteCampaign()"
           class="div-pic"
-          *ngIf="campaign.isOwnedByUser && campaign.isDraft"
+          *ngIf="isOwnedByUser&& campaign.isDraft"
         >
           <img src="assets/Images/blue-icons/corbeille-blue.svg" />
         </div>
@@ -294,7 +294,7 @@
         <span
           (click)="deleteCampaign()"
           class="span-text blue-text"
-          *ngIf="campaign.isOwnedByUser && campaign.isDraft"
+          *ngIf="isOwnedByUser&& campaign.isDraft"
           >Delete</span
         >
         <!------end div delete-->
@@ -431,10 +431,10 @@
                 role="button"
                 (click)="backClicked()"
                 *ngIf="
-                  (!this.campaign.isOwnedByUser &&
-                    campaign.isActive &&
+                  (!this.isOwnedByUser&&
+                    isActive &&
                     !editMode) ||
-                  (this.campaign.isOwnedByUser && !editMode)
+                  (this.isOwnedByUser&& !editMode)
                 "
               >
                 < {{ 'backToList' | translate }}</a
@@ -445,7 +445,7 @@
               class="btn-edit-ad-pool d-xl-block d-lg-block d-md-block d-sm-none d-none btn-apply-desk"
               id="btn-edit-ad-pool"
               (click)="goToEditPage(campaign.id)"
-              *ngIf="campaign.isOwnedByUser && campaign.isActive"
+              *ngIf="isOwnedByUser&& isActive"
             >
               <span class="padding-16" *ngIf="!this.showSpinner"
                 >{{ 'editAdpool' | translate }}
@@ -458,7 +458,7 @@
                 <span class="sr-only">Loading...</span>
               </div>
             </button>
-            <!--*ngIf="campaign.isOwnedByUser && campaign.type === 'finished'  && !loadingData && campaign.budget !== '0'"-->
+            <!--*ngIf="isOwnedByUser&& campaign.type === 'finished'  && !loadingData && campaign.budget !== '0'"-->
             <button
               type="button"
               [className]="
@@ -469,7 +469,7 @@
               id="btn-edit-refunds-pool"
               (click)="getRefunds(campaign.id)"
               *ngIf="
-                campaign.isOwnedByUser &&
+                isOwnedByUser&&
                 campaign.type === 'finished' &&
                 !loadingData &&
                 campaign.budget !== '0'
@@ -491,7 +491,7 @@
               id="btn-apply"
               (click)="goParticipate(campaign.id)"
               *ngIf="
-                !campaign.isOwnedByUser && campaign.isActive && isPlatformBrowser
+                !isOwnedByUser&& isActive && isPlatformBrowser
               "
             >
               <span class="padding-16" *ngIf="!this.showSpinner">{{
@@ -508,7 +508,7 @@
             <button
               type="button"
               class="btn-pending btn-apply-desk"
-              *ngIf="!campaign.isOwnedByUser && campaign.inProgress"
+              *ngIf="!isOwnedByUser&& campaign.inProgress"
             >
               <span class="padding-16">
                 {{ 'Monetize.pending' | translate }}</span

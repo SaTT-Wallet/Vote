@@ -25,6 +25,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       '/external/create-user',
       '/external/socialAccounts',
       '/external/campaign/filterLinksExternal',
+      '/external/campaign/getLinksExternal',
       '/external/link/verify',
       '/external/createCampaign',
       '/external/verify-token',
@@ -33,7 +34,8 @@ export class HttpInterceptorService implements HttpInterceptor {
       '/external/apply',
       '/external/checkHarvest',
       '/external/externalAnswer',
-      '/external/externalGains'
+      '/external/externalGains',
+      '/external/externalUploadPictureToIPFS'
     ];
 
     // Check if the request URL matches any of the specified URLs

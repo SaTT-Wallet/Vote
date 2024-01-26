@@ -30,6 +30,7 @@ import { WalletFacadeService } from '@core/facades/wallet-facade.service';
 
 import { ViewportScroller } from '@angular/common';
 import { Big } from 'big.js';
+import Cookies from 'js-cookie';
 @Component({
   selector: 'app-campaign-detail-gains',
   templateUrl: './campaign-detail-gains.component.html',
@@ -107,7 +108,10 @@ export class CampaignDetailGainsComponent implements OnInit {
 
   ngOnInit(): void {
     //  this.calcGains();
+
     this.ParticipationListService.isEarnings = true;
+    this.isOwnedByUser =(this.campaign.walletId === Cookies.get('metamaskAddress'))  
+    console.log("this.campaignthis.campaignthis.campaign",this.campaign)
     this.setQuery();
     this.subscription = this.campaignService.loadDataEarningsWhenEndScroll
       .pipe(takeUntil(this.isDestroyed))

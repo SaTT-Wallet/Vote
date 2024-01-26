@@ -7,13 +7,18 @@ import {
   PLATFORM_ID,
   Renderer2,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { arrayCountries, socialMedia } from '@config/atn.config';
 import { TokenStorageService } from '@core/services/tokenStorage/token-storage-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DOCUMENT, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -36,18 +41,17 @@ import { WindowRefService } from '@core/windowRefService';
 import * as FileSaver from 'file-saver';
 import JSZip from 'jszip';
 import { Location } from '@angular/common';
-import {ipfsURL } from '@config/atn.config'
+import { ipfsURL } from '@config/atn.config';
 declare var $: any;
 import { environment } from '@environments/environment.prod';
 import { CampaignHttpApiService } from '@app/core/services/campaign/campaign.service';
+import Cookies from 'js-cookie';
 @Component({
   selector: 'app-campaign-detail',
   templateUrl: './campaign-detail.component.html',
-  styleUrls: ['./campaign-detail.component.scss']
+  styleUrls: ['./campaign-detail.component.scss'],
 })
 export class CampaignDetailComponent implements OnInit {
-
-
   @ViewChild('transactionPassword', { static: false })
   public transactionPassword!: TemplateRef<any>;
   scrolling = false;
@@ -86,7 +90,7 @@ export class CampaignDetailComponent implements OnInit {
     1: 'facebook',
     2: 'youtube',
     3: 'instagram',
-    4: 'twitter'
+    4: 'twitter',
   };
   fund: any = { ERC20token: '', idCampaign: '', amount: 0, pass: '' };
   totalMedia: any = [];
@@ -96,7 +100,7 @@ export class CampaignDetailComponent implements OnInit {
     like: 0,
     like_satt: 0,
     share: 0,
-    share_satt: 0
+    share_satt: 0,
   };
   public getScreenWidth: any;
   proms: any = [];
@@ -127,6 +131,7 @@ export class CampaignDetailComponent implements OnInit {
   showInfoSpinner: boolean = true;
   campaignBrand: any;
   disabledBtn!: boolean;
+  isOwnedByUser: any;
   activeCampaign!: boolean;
   idUser = this.tokenStorageService.getUserId();
   showSpinner!: boolean;
@@ -142,13 +147,12 @@ export class CampaignDetailComponent implements OnInit {
   editMode = false;
   passwordForm = new UntypedFormGroup({});
   errorMessage: string = '';
+  isActive: string | boolean | undefined;
 
-  
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.getScreenWidth = event.target.innerWidth;
   }
-
 
   isPlatformBrowser = isPlatformBrowser(this.platformId);
 
@@ -178,11 +182,11 @@ export class CampaignDetailComponent implements OnInit {
     private elementRef: ElementRef
   ) {
     this.sendform = new UntypedFormGroup({
-      url: new UntypedFormControl(null, Validators.required)
+      url: new UntypedFormControl(null, Validators.required),
     });
 
     this.budgetform = new UntypedFormGroup({
-      cost: new UntypedFormControl(null, Validators.required)
+      cost: new UntypedFormControl(null, Validators.required),
     });
     this.route.queryParams.subscribe((params) => {
       !!params.mode && (this.editMode = true);
@@ -217,20 +221,39 @@ export class CampaignDetailComponent implements OnInit {
     this.router.navigate(['home/ad-pools']);
   }
 
-  async setMetaTags(){
+  async setMetaTags() {
     try {
-    await this.getCampaign();
-    console.log(this.campaign , "campaign data");
-  } catch (error) {
-    console.error('Error setting meta tags', error);
+      await this.getCampaign();
+      console.log(this.campaign, 'campaign data');
+    } catch (error) {
+      console.error('Error setting meta tags', error);
     }
-    }
+  }
 
+  loadData() {
+    this.CampaignService.getOneById('65b0e22fbeac9a5b04b96681').subscribe(
+      (res: any) => {
+        this.campaign = res.data;
+        this.isOwnedByUser =
+          this.campaign.walletId === Cookies.get('metamaskAddress');
+        this.isActive = this.campaign.type === 'apply'; // Fix the comparison operator here
+
+        // Now that you have the data, you can perform additional operations or update the UI.
+        console.log('Data loaded successfully:', this.campaign);
+        console.log('isOwnedByUser:', this.isOwnedByUser);
+        console.log('isActive:', this.isActive);
+      },
+      (error) => {
+        console.error('Error loading data:', error);
+      }
+    );
+  }
   ngOnInit(): void {
-    
-    
+    this.loadData();
+
+
     this.getScreenWidth = window.innerWidth;
-    
+
     this.refundButtonDisable = true;
     this.loadingData = true;
     this.CampaignService.isLoading.subscribe((res) => {
@@ -253,22 +276,24 @@ export class CampaignDetailComponent implements OnInit {
     // main.style.marginTop = '28%';
 
     // // cover.style.position = 'fixed';
-    
+
     this.campaignsStoreService.emitLogoCampaignUpdated
       .pipe(takeUntil(this.isDestroyed))
       .subscribe(() => {
         this.campaign = this.campaignsStoreService.campaign;
       });
-      this.spinner.show();
-      this.showInfoSpinner = true;
-      
+
+
+    this.spinner.show();
+    this.showInfoSpinner = true;
+
     this.totalG = {
       view: 0,
       view_satt: 0,
       like: 0,
       like_satt: 0,
       share: 0,
-      share_satt: 0
+      share_satt: 0,
     };
     this.proms = [];
     this.totalMedia = [];
@@ -283,98 +308,113 @@ export class CampaignDetailComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.getKits();
     }
-   
+
     setTimeout(() => {
       // WHEN YOU GET REFUNDS ( AFTER 15 DAYS )
-      this.dateRefund = new Date(((this.campaign?.endDate?.getTime() / 1000) + environment.dateRefund ) * 1000)
-      
-      if((this.dateRefund.getTime() - Date.now()) > 0) {
+      this.dateRefund = new Date(
+        (this.campaign?.endDate?.getTime() / 1000 + environment.dateRefund) *
+          1000
+      );
+
+      if (this.dateRefund.getTime() - Date.now() > 0) {
         this.refundButtonDisable = true;
       } else {
         this.refundButtonDisable = false;
       }
-      // CALCULATE THE DAYS : 
-      this.dateRefundDays = Math.floor((this.dateRefund.getTime() - Date.now()) / (1000 * 60 * 60 * 24  ));
-
+      // CALCULATE THE DAYS :
+      this.dateRefundDays = Math.floor(
+        (this.dateRefund.getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+      );
 
       // CALCULATE THE HOURS :
-      this.dateRefundHours = Math.floor(((this.dateRefund.getTime() - Date.now()) / (1000 * 60 * 60 * 24  ) - this.dateRefundDays ) * 24 )
+      this.dateRefundHours = Math.floor(
+        ((this.dateRefund.getTime() - Date.now()) / (1000 * 60 * 60 * 24) -
+          this.dateRefundDays) *
+          24
+      );
 
-
-      // CALCULATE MINUTES : 
-      this.dateRefundMinutes = Math.floor(((((this.dateRefund.getTime() - Date.now()) / (1000 * 60 * 60 * 24  ) - this.dateRefundDays ) * 24) - this.dateRefundHours) * 60)
+      // CALCULATE MINUTES :
+      this.dateRefundMinutes = Math.floor(
+        (((this.dateRefund.getTime() - Date.now()) / (1000 * 60 * 60 * 24) -
+          this.dateRefundDays) *
+          24 -
+          this.dateRefundHours) *
+          60
+      );
       this.loadingData = false;
-    }, 500)
-  
-    
+    }, 500);
   }
   openstat() {
     this.CampaignService.stat.next(true);
   }
 
   getCampaignCover() {
-    return this.campaign.coverSrcMobile.includes('ipfs') ? ipfsURL + this.campaign.coverSrcMobile.substring(27, this.campaign.coverSrcMobile.length) : undefined;
-   }
-   /*ngAfterViewInit() {
+    return this.campaign.coverSrcMobile.includes('ipfs')
+      ? ipfsURL +
+          this.campaign.coverSrcMobile.substring(
+            27,
+            this.campaign.coverSrcMobile.length
+          )
+      : undefined;
+  }
+  /*ngAfterViewInit() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         setTimeout(() => this.scrollToTop(), 0);
       }
     });
   }*/
-  getRefunds(id:string) {
+  getRefunds(id: string) {
     this.passwordForm = this._formBuilder.group({
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
     this.loadingButton = false;
     this.successMessage = '';
-   if(!this.refundButtonDisable) {
+    if (!this.refundButtonDisable) {
       this.openModal(this.transactionPassword);
-   }
+    }
   }
-
 
   callRemaining() {
     this.errorMessage = '';
     this.successMessage = '';
-    if(this.passwordForm.value.password.length > 0) {
+    if (this.passwordForm.value.password.length > 0) {
       this.loadingButton = true;
-      this.CampaignService.getRefunds(this.campaign.hash, this.passwordForm.value.password, this.campaign.currency.type).subscribe(
+      this.CampaignService.getRefunds(
+        this.campaign.hash,
+        this.passwordForm.value.password,
+        this.campaign.currency.type
+      ).subscribe(
         (res: any) => {
-          
-            if(res.code === 200 && res.message === "budget retrieved") {
-              this.loadingButton = false;
-              this.successMessage = "Budget retrieved";
-              setTimeout( _ => {
-                this.closeModal(this.transactionPassword)
-              }, 3000)
-            }
-     
-          
+          if (res.code === 200 && res.message === 'budget retrieved') {
+            this.loadingButton = false;
+            this.successMessage = 'Budget retrieved';
+            setTimeout((_) => {
+              this.closeModal(this.transactionPassword);
+            }, 3000);
+          }
         },
-        (err: { error: { error: string; }; }) => {
-          if(err.error.error === "Key derivation failed - possibly wrong password") {
-            this.errorMessage = "wrong password, please try again"
+        (err: { error: { error: string } }) => {
+          if (
+            err.error.error ===
+            'Key derivation failed - possibly wrong password'
+          ) {
+            this.errorMessage = 'wrong password, please try again';
             this.passwordForm.reset();
             this.loadingButton = false;
           } else {
-            this.errorMessage = "Something went wrong please try again";
+            this.errorMessage = 'Something went wrong please try again';
             this.passwordForm.reset();
             this.loadingButton = false;
           }
-  
+
           setTimeout(() => {
-            this.errorMessage = ''
-          }, 2000)
+            this.errorMessage = '';
+          }, 2000);
         }
-      )
-    } 
-    
+      );
+    }
   }
-
-
-  
-
 
   ngOnDestroy(): void {
     this.isDestroyed.next('');
@@ -393,9 +433,9 @@ export class CampaignDetailComponent implements OnInit {
   //     this.campaign.walletId?.toLowerCase() === this.idWallet!.toLowerCase()
   //   );
   // }
-  get isOwnedByUser(): boolean {
-    return Number(this.campaign.ownerId) === Number(this.idUser);
-  }
+  // get isOwnedByUser(): boolean {
+  //   return Number(this.campaign.ownerId) === Number(this.idUser);
+  // }
 
   onShowPasswordModal() {
     this.showPasswordModal = true;
@@ -423,35 +463,31 @@ export class CampaignDetailComponent implements OnInit {
       }
     }
   }
-  expiredSession() {
-
-  }
+  expiredSession() {}
 
   gettingAllproms(): void {
     this.CampaignService.getAllPromsStats(
       this.campaignId,
-      this.campaign.isOwnedByUser
+      this.isOwnedByUser
     )
       .pipe(takeUntil(this.isDestroyed))
       .subscribe((data: any) => {
-       
-          if (data.message === 'success') {
-            this.allProms = data.data.allProms;
-          }
-       
+        if (data.message === 'success') {
+          this.allProms = data.data.allProms;
+        }
       });
   }
 
   getCampaignList() {
     let state = '';
-    if (this.campaign.isOwnedByUser) {
+    if (this.isOwnedByUser) {
       state = 'owner';
     } else {
       state = 'part';
     }
     this.ParticipationListService.setQueryParams({
       campaignId: this.campaign.hash,
-      state: state
+      state: state,
     });
     this.ParticipationListService.listLinks$
       .pipe(
@@ -462,7 +498,7 @@ export class CampaignDetailComponent implements OnInit {
       )
       .pipe(takeUntil(this.isDestroyed))
       .subscribe((links: Participation[]) => {
-        if (this.campaign.isOwnedByUser) {
+        if (this.isOwnedByUser) {
           this.allProms = links?.filter(
             (item: any) => item.type !== 'rejected'
           );
@@ -554,7 +590,7 @@ export class CampaignDetailComponent implements OnInit {
               name: kit.link,
               link: kit.link,
               campaign: this.campaignId,
-              _id: kit._id
+              _id: kit._id,
             });
           } else {
             this.downloadKit = true;
@@ -570,7 +606,7 @@ export class CampaignDetailComponent implements OnInit {
                   id: kit._id,
                   taille: kit.chunkSize,
                   type: kit.contentType,
-                  uploadDate: kit.uploadDate
+                  uploadDate: kit.uploadDate,
                 };
               }),
               takeUntil(this.isDestroyed)
@@ -586,8 +622,7 @@ export class CampaignDetailComponent implements OnInit {
     return this.tokenStorageService.getLocale() || 'en';
   }
   goParticipate(id: any) {
-      this.router.navigate(['part', id]);
-  
+    this.router.navigate(['part', id]);
   }
 
   getCampaign() {
@@ -599,15 +634,13 @@ export class CampaignDetailComponent implements OnInit {
     this.campaign$
       .pipe(takeUntil(this.isDestroyed))
       .subscribe((campaign: Campaign) => {
-        
         if (campaign.id !== this.campaignId) {
           return;
         }
         //data logo image
         this.campaign = campaign;
         this.isLoading = false;
-        
-        
+
         if (!this.isErnings) {
           this.showmoonboy = true;
         }
@@ -671,7 +704,7 @@ export class CampaignDetailComponent implements OnInit {
           like: 0,
           like_satt: 0,
           share: 0,
-          share_satt: 0
+          share_satt: 0,
         });
         index -= 1;
       }
@@ -793,7 +826,10 @@ export class CampaignDetailComponent implements OnInit {
     this.checkValidDraft();
     if (this.disabledBtn === false) {
       this.router.navigate(['home/check-password'], {
-        queryParams: { id: this.campaignId, network: this.campaign.currency.type }
+        queryParams: {
+          id: this.campaignId,
+          network: this.campaign.currency.type,
+        },
       });
     }
   }
@@ -812,7 +848,7 @@ export class CampaignDetailComponent implements OnInit {
       this.campaign.description &&
       this.campaign.endDate &&
       this.campaign.startDate &&
-      this.campaign.isOwnedByUser &&
+      this.isOwnedByUser &&
       this.campaign.initialBudget &&
       endDate.setHours(0, 0, 0, 0) >= startDate.setHours(0, 0, 0, 0) &&
       endDate.setHours(0, 0, 0, 0) >= today.setHours(0, 0, 0, 0) &&
@@ -849,7 +885,7 @@ export class CampaignDetailComponent implements OnInit {
         });
 
         resourceKitFolder?.file(fileName, base64data, {
-          base64: true
+          base64: true,
         });
       }
     }
@@ -865,11 +901,14 @@ export class CampaignDetailComponent implements OnInit {
   }
 
   scrollToTop() {
-    this.elementRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.elementRef.nativeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
   }
 
   goToEditPage(id: string) {
-    this.router.navigate(['home/campaign', id, 'edit']);
+    this.router.navigate(['campaign', id, 'edit']);
   }
   deleteCampaign() {
     this.campaignsStoreService
@@ -888,11 +927,8 @@ export class CampaignDetailComponent implements OnInit {
         takeUntil(this.isDestroyed)
       )
       .subscribe((data1: any) => {
-     
-          this.toastr.success(data1);
-          this.router.navigate(['home/ad-pools']);
-      
-        
+        this.toastr.success(data1);
+        this.router.navigate(['home/ad-pools']);
       });
   }
 }

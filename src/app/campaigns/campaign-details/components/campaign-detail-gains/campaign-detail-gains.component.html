@@ -550,7 +550,7 @@
     class="col fit-center m-0"
     [id]="prom.hash"
     *ngFor="let prom of campaignLinks | filter: searchData; trackBy: trackById"
-    [isOwner]="this.campaign.isOwnedByUser"
+    [isOwner]="isOwnedByUser"
     [formatGrid]="this.isStyleGrid"
     [prom]="prom"
     (deleted)="update($event)"

@@ -119,9 +119,9 @@ export class Campaign {
     return this.type === 'inProgress';
   }
 
-  /*get isOwnedByUser(): boolean {
-    return Number(this.ownerId) === Number(localStorage.getItem('userId'));
-  }*/
+  // get isOwnedByUser(): boolean {
+  //   return Number(this.ownerId) === Number(localStorage.getItem('userId'));
+  // }
 
   set ownedByUser(isOwnedByUser: boolean) {
     this.isOwnedByUser = isOwnedByUser;

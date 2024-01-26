@@ -99,21 +99,21 @@ export class WalletStoreService {
   }
 
   getCryptoList() {
-    // this.cryptoService
-    //   .getBalanceCrypto()
-    //   .pipe(
-    //     map((data: any) =>
-    //       data.listOfCrypto.map((crypto: any) => {
-    //         if (crypto.quantity === '-') {
-    //           return { ...crypto, quantity: 0 };
-    //         }
-    //         return crypto;
-    //       })
-    //     )
-    //   )
-    //   .subscribe((list) => {
-    //     this.walletBalanceSubject.next(list);
-    //   });
+     this.cryptoService
+       .getBalanceCrypto()
+       .pipe(
+         map((data: any) =>
+           data.listOfCrypto.map((crypto: any) => {
+             if (crypto.quantity === '-') {
+               return { ...crypto, quantity: 0 };
+             }
+             return crypto;
+           })
+         )
+       )
+       .subscribe((list) => {
+         this.walletBalanceSubject.next(list);
+       });
     this.store.dispatch(loadCryptoLists());
   }
 

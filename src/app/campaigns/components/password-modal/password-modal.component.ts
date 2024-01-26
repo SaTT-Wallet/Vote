@@ -340,18 +340,18 @@ let dateInSeconds = Math.floor(date.getTime() / 1000);
                   this.errorMessage = 'wrong_password';
                 }
               }),
-              concatMap(() => {
-                if (this.campaign.remuneration === 'performance') {
-                  return this.launchCampaignWithPerPerformanceReward(
-                    campaign_info
-                  );
-                } else if (this.campaign.remuneration === 'publication') {
-                  return this.launchCampaignWithPerPublicationReward(
-                    campaign_info
-                  );
-                }
-                return of(null);
-              }),
+              // concatMap(() => {
+              //   if (this.campaign.remuneration === 'performance') {
+              //     return this.launchCampaignWithPerPerformanceReward(
+              //       campaign_info
+              //     );
+              //   } else if (this.campaign.remuneration === 'publication') {
+              //     return this.launchCampaignWithPerPublicationReward(
+              //       campaign_info
+              //     );
+              //   }
+              //   return of(null);
+              // }),
               takeUntil(this.isDestroyed)
             );
         })
@@ -383,18 +383,18 @@ let dateInSeconds = Math.floor(date.getTime() / 1000);
                   this.errorMessage = 'wrong_password';
                 }
               }),
-              concatMap(() => {
-                if (this.campaign.remuneration === 'performance') {
-                  return this.launchCampaignWithPerPerformanceReward(
-                    campaign_info
-                  );
-                } else if (this.campaign.remuneration === 'publication') {
-                  return this.launchCampaignWithPerPublicationReward(
-                    campaign_info
-                  );
-                }
-                return of(null);
-              }),
+              // concatMap(() => {
+              //   if (this.campaign.remuneration === 'performance') {
+              //     return this.launchCampaignWithPerPerformanceReward(
+              //       campaign_info
+              //     );
+              //   } else if (this.campaign.remuneration === 'publication') {
+              //     return this.launchCampaignWithPerPublicationReward(
+              //       campaign_info
+              //     );
+              //   }
+              //   return of(null);
+              // }),
               takeUntil(this.isDestroyed)
             );
         })
@@ -430,18 +430,18 @@ let dateInSeconds = Math.floor(date.getTime() / 1000);
                   this.errorMessage = 'wrong_password';
                 }
               }),
-              concatMap(() => {
-                if (this.campaign.remuneration === 'performance') {
-                  return this.launchCampaignWithPerPerformanceReward(
-                    campaign_info
-                  );
-                } else if (this.campaign.remuneration === 'publication') {
-                  return this.launchCampaignWithPerPublicationReward(
-                    campaign_info
-                  );
-                }
-                return of(null);
-              }),
+              // concatMap(() => {
+              //   if (this.campaign.remuneration === 'performance') {
+              //     return this.launchCampaignWithPerPerformanceReward(
+              //       campaign_info
+              //     );
+              //   } else if (this.campaign.remuneration === 'publication') {
+              //     return this.launchCampaignWithPerPublicationReward(
+              //       campaign_info
+              //     );
+              //   }
+              //   return of(null);
+              // }),
               takeUntil(this.isDestroyed)
             );
         })
@@ -475,18 +475,18 @@ let dateInSeconds = Math.floor(date.getTime() / 1000);
                   this.errorMessage = 'wrong_password';
                 }
               }),
-              concatMap(() => {
-                if (this.campaign.remuneration === 'performance') {
-                  return this.launchCampaignWithPerPerformanceReward(
-                    campaign_info
-                  );
-                } else if (this.campaign.remuneration === 'publication') {
-                  return this.launchCampaignWithPerPublicationReward(
-                    campaign_info
-                  );
-                }
-                return of(null);
-              }),
+              // concatMap(() => {
+              //   if (this.campaign.remuneration === 'performance') {
+              //     return this.launchCampaignWithPerPerformanceReward(
+              //       campaign_info
+              //     );
+              //   } else if (this.campaign.remuneration === 'publication') {
+              //     return this.launchCampaignWithPerPublicationReward(
+              //       campaign_info
+              //     );
+              //   }
+              //   return of(null);
+              // }),
               takeUntil(this.isDestroyed)
             );
         })
@@ -524,18 +524,18 @@ let dateInSeconds = Math.floor(date.getTime() / 1000);
                     this.errorMessage = 'wrong_password';
                   }
                 }),
-                concatMap(() => {
-                  if (this.campaign.remuneration === 'performance') {
-                    return this.launchCampaignWithPerPerformanceReward(
-                      campaign_info
-                    );
-                  } else if (this.campaign.remuneration === 'publication') {
-                    return this.launchCampaignWithPerPublicationReward(
-                      campaign_info
-                    );
-                  }
-                  return of(null);
-                }),
+                // concatMap(() => {
+                //   if (this.campaign.remuneration === 'performance') {
+                //     return this.launchCampaignWithPerPerformanceReward(
+                //       campaign_info
+                //     );
+                //   } else if (this.campaign.remuneration === 'publication') {
+                //     return this.launchCampaignWithPerPublicationReward(
+                //       campaign_info
+                //     );
+                //   }
+                //   return of(null);
+                // }),
                 takeUntil(this.isDestroyed)
               );
           })
@@ -568,7 +568,7 @@ let dateInSeconds = Math.floor(date.getTime() / 1000);
   }
 
     // Common logic for launching campaigns, handles date conversion and common actions.
-  private commonCampaignLogic(campaign_info: any, createCampaign: boolean): Observable<any> {
+  private commonCampaignLogic(campaign_info: any, createCampaign: boolean) {
         // Convert the start date to Unix timestamp
     // const startDateUnix = Math.floor(campaign_info.startDate.getTime() / 1000);
     // campaign_info.startDate = startDateUnix;
@@ -577,27 +577,27 @@ let dateInSeconds = Math.floor(date.getTime() / 1000);
       campaign_info.tokenAddress = null;
     }
     
-      // Determine which campaign method to call based on the 'createCampaign' flag
-    const campaignObservable = createCampaign
-      && this.campaignService.createCompaign(campaign_info)
-      || this.campaignService.launchCampaignWithBounties(campaign_info);
+    //   // Determine which campaign method to call based on the 'createCampaign' flag
+    // const campaignObservable = createCampaign
+    //   && this.campaignService.createCompaign(campaign_info)
+    //   || this.campaignService.launchCampaignWithBounties(campaign_info);
 
-    return campaignObservable.pipe(
-      tap(() => {
-        // Reset common UI elements and flags after campaign launch
-        this.gasError = false;
-        this.showButtonSend = true;
-        this.loadingButton = false;
-        this.passwordForm.reset();
-      })
-    );
+    // return campaignObservable.pipe(
+    //   tap(() => {
+    //     // Reset common UI elements and flags after campaign launch
+    //     this.gasError = false;
+    //     this.showButtonSend = true;
+    //     this.loadingButton = false;
+    //     this.passwordForm.reset();
+    //   })
+    // );
   }
 
-  launchCampaignWithPerPerformanceReward(campaign_info: any) : Observable<any> {
-    return this.commonCampaignLogic(campaign_info, true);
+  launchCampaignWithPerPerformanceReward(campaign_info: any) {
+    // return this.commonCampaignLogic(campaign_info, true);
   }
 
-  launchCampaignWithPerPublicationReward(campaign_info: any) : Observable<any> {
+  launchCampaignWithPerPublicationReward(campaign_info: any) {
     return this.commonCampaignLogic(campaign_info, false);
   }
 
