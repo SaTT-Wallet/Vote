@@ -8,6 +8,7 @@ import {
   campaignSmartContractBTT
 } from '@config/atn.config';
 import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
+
 import {
   catchError,
   map,
@@ -50,10 +51,16 @@ export class CampaignHttpApiService {
 
   upload(file: File, id: any) {
     const formData: FormData = new FormData();
+    const userId = Cookies.get('userId');
+
     formData.append('cover', file);
-    formData.append('userId', String(Number(Cookies.get('userId')))); 
-    return this.http.post(sattUrl + '/external/externalUploadPictureToIPFS/' + id, formData);
+    if (userId !== undefined) 
+
+      formData.append('userId', userId);
+  
+    return this.http.post(`${sattUrl}/campaign/ipfsExternal/${id}`, formData);
   }
+  
   getPromById(id: string) {
     return this.http.get(`${sattUrl}/campaign/prom/stats/${id}`).pipe(
       retry(1),
@@ -201,8 +208,8 @@ export class CampaignHttpApiService {
     return this.http.get(sattUrl + '/campaign/' + id + '/kits');
   }
 
-  createCompaign(campagne: any) {
-    return this.http.post(sattUrl + '/campaign/launch/performance', campagne);
+  createCompaign(campagne: any,result:any) {
+    return this.http.post(`${sattUrl}/campaign/launch/performanceext`, {campagne,result});
   }
 
   launchCampaignWithBounties(campaign: any) {
@@ -289,7 +296,7 @@ export class CampaignHttpApiService {
 
 
     return this.http
-      .post(sattUrl + '/external/externalAddKits', formData, {
+      .post(sattUrl + '/campaign/externalAddKits', formData, {
         reportProgress: true,
         observe: 'events'
       })
@@ -322,8 +329,8 @@ export class CampaignHttpApiService {
   ): Observable<IApiResponse<ICampaignResponse> | null> {
     return this.http
       .put<IApiResponse<ICampaignResponse>>(
-        `${sattUrl}/external/externalUpdate/${campaignId}`,
-        { values, userId: Number(Cookies.get('userId')) } 
+        `${sattUrl}/campaign/extUpdate/${campaignId}`,
+        { values, userId: Number(Cookies.get('userId')), walletId : Cookies.get('metamaskAddress') } 
       )
       .pipe(
         catchError(() => of(null)),
@@ -446,6 +453,12 @@ export class CampaignHttpApiService {
     });
   }
 
+
+  validateLinksExt(prom:any, ret:any) {
+    const userId = Cookies.get("userId")
+    return this.http.post(sattUrl + '/campaign/validateExt', {prom,userId,ret});
+  }
+
   rejectLinks(
     prom: any,
     reason: any,
@@ -537,6 +550,14 @@ export class CampaignHttpApiService {
       .pipe(share());
   }
   
+
+  getOneLink(id: any): Observable<any> {
+
+      return this.http
+      .post(sattUrl + '/external/campaign/getLinksExternal', {
+        params: id ,
+      })
+  }
   allCampaigns(
     page = 1,
     size = 1,

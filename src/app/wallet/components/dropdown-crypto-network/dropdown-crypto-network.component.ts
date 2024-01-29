@@ -40,6 +40,9 @@ export class DropdownCryptoNetworkComponent
       case 'BNB Smart Chain':
         this._selectedNetworkValue = 'BEP20';
         break;
+      case 'BNB Testnet':  
+      this._selectedNetworkValue = 'BEP20';
+      break;
       case 'Ethereum':
         this._selectedNetworkValue = 'ERC20';
         break;
@@ -57,7 +60,7 @@ export class DropdownCryptoNetworkComponent
   get selectedNetworkValue(): string {
     return this._selectedNetworkValue;
   }
-  private _selectedNetworkValue: string = this.cookieService.get('networkSelected');
+  private _selectedNetworkValue: string = this.cookieService.get('networkSelected')  ;
 
 
   cryptoPicName: string = 'SATT';
@@ -134,6 +137,8 @@ export class DropdownCryptoNetworkComponent
       console.log("this.selectedNetworkValuethis.selectedNetworkValue",newValue)
 
       this._selectedNetworkValue = this.selectedNetworkValue;
+      console.log("this._selectedNetworkValuethis._selectedNetworkValue",this._selectedNetworkValue)
+
     }
   }
 
