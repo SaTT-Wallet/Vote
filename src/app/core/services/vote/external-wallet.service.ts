@@ -110,93 +110,47 @@ export class ExternalWalletService {
     window.open('https://metamask.io/', '_blank');
   }
   
-  async changeNetwork(provider: any, network: any) {
-    console.log({network})
-    await (provider as any).request({
-      method: 'wallet_addEthereumChain',
-      params: [
-        {
-          chainId:
-            network === 'bsc'
-              ? env.bnbNetwork.chainIDHex
-              : network === 'erc20'
-              ? env.mainnetNetwork.chainIDHex
-              : network === 'bscT'
-              ? env.testNetNetwork.chainIDHex
-              : network === 'polygon'
-              ? env.polygonNetwork.chainIDHex
-              : network === 'arthera' 
-              ? env.artheraNetwork.chainIDHex
-              : env.bttNetwork.chainIDHex,
-          chainName:
-            network === 'bsc'
-              ? env.bnbNetwork.chainName
-              : network === 'erc20'
-              ? env.mainnetNetwork.chainName
-              : network === 'bscT'
-              ? env.testNetNetwork.chainName
-              : network === 'polygon'
-              ? env.polygonNetwork.chainName
-              : network === 'arthera'
-              ? env.artheraNetwork.chainName 
-              : env.bttNetwork.chainName,
-          nativeCurrency: {
-            name:
-              network === 'bsc'
-                ? env.bnbNetwork.currencySymbol
-                : network === 'erc20'
-                ? env.mainnetNetwork.currencySymbol
-                : network === 'bscT'
-                ? env.testNetNetwork.currencySymbol
-                : network === 'polygon'
-                ? env.polygonNetwork.currencySymbol
-                : network === 'arthera'
-                ? env.artheraNetwork.currencySymbol
-                : env.bttNetwork.currencySymbol,
-            symbol:
-              network === 'bsc'
-                ? env.bnbNetwork.currencySymbol
-                : network === 'erc20'
-                ? env.mainnetNetwork.currencySymbol
-                : network === 'bscT'
-                ? env.testNetNetwork.currencySymbol
-                : network === 'polygon'
-                ? env.polygonNetwork.currencySymbol
-                : network === 'arthera'
-                ? env.artheraNetwork.currencySymbol
-                : env.bttNetwork.currencySymbol,
-            decimals: 18,
-          },
-          rpcUrls: [
-            network === 'bsc'
-              ? env.bnbNetwork.rpcURL
-              : network === 'erc20'
-              ? env.mainnetNetwork.rpcURL
-              : network === 'bscT'
-              ? env.testNetNetwork.rpcURL
-              : network === 'polygon'
-              ? env.polygonNetwork.rpcURL
-              : network === 'arthera'
-              ? env.artheraNetwork.rpcURL
-              : env.bttNetwork.rpcURL,
-          ],
-          blockExplorerUrls: [
-            network === 'bsc'
-              ? env.bnbNetwork.blockExplorerURL
-              : network === 'erc20'
-              ? env.mainnetNetwork.blockExplorerURL
-              : network === 'bscT'
-              ? env.testNetNetwork.blockExplorerURL
-              : network === 'polygon'
-              ? env.polygonNetwork.blockExplorerURL
-              : network === 'arthera'
-              ? env.artheraNetwork.blockExplorerURL
-              : env.bttNetwork.blockExplorerURL,
-          ],
-        },
-      ],
-    });
+  async changeNetwork(provider: any, network: string): Promise<void> {
+    const chainConfig = this.getChainConfig(network);
+    try {
+      await (provider as any).request({
+        method: 'wallet_addEthereumChain',
+        params: [chainConfig],
+      });
+    } catch (error) {
+      console.error(`Error changing network to ${network}:`, error);
+    }
   }
+
+
+  private getChainConfig(network: string): any {
+    const networksConfig:any = {
+      bsc: env.bnbNetwork,
+      erc20: env.mainnetNetwork,
+      bscT: env.testNetNetwork,
+      polygon: env.polygonNetwork,
+      arthera: env.artheraNetwork,
+      btt: env.bttNetwork
+      // Add other networks as needed
+    };
+  
+    const selectedNetworkConfig = networksConfig[network];
+  
+    return {
+      chainId: selectedNetworkConfig.chainIDHex,
+      chainName: selectedNetworkConfig.chainName,
+      nativeCurrency: {
+        name: selectedNetworkConfig.currencySymbol,
+        symbol: selectedNetworkConfig.currencySymbol,
+        decimals: 18,
+      },
+      rpcUrls: [selectedNetworkConfig.rpcURL],
+      blockExplorerUrls: [selectedNetworkConfig.blockExplorerURL],
+    };
+  }
+
+
+
   async changeToBinance(provider: any) {
     const chainId = await this.ethereum.request({ method: 'eth_chainId' });
 
