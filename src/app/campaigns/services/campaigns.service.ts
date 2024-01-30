@@ -143,7 +143,7 @@ export class CampaignsService {
       const contractAddresses = {
         Ethereum: campaignSmartContractERC20,
         'BNB Testnet': campaignSmartContractBEP20,
-        'BNB Smart Chain': campaignSmartContractBEP20,
+        'BNB Smart chain': campaignSmartContractBEP20,
         Polygon: campaignSmartContractPOLYGON,
         BitTorrent: campaignSmartContractBTT,
       } as { [key: string]: string };
@@ -155,14 +155,15 @@ export class CampaignsService {
   
       const ethersProvider = new ethers.providers.Web3Provider(provider);
       const signer = ethersProvider.getSigner();
-  
+   
       let networkSelected = Cookies.get('networkSelected');
-      console.log("networkSelectednetworkSelected",networkSelected)
-      if (!networkSelected || !contractAddresses[networkSelected]) {
+      if (!networkSelected || !contractAddresses[networkSelected!]) {
         throw new Error('Invalid or missing network selection.');
       }
   
-      const contractAddress = contractAddresses[networkSelected];
+      const contractAddress = contractAddresses[networkSelected!];
+      console.log("Contraaaaaaaact", contractAddress);
+
       const abiString = JSON.stringify(campaignABI);
       const parsedABI = JSON.parse(abiString);
       const ctr = new ethers.Contract(contractAddress, parsedABI, signer);
