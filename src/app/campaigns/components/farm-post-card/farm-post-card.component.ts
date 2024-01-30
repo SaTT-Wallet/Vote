@@ -146,6 +146,7 @@ export class FarmPostCardComponent implements OnInit {
     );
   }
   ngOnInit(): void {
+    console.log("isOwnerisOwnerisOwnerisOwner",this.prom)
     this.getPartPic();
     if (this.router.url.includes('farm-posts')) {
       this.isFarmingRouter = true;
@@ -329,17 +330,20 @@ export class FarmPostCardComponent implements OnInit {
   }
   
   validateLink(prom: any) {
-    this.blockchainActions.onActionButtonClick({
-      data: { prom, campaignId: prom.campaign._id, fromNotification: false },
-      action: EButtonActions.VALIDATE_LINK,
-    });
-    this.router.navigate(['verify-link'], {
-      queryParams: {
-        campaign_id: prom.campaign._id,
-        network: ListTokens[prom.campaign.currency].type,
-      },
-      relativeTo: this.activatedRoute,
-    });
+    console.log("prompromprom",prom)
+
+    this.campaign.validate(prom)
+    // this.blockchainActions.onActionButtonClick({
+    //   data: { prom, campaignId: prom.campaign._id, fromNotification: false },
+    //   action: EButtonActions.VALIDATE_LINK,
+    // });
+    // this.router.navigate(['verify-link'], {
+    //   queryParams: {
+    //     campaign_id: prom.campaign._id,
+    //     network: ListTokens[prom.campaign.currency].type,
+    //   },
+    //   relativeTo: this.activatedRoute,
+    // });
   }
   closeModal(content: any) {
     this.modalService.dismissAll(content);

@@ -24,6 +24,7 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
+import { CampaignHttpApiService } from '@core/services/campaign/campaign.service';
 import { arrayCountries, ListTokens } from '@config/atn.config';
 import { Editor } from 'ngx-editor';
 import { WalletStoreService } from '@core/services/wallet-store.service';
@@ -31,6 +32,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CryptofetchServiceService } from '@core/services/wallet/cryptofetch-service.service';
 import { catchError, filter, map, mergeMap, takeUntil,tap } from 'rxjs/operators';
 import { Observable, of, Subject } from 'rxjs';
+import { ConvertFromWei } from '@shared/pipes/wei-to-sa-tt.pipe';
 import { Campaign } from '@app/models/campaign.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { OwlOptions } from 'ngx-owl-carousel-o';
@@ -44,10 +46,7 @@ import { DOCUMENT } from '@angular/common';
 import { WindowRefService } from '@app/core/windowRefService';
 import { SocialAccountFacadeService } from '@app/core/facades/socialAcounts-facade/socialAcounts-facade.service';
 import { Big } from 'big.js';
-import FileSaver from 'file-saver';
-import { TranslateService } from '@ngx-translate/core';
-import { ConvertFromWei } from '@app/shared/pipes/wei-to-sa-tt.pipe';
-import { CampaignHttpApiService } from '@app/core/services/campaign/campaign.service';
+import FileSaver from 'file-saver';import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-campaign-info',
@@ -331,7 +330,6 @@ export class CampaignInfoComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit(): void {
-      
     this.CampaignService.stat.subscribe((res) => {
       if (res === true) {
         this.navigationTab = 'stat';
@@ -360,6 +358,7 @@ export class CampaignInfoComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.currencyName === 'SATTBEP20') {
       this.currencyName = 'SATT';
     }
+    
     this.etherInWei = ListTokens[this.currencyName].decimals;
     this.titleTab = this.campaign.isOwnedByUser ? 'Links' : 'Gains';
     this.paramsSubscription = this.activatedRoute.queryParams
@@ -1013,7 +1012,7 @@ export class CampaignInfoComponent implements OnInit, OnChanges, AfterViewInit {
       });
   }*/
   linkAccount() {
-    this.router.navigate(['/social-networks']);
+    this.router.navigate(['/settings/social-networks']);
   }
 
   campaignMissions(oracle: any) {
