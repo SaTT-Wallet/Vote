@@ -17,7 +17,7 @@ export class ExternalWalletService {
   public isWalletConnected!: boolean;
   public connect: boolean = false;
   currentAccount: string = '';
-  networkLabel: any = "BNB Smart chain";
+  networkLabel: any = "BNB Smart Chain";
   acc: string | any[] = [];
   public isMetaMaskInstalled: boolean = false;
   networkHasChanged: boolean = false;

@@ -122,7 +122,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   bepGaz: any;
   showNotifications: boolean = false;
   newNotification: boolean = false;
-  networkLabel: any = "BNB Smart chain";
+  networkLabel: any = "BNB Smart Chain";
   networkLogo: any = "bsc"
   networkList: any = networkList;
   showNetwork: any = false;

@@ -143,7 +143,7 @@ export class CampaignsService {
       const contractAddresses = {
         Ethereum: campaignSmartContractERC20,
         'BNB Testnet': campaignSmartContractBEP20,
-        'BNB Smart chain': campaignSmartContractBEP20,
+        'BNB Smart Chain': campaignSmartContractBEP20,
         Polygon: campaignSmartContractPOLYGON,
         BitTorrent: campaignSmartContractBTT,
       } as { [key: string]: string };
@@ -157,6 +157,7 @@ export class CampaignsService {
       const signer = ethersProvider.getSigner();
    
       let networkSelected = Cookies.get('networkSelected');
+      console.log(networkSelected);
       if (!networkSelected || !contractAddresses[networkSelected!]) {
         throw new Error('Invalid or missing network selection.');
       }
