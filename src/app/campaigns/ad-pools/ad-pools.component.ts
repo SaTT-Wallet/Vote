@@ -40,6 +40,8 @@ import { AuthService } from '@app/core/services/Auth/auth.service';
 import { ConvertFromWei } from '@app/shared/pipes/wei-to-sa-tt.pipe';
 import { ShowNumbersRule } from '@app/shared/pipes/showNumbersRule';
 import Cookies from 'js-cookie';
+import { ExternalWalletService } from '@app/core/services/vote/external-wallet.service';
+import { VoteService } from '@app/core/services/vote/vote.service';
 @Component({
   selector: 'app-ad-pools',
   templateUrl: './ad-pools.component.html',
@@ -105,7 +107,9 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
     public modalService: NgbModal,
     private convertFromWeiTo: ConvertFromWei,
     private walletFacade: WalletFacadeService,
-    private showNumbersRule: ShowNumbersRule
+    private showNumbersRule: ShowNumbersRule,
+    public externalWalletService: ExternalWalletService,
+    private voteService: VoteService,
   ) {}
 
   ngOnInit(): void {
@@ -143,13 +147,19 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
 
   createNewDraftCampaign() {
     //this.draftStore.init();
-    this.draftStore
+    if(this.externalWalletService.isWalletConnected &&
+    this.externalWalletService.connect) {
+      this.draftStore
       .addNewDraft(new Campaign())
       .pipe(takeUntil(this.onDestoy$))
       .subscribe((draft: Campaign) => {
         this.idcamp = draft.id || '';
         this.router.navigate(['campaign', this.idcamp, 'edit']);
       });
+    } else {
+      this.voteService.connectWallet('metamask')
+    }
+    
   }
   sortList(array: any) {
     let list = [
