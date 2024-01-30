@@ -162,7 +162,6 @@ export class CampaignsService {
       }
   
       const contractAddress = contractAddresses[networkSelected!];
-      console.log("Contraaaaaaaact", contractAddress);
 
       const abiString = JSON.stringify(campaignABI);
       const parsedABI = JSON.parse(abiString);
