@@ -330,7 +330,6 @@ export class CampaignInfoComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit(): void {
-      debugger
     this.CampaignService.stat.subscribe((res) => {
       if (res === true) {
         this.navigationTab = 'stat';

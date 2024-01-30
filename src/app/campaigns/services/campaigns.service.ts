@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ethers, utils } from 'ethers';
+
+import { map, takeUntil } from 'rxjs/operators';
 import {
   campaignSmartContractBEP20,
   campaignSmartContractBTT,
@@ -16,11 +18,15 @@ import { config } from 'process';
 import { campaignABI } from '../../abi/campaignABI';
 import { CampaignHttpApiService } from '@app/core/services/campaign/campaign.service';
 import { abi, tokenabi } from './../../config/atn.config';
+import { IApiResponse } from '@app/core/types/rest-api-responses';
+import { ICampaignResponse } from '@app/core/campaigns-list-response.interface';
+import { Campaign } from '@app/models/campaign.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CampaignsService {
+  campaignData: any;
   constructor(
     public tokenStorageService: TokenStorageService,
     public campaignHttpApiService: CampaignHttpApiService
@@ -36,16 +42,40 @@ export class CampaignsService {
     return unixTimestamp;
   }
 
+  convertUnixTimeFormat(dateStr: string): number {
+    const milliseconds = parseFloat(dateStr) * 1000; // Convert to milliseconds
+    const unixTimestampSeconds = Math.floor(milliseconds / 1000); // Convert to seconds
+
+    return unixTimestampSeconds;
+}
+
+
+
+  async loadDataCampaign(id: any): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.campaignHttpApiService.getOneByIdDraft(id).subscribe(
+        (res) => {
+          this.campaignData = res;
+          resolve();
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
   async createPriceFundAll(data: any) {
     try {
-
+      await this.loadDataCampaign(data.id);
+      console.log('this.campaignData', this.campaignData);
+      data = this.campaignData.data;
       const provider = await detectEthereumProvider();
       if (provider) {
         const ethersProvider = new ethers.providers.Web3Provider(provider);
         const signer = ethersProvider.getSigner();
         data.walletId = Cookies.get('metamaskAddress');
-        data.cost_usd = data.initialBudgetInUSD;
-        data.amount = data.initialBudget;
+        data.cost_usd = data.cost_usd;
+        data.amount = data.cost;
         const contractAddresses = {
           Ethereum: campaignSmartContractERC20,
           'BNB Smart Chain': campaignSmartContractBEP20,
@@ -145,12 +175,12 @@ export class CampaignsService {
           if (contractAddress) {
             const contract = new ethers.Contract(contractAddress, abi, signer);
             const contractToken = new ethers.Contract(
-              data.currency.addr,
+              data.token.addr,
               tokenabi,
               signer
             );
 
-            const desiredAllowance = ethers.utils.parseEther(data.amount);
+            const desiredAllowance = ethers.utils.parseEther(data.cost);
 
             const approveTx = await contractToken.approve(
               contractAddresses[networkSelected],
@@ -169,11 +199,11 @@ export class CampaignsService {
               contract.createPriceFundAll as any
             )(
               'https://ropsten.etherscan.io/token/0x2bef0d7531f0aae08adc26a0442ba8d0516590d0',
-              this.dateToUnixTimestamp(data.startDate),
-              this.dateToUnixTimestamp(data.endDate),
+              this.convertUnixTimeFormat(data.startDate),
+              this.convertUnixTimeFormat(data.endDate),
               flatRatiosArray,
-              data.currency.addr,
-              data.initialBudget,
+              data.token.addr,
+              data.cost,
               data.limit || 100,
               {
                 from: Cookies.get('metamaskAddress'),
@@ -286,9 +316,10 @@ export class CampaignsService {
 
   async validate(prom: any): Promise<any> {
     try {
-      const res: any = await this.campaignHttpApiService.getOneLink(prom.id)
-      .toPromise();
-      const data =res.data[0]
+      const res: any = await this.campaignHttpApiService
+        .getOneLink(prom.id)
+        .toPromise();
+      const data = res.data[0];
       const contractAddresses = {
         Ethereum: campaignSmartContractERC20,
         'BNB Smart Chain': campaignSmartContractBEP20,
@@ -313,7 +344,7 @@ export class CampaignsService {
         let networkSelected = Cookies.get('networkSelected');
         if (
           networkSelected &&
-          contractAddresses.hasOwnProperty(networkSelected) 
+          contractAddresses.hasOwnProperty(networkSelected)
         ) {
           const contractAddress = contractAddresses[networkSelected];
 
@@ -341,8 +372,9 @@ export class CampaignsService {
       const transactionReceipt = await ret.wait();
       const events = transactionReceipt.events;
 
-      const result: any = await this.campaignHttpApiService.validateLinksExt(prom,events[0].args[0])
-      .toPromise();
+      const result: any = await this.campaignHttpApiService
+        .validateLinksExt(prom, events[0].args[0])
+        .toPromise();
       return result;
     } catch (error) {
       console.log(error);

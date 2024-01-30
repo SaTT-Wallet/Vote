@@ -96,10 +96,20 @@ export class CampaignHttpApiService {
     projection: string = ''
   ): Observable<IApiResponse<ICampaignResponse>> {
     return this.http.get<IApiResponse<ICampaignResponse>>(
-      sattUrl + '/campaign/details/' + id + `?projection=${projection}`
+      sattUrl + '/campaign/details/' + id 
     );
   }
 
+
+  getOneByIdDraft(
+    id: string,
+    projection: string = ''
+  ): Observable<IApiResponse<ICampaignResponse>> {
+    debugger
+    return this.http.get<IApiResponse<ICampaignResponse>>(
+      sattUrl + '/campaign/detailsdraft/' + id + `?projection=${projection}`
+    );
+  }
   /**
    * Recover earnings of the accepted campaign medias.
    * @param id prom identifier
