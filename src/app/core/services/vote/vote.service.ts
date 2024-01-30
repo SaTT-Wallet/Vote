@@ -72,7 +72,7 @@ export class VoteService {
 
 
       } else {
-        this.showInstall();
+        window.open('https://metamask.io/', '_blank');
       }
       if (this.externalWalletService.connect === true) {
 

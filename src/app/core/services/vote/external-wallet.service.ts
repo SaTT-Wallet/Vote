@@ -48,59 +48,68 @@ export class ExternalWalletService {
   }
 
   async connectMetamask(): Promise<void> {
-    const provider = await detectEthereumProvider();
+    try {
+      const provider = await detectEthereumProvider();
 
-    if (provider && provider.isMetaMask) {
-      try {
-        // Generate a unique nonce for each connection
+      if (provider && provider.isMetaMask) {
+          const accounts = await this.ethereum.request({
+            method: 'eth_requestAccounts',
+          });
+      
+           // Save user data to local storage
+          await this.saveUserData(accounts[0]);
+  
+          // Request necessary permissions
+          await this.requestWalletPermissions();
 
-        const timestamp = Date.now().toString();
-
-        // Construct the message
-
-        const accounts = await this.ethereum.request({
-          method: 'eth_requestAccounts',
-        });
-        this.tokenStorageService.saveIdWallet(accounts[0]);
-        const message = `authentication=true&address=${accounts[0]}&ts=${timestamp}`;
-        const signature = await this.ethereum.request({
-          method: 'personal_sign',
-          params: [message, accounts[0]],
-        });
-
-        // Save the signature and address to local storage
-        Cookies.set('metamaskSignature', signature, {
-          secure: true,
-          sameSite: 'Lax',
-        });
-        Cookies.set('metamaskAddress', accounts[0], {
-          secure: true,
-          sameSite: 'Lax',
-        });
-        Cookies.set('metamaskNonce', message, {
-          secure: true,
-          sameSite: 'Lax',
-        });
-
-        // Rest of your code
-        await this.ethereum.request({
-          method: 'wallet_requestPermissions',
-          params: [{ eth_accounts: {} }],
-        });
-        await this.changeToBinance(provider);
-       
-        this.connect = true;
-        this.isWalletConnected = true;
-        this.tokenStorageService.setIsAuth('true');
-      } catch (error) {
-        console.error('Error connecting with MetaMask:', error);
-        // Handle errors as needed
+          // Switch to Binance network
+          await this.changeToBinance(provider);
+         
+          // Update flags and state
+          this.connect = true;
+          this.isWalletConnected = true;
+          this.tokenStorageService.setIsAuth('true');
+        
+      } else {
+        
+        // redirect user to metamask website
+  
+        this.redirectToMetaMaskWebsite();
+        
       }
-    } else {
-      // Handle the case where MetaMask is not available
-      // throw new Error('Please install MetaMask!');
+    } catch(err) {
+      console.error('Error with metamask : ', err);
     }
+    
   }
+
+  private async saveUserData(address: string): Promise<void> {
+    const timestamp = Date.now().toString();
+    const message = `authentication=true&address=${address}&ts=${timestamp}`;
+    const signature = await this.ethereum.request({
+      method: 'personal_sign',
+      params: [message, address],
+    });
+    const cookieOptions = { secure: true, sameSite: 'Lax' as const };
+  
+    // Save the signature and address to local storage
+    Cookies.set('metamaskSignature', signature, cookieOptions);
+    Cookies.set('metamaskAddress', address, cookieOptions);
+    Cookies.set('metamaskNonce', message, cookieOptions);
+  }
+
+  private async requestWalletPermissions(): Promise<void> {
+    await this.ethereum.request({
+      method: 'wallet_requestPermissions',
+      params: [{ eth_accounts: {} }],
+    });
+  }
+  
+  private redirectToMetaMaskWebsite(): void {
+    // Redirect user to MetaMask website
+    window.open('https://metamask.io/', '_blank');
+  }
+  
   async changeNetwork(provider: any, network: any) {
     console.log({network})
     await (provider as any).request({
