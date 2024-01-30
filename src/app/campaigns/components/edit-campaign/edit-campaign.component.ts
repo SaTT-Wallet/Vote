@@ -239,10 +239,9 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
       this.sendErrorToMissionRemu = true;
     }
   }
-  saveAndLaunchCampaign() {
-
+  async saveAndLaunchCampaign() {
     console.log("this.campaignDatathis.campaignData",this.campaignData)
-      this.getCampaignData();
+     await this.getCampaignData();
       this.checkValidation();
       if (
       this.validFormParam &&
