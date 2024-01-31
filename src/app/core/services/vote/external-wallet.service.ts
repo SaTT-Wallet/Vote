@@ -172,7 +172,7 @@ export class ExternalWalletService {
     }
   }
 
-private async addChain(provider: any, network: any) {
+  private async addChain(provider: any, network: any) {
     await (provider as any).request({
         method: 'wallet_addEthereumChain',
         params: [
@@ -189,44 +189,6 @@ private async addChain(provider: any, network: any) {
             },
         ],
     });
-}
-
-  async addTokenToBinance(provider: any) {
-    const token = {
-      type: 'ERC20',
-      options: {
-        address: env.sattContractAdress,
-        symbol: 'SATT',
-        decimals: 18,
-        image: 'https://s2.coinmarketcap.com/static/img/coins/200x200/7244.png',
-      },
-    };
-    try {
-      const accounts = await this.ethereum.request({ method: 'eth_accounts' });
-      const tokenBalance = await this.getTokenBalance(
-        token.options.address,
-        accounts[0]
-      );
-      // console.log(tokenBalance)
-      if (tokenBalance > 0) {
-        // console.log('SATT already exists in wallet');
-      } else {
-        const added = await (provider as any).request({
-          method: 'wallet_watchAsset',
-          params: {
-            type: 'ERC20',
-            options: token.options,
-          },
-        });
-        if (added) {
-          // console.log('SATT added to wallet');
-        } else {
-          // console.error('Failed to add SATT to wallet');
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
   }
 
   async getTokenBalance(tokenAddress: string, account: string) {
@@ -234,46 +196,6 @@ private async addChain(provider: any, network: any) {
     const contract = new web3.eth.Contract(abi.SATT as any, tokenAddress);
     const balance = await (contract.methods.balanceOf as any)(account).call();
     return Number(balance) / 1e18;
-  }
-
-  async checkChangedNetworkOrChainID() {
-    if (this.isMetaMaskInstalled) {
-      window.ethereum
-        .request({ method: 'eth_chainId' })
-        .then((chainId: any) => {
-          console.log({ chainId });
-          if (
-            this.isWalletConnected &&
-            chainId !== env.chainIDDecimal &&
-            chainId !== env.chainIDHex
-          ) {
-            this.networkHasChanged = true;
-          } else if (
-            this.isWalletConnected &&
-            (chainId === env.chainIDDecimal || chainId === env.chainIDHex)
-          ) {
-            this.networkHasChanged = false;
-          }
-        })
-        .catch((err: any) => {
-          console.error(err);
-        });
-
-      window.ethereum.on('chainChanged', (chainId: any) => {
-        if (
-          this.isWalletConnected &&
-          chainId !== env.chainIDDecimal &&
-          chainId !== env.chainIDHex
-        ) {
-          this.networkHasChanged = true;
-        } else if (
-          this.isWalletConnected &&
-          (chainId === env.chainIDDecimal || chainId === env.chainIDHex)
-        ) {
-          this.networkHasChanged = false;
-        }
-      });
-    }
   }
 
   checkChangedAccounts() {
@@ -319,9 +241,6 @@ private async addChain(provider: any, network: any) {
     const provider = await detectEthereumProvider();
     if (connectValue !== null && connectValue === 'true') {
       this.connect = true;
-      /*if (this.isWalletConnected) {
-        await this.checkChangedNetworkOrChainID();
-      }*/
       await this.checkChangedAccounts();
     } else {
       this.connect = false;
@@ -336,9 +255,6 @@ private async addChain(provider: any, network: any) {
   };
 
   async disconnectMetamask(): Promise<void> {
-    // window.ethereum.on('disconnect', (error: any) => {
-    //   console.log('Metamask disconnected:', error);
-    // });
     this.connect = false;
     this.isWalletConnected = false;
     this.acc = [];
