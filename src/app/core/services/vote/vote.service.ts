@@ -67,28 +67,18 @@ export class VoteService {
   }
   connectWallet = async (walletType: string) => {
     if (walletType === 'metamask') {
-      if (this.externalWalletService.isMetaMaskInstalled) {
-        this.provider = await this.externalWalletService.connectMetamask();
-
-
-      } else {
-        window.open('https://metamask.io/', '_blank');
+      await this.externalWalletService.connectMetamask();
+      if(!!window.ethereum) {
+        this.web3 = new Web3Provider(window.ethereum);
+        this.account = await this.web3.listAccounts();
+        this.createAccount(this.account[0])
+        await this.externalWalletService.checkConnectedWallet();
       }
-      if (this.externalWalletService.connect === true) {
-
-      }
-    } else if (walletType === 'trust') {
-      // this.provider = await this.externalWalletService.connectTrust();
+      
     } else {
-      throw new Error('Invalid wallet type');
+     console.error('we support only metamask for now!!!!');
     }
-    if (typeof window.ethereum !== 'undefined') {
-      this.web3 = new Web3Provider(window.ethereum);
-      this.account = await this.web3.listAccounts();
-      this.createAccount(this.account[0])
-      await this.externalWalletService.checkConnectedWallet();
-    }
-
+    
     //this.hideConnectDialog();
   }
 
@@ -97,7 +87,7 @@ export class VoteService {
     (res:any) => {
      Cookies.set('userId', res.data.UserId)
     }, (err:any) => {
-      console.error(err)
+      console.error('Error in create account API : ' , err);
     }
   );
   

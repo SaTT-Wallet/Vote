@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import detectEthereumProvider from '@metamask/detect-provider';
-import { Web3Provider } from '@ethersproject/providers';
 import Web3 from 'web3';
 import { environment as env } from '../../../../environments/environment.prod';
 import { abi } from '../../../../environments/abi';
@@ -27,25 +26,11 @@ export class ExternalWalletService {
     private snapshotService: SnapshotService,
     private tokenStorageService: TokenStorageService
   ) {
-    this.detectMetaMask();
     const { ethereum } = <any>window;
     this.ethereum = ethereum;
-
-    // if (this.isMetaMaskInstalled) {
-    //   this.ethereum.on('disconnect', (error: any) => {
-    //     this.handleDisconnect();
-    //   });
-    // }
   }
 
-  async detectMetaMask() {
-    const provider = await detectEthereumProvider();
-    if (provider && provider.isMetaMask) {
-      this.isMetaMaskInstalled = true;
-    } else {
-      this.isMetaMaskInstalled = false;
-    }
-  }
+  
 
   async connectMetamask(): Promise<void> {
     try {
@@ -215,7 +200,7 @@ export class ExternalWalletService {
     }
   }
 
-  async handleAccountsChanged(accounts: string | any[]) {
+  /*async handleAccountsChanged(accounts: string | any[]) {
     if (accounts.length === 0) {
       this.connect = false;
       this.isWalletConnected = false;
@@ -234,27 +219,40 @@ export class ExternalWalletService {
     if (accounts.length !== 0 && accounts[0] !== this.currentAccount) {
       this.currentAccount = accounts[0];
     }
-  }
+  }*/
+  async handleAccountsChanged(accounts: string | any[]) {
+    if (accounts.length === 0) {
+        this.disconnectMetamask();
+    } else {
+        this.handleConnectedAccount(accounts as string[]);
+    }
+}
+  private async handleConnectedAccount(accounts: string[]) {
+    this.isWalletConnected = true;
+    this.acc = accounts;
+
+    if (this.latest_acc !== this.acc[0]) {
+        this.vp = await this.snapshotService.getVotingPower(this.acc[0].toString());
+        this.latest_acc = this.acc[0];
+    }
+
+    if (this.acc[0] !== this.currentAccount) {
+        this.currentAccount = this.acc[0];
+    }
+}
 
   public checkConnectedWallet = async () => {
     const connectValue = this.tokenStorageService.getIsAuth();
-    const provider = await detectEthereumProvider();
     if (connectValue !== null && connectValue === 'true') {
-      this.connect = true;
-      await this.checkChangedAccounts();
-    } else {
-      this.connect = false;
+      this.checkChangedAccounts();
     }
-    if (this.acc.length === 0) {
-      this.connect = false;
-      this.isWalletConnected = false;
-    } else {
-      this.isWalletConnected = true;
-    }
+    this.connect = !!this.acc.length;
+    this.isWalletConnected = this.connect;
     return this.acc;
   };
 
-  async disconnectMetamask(): Promise<void> {
+
+   disconnectMetamask() {
     this.connect = false;
     this.isWalletConnected = false;
     this.acc = [];
