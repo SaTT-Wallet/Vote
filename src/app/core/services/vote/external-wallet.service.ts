@@ -150,29 +150,27 @@ export class ExternalWalletService {
   }
 
 
-
   async changeToBinance(provider: any) {
     const chainId = await this.ethereum.request({ method: 'eth_chainId' });
+    console.log({chainId});
+    const supportedNetworks = [
+        env.testNetNetwork,
+        env.bnbNetwork,
+        env.polygonNetwork,
+        env.bttNetwork,
+        env.mainnetNetwork,
+        // Add more networks as needed
+    ];
 
-    switch (chainId) {
-        case env.testNetNetwork.chainIDHex:
-            await this.addChain(provider, env.testNetNetwork);
-            break;
-        case env.bnbNetwork.chainIDHex:
-            await this.addChain(provider, env.bnbNetwork);
-            break;
-        case env.polygonNetwork.chainIDHex:
-            await this.addChain(provider, env.polygonNetwork);
-            break;
-        case env.bttNetwork.chainIDHex:
-            await this.addChain(provider, env.bttNetwork);
-            break;
-        // Add more cases as needed
-        default:
-            console.error('Unsupported chain ID:', chainId);
-            break;
+    const selectedNetwork = supportedNetworks.find(network => network.chainIDHex === chainId);
+
+    if (selectedNetwork) {
+        await this.addChain(provider, selectedNetwork);
+    } else {
+        console.error('Unsupported chain ID:', chainId);
+         await this.addChain(provider, env.bnbNetwork);
     }
-}
+  }
 
 private async addChain(provider: any, network: any) {
     await (provider as any).request({
