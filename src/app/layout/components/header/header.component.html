@@ -59,7 +59,7 @@
     <div class="phone">
       <div
         class="d-md-block d-xl-none d-lg-none d-sm-block navbar-nav"
-        *ngIf="!externalWalletService.connect"
+        *ngIf="!connectStatus()"
       >
         <button class="button-connect" (click)="voteService.showConnectDialog(connectModal)">
           <img src="assets/Images/connected-wallet.png" />
@@ -69,8 +69,7 @@
       <ul
         class="d-md-block d-xl-none d-lg-none d-sm-block navbar-nav"
         *ngIf="
-          externalWalletService.isWalletConnected &&
-          externalWalletService.connect
+          connectStatus()
         "
       >
         <!------------------------------------------------------------------------->
@@ -86,7 +85,7 @@
             >
               <img src="assets/Images/connected-wallet.png" />
               <span class="span-userName ps-2 pe-2">'{{
-                formattedCreator
+                walletIdConnected()
               }}'</span>
               <i class="chevron fa fa-fw"></i>
             </a>
@@ -156,17 +155,10 @@
         </li>
         <li class="li-menu" [ngClass]="{ 'is-visited': menuFarmPost }" id="intro3">
           <a
-            *ngIf="isConnected"
             class="farmPost"
             [routerLink]="['/farm-posts']"
             (click)="checkMenuFarmPost()"
             >{{ 'faq_farmming' | translate }}</a
-          >
-          <a
-            *ngIf="!isConnected"
-            class="farmPost"
-            [routerLink]="['/auth/login']"
-            ><span>{{ 'faq_farmming' | translate }}</span></a
           >
         </li>
 
@@ -183,8 +175,7 @@
         class="right_nav_side navbar-nav right-menu"
         *ngIf="
           
-        externalWalletService.isWalletConnected &&
-          externalWalletService.connect
+          connectStatus()
         "
       >
       
@@ -201,7 +192,7 @@
             >
               <img src="assets/Images/connected-wallet.png" />
               <span class="span-userName ps-2 pe-2">{{
-                voteService.formattedCreator
+                walletIdConnected()
               }}</span>
              
               <i class="chevron fa fa-fw"></i>
@@ -262,7 +253,7 @@
           <a class="" [routerLink]="['/auth/login']">Connect</a>
         </button> -->
         <div>
-          <button (click)="toggleNetworkList()"class="network_btn" [ngClass]="{'margin_right' : externalWalletService.isWalletConnected && externalWalletService.connect}">
+          <button (click)="toggleNetworkList()"class="network_btn" [ngClass]="{'margin_right' : connectStatus() }">
             <img class="network_logo" [src]="'assets/Images/' + networkLogo + '.svg'"  alt="">
             <span class="network_label">{{networkLabel | uppercase}}</span>
             <ng-container *ngIf="!showNetwork; else arrowUp">
@@ -286,24 +277,12 @@
           </button>
         </div>
         
-        <div *ngIf="!externalWalletService.connect">
+        <div *ngIf="!connectStatus()">
           <button class="button-connect" (click)="voteService.showConnectDialog(connectModal)">
             <img src="assets/Images/connected-wallet.png" />
             Connect Wallet
           </button>
         </div>
-
-        <!--
-        <li class="li-menu sign-in ">
-          <a class="adpools " [routerLink]="[ '/auth/login'] ">{{
-            'sign_in' | translate
-          }}</a>
-        </li>
-        <li class="li-menu sign-up ">
-          <a class="adpools " [routerLink]="[ '/auth/registration'] "
-            >{{ 'sign_up' | translate }}
-          </a>
-        </li> -->
       </ul>
     </div>
     <!--end desktop-->

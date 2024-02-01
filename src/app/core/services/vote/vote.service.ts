@@ -65,6 +65,8 @@ export class VoteService {
     this.externalWalletService.disconnectMetamask();
     this.hideNetworkHasChanged();
   }
+
+  
   connectWallet = async (walletType: string) => {
     if (walletType === 'metamask') {
       await this.externalWalletService.connectMetamask();

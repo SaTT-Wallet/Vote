@@ -37,23 +37,40 @@ export class ExternalWalletService {
       const provider = await detectEthereumProvider();
 
       if (provider && provider.isMetaMask) {
-          const accounts = await this.ethereum.request({
-            method: 'eth_requestAccounts',
-          });
-      
-           // Save user data to local storage
-          await this.saveUserData(accounts[0]);
-  
-          // Request necessary permissions
-          await this.requestWalletPermissions();
+          if(!!window.ethereum.selectedAddress) {
 
-          // Switch to Binance network
-          await this.changeToBinance(provider);
-         
-          // Update flags and state
-          this.connect = true;
-          this.isWalletConnected = true;
-          this.tokenStorageService.setIsAuth('true');
+          } else {
+            const accounts = await this.ethereum.request({
+              method: 'eth_requestAccounts',
+            });
+        
+             // Save user data to local storage
+            await this.saveUserData(accounts[0]);
+    
+            // Request necessary permissions
+            await this.requestWalletPermissions();
+  
+            // Switch to Binance network
+            await this.changeToBinance(provider);
+           
+            // Update flags and state
+            this.connect = true;
+            this.isWalletConnected = true;
+            this.tokenStorageService.setIsAuth('true');
+          }
+        /*window.ethereum
+            .request({ method: 'eth_accounts' })
+            .then((accounts: any) => {
+              if(accounts.length) {
+
+              } else {
+
+              }
+            })
+            .catch((err:any) => {
+              console.error('error metamask : ', err);
+            })*/
+          
         
       } else {
         
@@ -184,19 +201,19 @@ export class ExternalWalletService {
   }
 
   checkChangedAccounts() {
-    if (this.isMetaMaskInstalled) {
+    
+    if (!!window.ethereum) {
       window.ethereum
         .request({ method: 'eth_accounts' })
         .then(async (accounts: any) => {
-          await this.handleAccountsChanged(accounts);
+          console.log({accounts});
+          this.handleAccountsChanged(accounts);
         })
         .catch((err: any) => {
           // console.error(err);
         });
 
-      window.ethereum.on('accountsChanged', async (accounts: any) => {
-        await this.handleAccountsChanged(accounts);
-      });
+      
     }
   }
 
@@ -230,24 +247,22 @@ export class ExternalWalletService {
   private async handleConnectedAccount(accounts: string[]) {
     this.isWalletConnected = true;
     this.acc = accounts;
-
-    if (this.latest_acc !== this.acc[0]) {
+    
+    /*if (this.latest_acc !== this.acc[0]) {
         this.vp = await this.snapshotService.getVotingPower(this.acc[0].toString());
         this.latest_acc = this.acc[0];
-    }
+    }*/
+   
 
-    if (this.acc[0] !== this.currentAccount) {
-        this.currentAccount = this.acc[0];
-    }
+        this.currentAccount = window.ethereum.selectedAddress;
+    
 }
 
   public checkConnectedWallet = async () => {
-    const connectValue = this.tokenStorageService.getIsAuth();
-    if (connectValue !== null && connectValue === 'true') {
-      this.checkChangedAccounts();
-    }
+    this.checkChangedAccounts();
     this.connect = !!this.acc.length;
     this.isWalletConnected = this.connect;
+    
     return this.acc;
   };
 

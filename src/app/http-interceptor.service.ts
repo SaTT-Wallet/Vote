@@ -45,7 +45,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
         .set('X-Signature', Cookies.get('metamaskSignature') || '')
-        .set('X-Address', Cookies.get('metamaskAddress') || '')
+        .set('X-Address', !!window.ethereum.selectedAddress ? window.ethereum.selectedAddress : '')
         .set('X-Message', Cookies.get('metamaskNonce') || '');
 
       const cloned = req.clone({ headers });
