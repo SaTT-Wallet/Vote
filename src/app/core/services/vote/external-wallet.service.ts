@@ -43,9 +43,10 @@ export class ExternalWalletService {
             const accounts = await this.ethereum.request({
               method: 'eth_requestAccounts',
             });
-        
+            console.log({})
              // Save user data to local storage
-            await this.saveUserData(accounts[0]);
+            !Cookies.get('metamaskNonce')?.includes(window.ethereum.selectedAddress) && 
+            await this.saveUserData(window.ethereum.selectedAddress);
     
             // Request necessary permissions
             await this.requestWalletPermissions();
@@ -154,7 +155,6 @@ export class ExternalWalletService {
 
   async changeToBinance(provider: any) {
     const chainId = await this.ethereum.request({ method: 'eth_chainId' });
-    console.log({chainId});
     const supportedNetworks = [
         env.testNetNetwork,
         env.bnbNetwork,
@@ -259,7 +259,7 @@ export class ExternalWalletService {
 }
 
   public checkConnectedWallet = async () => {
-    this.checkChangedAccounts();
+    //this.checkChangedAccounts();
     this.connect = !!this.acc.length;
     this.isWalletConnected = this.connect;
     

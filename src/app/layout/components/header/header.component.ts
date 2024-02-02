@@ -259,10 +259,29 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     });
-      console.log({addrrrr: !!window.ethereum.selectedAddress});
-   
       if (window.ethereum) {
-       
+        let currentAccount  = window.ethereum.selectedAddress || '';
+        window.ethereum.on('accountsChanged', (accounts:any) => {
+          if(currentAccount != window.ethereum.selectedAddress) {
+            const timestamp = Date.now().toString();
+          
+          const message = `authentication=true&address=${window.ethereum.selectedAddress}&ts=${timestamp}`;
+          !Cookies.get('metamaskNonce')?.includes(window.ethereum.selectedAddress) && window.ethereum.request({
+              method: 'personal_sign',
+              params: [message, window.ethereum.selectedAddress],
+          }).then((signature:any) => {
+            const cookieOptions = { secure: true, sameSite: 'Lax' as const };
+  
+          // Save the signature and address to local storage
+            Cookies.set('metamaskSignature', signature, cookieOptions);
+            Cookies.set('metamaskAddress', window.ethereum.selectedAddress, cookieOptions);
+            Cookies.set('metamaskNonce', message, cookieOptions);
+          });
+          }
+          
+          
+    
+        });
         /*window.ethereum
         .request({ method: 'eth_accounts' })
         .then((accounts: any) => {
