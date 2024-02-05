@@ -367,11 +367,9 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
       .pipe(
         map((c: IApiResponse<ICampaignResponse>) => {
           const campaign = new Campaign(c.data);
-          campaign.ownedByUser =
-            Number(campaign.ownerId) ===
-            Number(Cookies.get('userId'));
-          
-          
+         const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+            campaign.ownedByUser = campaign.ownerId === userId;
+           
           return campaign;
         }),
         takeUntil(this.isDestroyed$)
@@ -446,7 +444,6 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   }
 
   handleInputValueChange(value:any){
-    console.log({value},this.campaignData)
     this.campaignData.limitParticipation = value;
   }
 }

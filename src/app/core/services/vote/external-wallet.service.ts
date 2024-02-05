@@ -102,7 +102,6 @@ export class ExternalWalletService {
     }
   }
   async changeNetwork(provider: any, network: any) {
-    console.log({network})
     await (provider as any).request({
       method: 'wallet_addEthereumChain',
       params: [
@@ -280,7 +279,6 @@ private async addChain(provider: any, network: any) {
       window.ethereum
         .request({ method: 'eth_chainId' })
         .then((chainId: any) => {
-          console.log({ chainId });
           if (
             this.isWalletConnected &&
             chainId !== env.chainIDDecimal &&

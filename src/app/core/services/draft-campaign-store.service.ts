@@ -9,6 +9,7 @@ import { CampaignsStoreService } from '@campaigns/services/campaigns-store.servi
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormatDataService } from '@campaigns/services/format-data.service';
 import { TokenStorageService } from '@core/services/tokenStorage/token-storage-service.service';
+import Cookies from 'js-cookie';
 
 @Injectable({
   providedIn: 'root'
@@ -59,9 +60,8 @@ export class DraftCampaignStoreService {
       .pipe(
         map((data: any) => {
           const campaign = new Campaign(data.data);
-          campaign.ownedByUser =
-            Number(campaign.ownerId) ===
-            Number(this.localeStorageService.getIdUser());
+         const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+            campaign.ownedByUser = campaign.ownerId === userId;
           return campaign;
         }),
         //tap(console.log),

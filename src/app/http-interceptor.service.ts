@@ -22,7 +22,6 @@ export class HttpInterceptorService implements HttpInterceptor {
       '/external/RemoveLinkedInChannel',
       '/external/RemoveTiktokChannel',
       '/external/RemoveGoogleChannel',
-      '/external/create-user',
       '/external/socialAccounts',
       '/external/campaign/filterLinksExternal',
       '/external/campaign/getLinksExternal',
