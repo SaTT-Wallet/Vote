@@ -9,6 +9,7 @@ import { map, share, mapTo, takeUntil } from 'rxjs/operators';
 import { TokenStorageService } from '@core/services/tokenStorage/token-storage-service.service';
 import { isPlatformBrowser } from '@angular/common';
 import { ICampaignsListResponse } from '@app/core/campaigns-list-response.interface';
+import Cookies from 'js-cookie';
 
 /*interface CampaignsListStore {
   pages: Page<Campaign>[];
@@ -120,9 +121,8 @@ export class CampaignsListStoreService {
                 campaigns: !!res.data.campaigns
                   ? res.data.campaigns.map((c: any) => {
                       let campaign = new Campaign(c);
-                      campaign.ownedByUser =
-                        Number(campaign.ownerId) ===
-                        Number(this.localStorageService.getUserId());
+                     const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+                      campaign.ownedByUser = campaign.ownerId === userId;
                       return campaign;
                     })
                   : ([] as Campaign[])

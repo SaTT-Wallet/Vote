@@ -8,6 +8,7 @@ import { TokenStorageService } from '@core/services/tokenStorage/token-storage-s
 import { FormatDataService } from '@campaigns/services/format-data.service';
 import { ICampaignResponse } from '@app/core/campaigns-list-response.interface';
 import { IApiResponse } from '@app/core/types/rest-api-responses';
+import Cookies from 'js-cookie';
 
 @Injectable({
   providedIn: 'root'
@@ -83,9 +84,8 @@ export class CampaignsStoreService {
       )
       .subscribe((c) => {
         let campaign = new Campaign(c);
-        campaign.ownedByUser =
-          Number(campaign.ownerId) ===
-          Number(this.localStorageService.getUserId());
+       const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+            campaign.ownedByUser = campaign.ownerId === userId;
         this.setCampaign(campaign);
       });
   }
@@ -98,9 +98,8 @@ export class CampaignsStoreService {
       .subscribe((res: IApiResponse<ICampaignResponse> | null) => {
         let campaign = new Campaign(res?.data);
 
-        campaign.ownedByUser =
-          Number(campaign.ownerId) ===
-          Number(this.localStorageService.getUserId());
+       const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+            campaign.ownedByUser = campaign.ownerId === userId;
         this.setCampaign(campaign);
 
         this.emitLogoCampaignUpdated.next(true);

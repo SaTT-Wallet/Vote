@@ -99,7 +99,7 @@
           class="top-bar-btn-apply btn-apply"
           (click)="goParticipate(campaign.id)"
           *ngIf="
-            !isOwnedByUser&& isActive && isPlatformBrowser
+            !campaign.isOwnedByUser && campaign.isActive && isPlatformBrowser
           "
         >
           {{ 'Apply_Now' | translate }}
@@ -491,7 +491,7 @@
               id="btn-apply"
               (click)="goParticipate(campaign.id)"
               *ngIf="
-                !isOwnedByUser&& isActive && isPlatformBrowser
+                !campaign.isOwnedByUser && campaign.isActive && isPlatformBrowser
               "
             >
               <span class="padding-16" *ngIf="!this.showSpinner">{{

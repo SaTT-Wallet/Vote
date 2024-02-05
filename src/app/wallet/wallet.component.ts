@@ -1105,7 +1105,7 @@ export class WalletComponent implements OnInit, OnDestroy {
         }
         
       }, (err:any) => {
-        console.log({err})
+        console.error({err})
       });
   }
   getMigrationStatus($event: any) {

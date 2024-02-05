@@ -8,6 +8,7 @@ import * as CampaignDetailsActions from './campaign-details.actions';
 import { CampaignHttpApiService } from '@app/core/services/campaign/campaign.service';
 import { Campaign } from '@app/models/campaign.model';
 import { TokenStorageService } from '@app/core/services/tokenStorage/token-storage-service.service';
+import Cookies from 'js-cookie';
 
 @Injectable()
 export class CampaignsEffects {
@@ -19,9 +20,8 @@ export class CampaignsEffects {
         this.campaignHttpApiService.getOneById(action.id).pipe(
           map((data: any) => {
             const campaign = new Campaign(data.data);
-            campaign.ownedByUser =
-              Number(campaign.ownerId) ===
-              Number(this.localStorageService.getIdUser());
+           const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+            campaign.ownedByUser = campaign.ownerId === userId;
             return campaign;
           }),
           map((campaign: Campaign) =>

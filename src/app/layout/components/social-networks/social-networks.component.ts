@@ -198,9 +198,7 @@ export class SocialNetworksComponent implements OnInit {
       takeUntil(this.isDestroyed)
     ).subscribe(
       ({ params, data }: { params: Params; data: any }) => {
-        console.log({params})
         if (data !== null) {
-          console.log({data})
           let count = 0;
           this.allChannels = data.data;
           this.channelGoogle = data.data.google;
@@ -261,7 +259,6 @@ export class SocialNetworksComponent implements OnInit {
           setTimeout(() => {
             this.showSpinner = false;
           }, 2000);
-          console.log({google: this.channelGoogle, percent:this.percentSocial, twitter: this.channelTwitter, facebook: this.channelFacebook, linkedin: this.channelLinkedin, tiktok: this.channelTiktok})
         } else {
           this.percentSocial = 0;
           this.allChannels = [];
@@ -514,7 +511,6 @@ goToAccount(oracle: string, userName: string) {
   }
 
   deleteAccount(id: string, network: string,linkedinId : string ="") {
-    console.log({id})
     if (network === 'google') {
       this.socialAccountFacadeService
         .deleteOneSocialNetworksGoogle(id)

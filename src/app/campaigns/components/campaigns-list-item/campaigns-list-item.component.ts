@@ -75,8 +75,7 @@ export class CampaignsListItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('campaigncampaigncampaign',this.campaign)
-    this.campaign.isOwnedByUser = this.campaign.walletId === Cookies.get('metamaskAddress') ?true  : false
+   
 
     this.getScreenWidth = window.innerWidth;
 this.getNewApplicant()

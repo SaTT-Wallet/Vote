@@ -573,15 +573,13 @@ export class CampaignHttpApiService {
     size = 1,
     queryParams: HttpParams = new HttpParams()
   ): Observable<ICampaignsListResponse> {
-    const walletId = !!this.tokenStorageService.getToken()
-      ? (this.tokenStorageService.getIdWallet() as string)
-      : '';
+    const walletId = !!window.ethereum.selectedAddress ? window.ethereum.selectedAddress : '';
     let queryParams2 = queryParams
       .set('idWallet', walletId)
       .set('page', '' + page)
       .set('limit', '' + size);
     return this.http
-      .get<ICampaignsListResponse>(` ${sattUrl}/campaign/campaigns`, {
+      .get<ICampaignsListResponse>(` ${sattUrl}/external/campaigns`, {
         params: queryParams2
       })
       .pipe(share());
