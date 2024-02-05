@@ -255,7 +255,7 @@ export class RemunerationComponent implements OnInit, OnDestroy {
 
 
     this.campaignService.getOneById(this.draftData.id).subscribe((res: any) => {
-      this.selectedNetworkValue = this.cookieService.get('networkSelected');
+      this.selectedNetworkValue = res.data.token.type;
      
         this.res = this.cryptodata;
         const campaignCryptoSet = new Set();

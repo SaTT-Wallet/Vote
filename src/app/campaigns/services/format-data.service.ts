@@ -10,6 +10,7 @@ import * as CryptoActionsList from '../../core/store/crypto-prices/actions/crypt
 import { Store } from '@ngrx/store';
 import { selectCryptoPriceList } from '@app/core/store/crypto-prices/selectors/crypto.selectors';
 import { SharedDataService } from '@app/shared/service/SharedDataService';
+import Cookies from 'js-cookie';
 
 @Injectable({
   providedIn: 'root'
@@ -69,9 +70,10 @@ export class FormatDataService {
       object.countries = campaign.targetedCountries; //this.countriesCode(campaign.targetedCountries);
     }
     if (campaign.hasOwnProperty('currency')) {
+      const selectedNetwork =(!!Cookies.get('networkSelected') ? (Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : ( Cookies.get('networkSelected') === 'Arthera' ? 'arthera':'polygon')))) :'bep20')
       object.token = {
         name: campaign.currency.name || '',
-        type: campaign.currency.type.toUpperCase() || '',
+        type: selectedNetwork.toUpperCase() || '',
         addr: campaign.currency.addr || null
       };
     }

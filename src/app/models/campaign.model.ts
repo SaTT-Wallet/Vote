@@ -2,6 +2,7 @@ import { ListTokens } from '@config/atn.config';
 import { getDateObjectFrom } from '@helpers/utils/common';
 import { TokenStorageService } from '@app/core/services/tokenStorage/token-storage-service.service';
 import { ICampaignResponse } from '@app/core/campaigns-list-response.interface';
+import Cookies from 'js-cookie';
 
 export class Campaign {
   id: string;
@@ -43,7 +44,9 @@ export class Campaign {
   missions: [];
   isOwnedByUser = false;
   budgetUsd: string;
+  selectedNetwork =(!!Cookies.get('networkSelected') ? (Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : ( Cookies.get('networkSelected') === 'Arthera' ? 'arthera':'polygon')))) :'bep20')
   constructor(data?: ICampaignResponse) {
+    console.log({selectedNetwork: this.selectedNetwork});
     this.id = data?._id || '';
     this.hash = data?.hash || null;
     this.walletId = data?.walletId || '';
@@ -70,7 +73,7 @@ export class Campaign {
     this.title = data?.title || '';
     this.currency = data?.token || {
       name: 'SATT',
-      type: 'erc20',
+      type: this.selectedNetwork,
       addr: ListTokens['SATT'].contract
     };
     this.brand = data?.brand || '';
