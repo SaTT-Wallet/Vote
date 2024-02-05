@@ -210,7 +210,7 @@ export class CampaignHttpApiService {
 
   deleteDraft(id: any) {
     return this.http
-      .delete(sattUrl + '/campaign/deleteDraft' + `/${id}`)
+      .delete(sattUrl + '/external/deleteDraft' + `/${id}`)
       .pipe(shareReplay(1));
   }
 
