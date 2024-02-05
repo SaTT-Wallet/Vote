@@ -11,6 +11,7 @@ import {
 } from '@app/core/types/rest-api-responses';
 import Web3 from 'web3';
 import { environment } from '@environments/environment.prod';
+import Cookies from 'js-cookie';
 
 export interface ITransferTokensRequestBody {
   from: string;
@@ -105,76 +106,12 @@ return of(responseWallet);
   }
 
   
-  getBalanceByToken(payload: any): Observable<any> {
-    const { network, walletAddress, smartContract } = payload;
-
-    const getWeb3Url = (networkName: string): string => {
-      switch (networkName.toLowerCase()) {
-        case 'bnb smart chain':
-        case 'bep20':
-          return environment.WEB3_URL_BEP20;
-        case 'ethereum':
-        case 'erc20':
-          return environment.WEB3_URL;
-        case 'polygon':
-        case 'polygon':
-          return environment.WEB3_URL_POLYGON;
-        case 'bttc':
-        case 'bittorrent':
-          return environment.WEB3_URL_BTT;
-        default:
-          return '';
-      }
-    };
-
-    const web3Url = getWeb3Url(network);
-
-    if (!web3Url) {
-      console.error('Unsupported network:', network);
-      return throwError({
-        code: 500,
-        message: 'error',
-        data: null,
-      });
-    }
-
-    this.web3 = new Web3(new Web3.providers.HttpProvider(web3Url));
-
-    const data = this.web3.eth.abi.encodeFunctionSignature('balanceOf(address)') +
-                 this.web3.eth.abi.encodeParameters(['address'], [walletAddress]).slice(2);
-
-    return from(this.web3.eth.call({
-      to: smartContract,
-      data: data,
-    })).pipe(
-      map((rawBalance: any) => {
-        const balanceHex = this.web3.utils.isHexStrict(rawBalance) ? rawBalance : '0x0';
-        
-        if (balanceHex === '0x' || balanceHex === '0x0') {
-          return {
-            code: 200,
-            message: 'success',
-            data: 0,
-          };
-        }
-
-        const balanceDecimal = this.web3.utils.hexToNumberString(balanceHex);
-        return {
-          code: 200,
-          message: 'success',
-          data: Number(balanceDecimal),
-        };
-      }),
-      catchError((error: any) => {
-        console.error('Error getting balance:', error);
-        return throwError({
-          code: 500,
-          message: 'error',
-          data: null,
-        });
-      })
-    );
-}
+  getBalanceByToken(payload: any) {
+    
+    const selectedNetwork =(!!Cookies.get('networkSelected') ? (Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : ( Cookies.get('networkSelected') === 'Arthera' ? 'arthera':'polygon')))) :'bep20') 
+    payload.network = selectedNetwork;
+    return this.http.post(`${sattUrl}/external/getBalance`, payload);
+  }
 
 
   createNewWalletV2(password: string) {
