@@ -153,43 +153,43 @@ padding: 0 1em;
 
 
 //sk 
-// abbr {
-//   position: relative;
-//   text-decoration: none;
-//   }
+abbr {
+  position: relative;
+  text-decoration: none;
+  }
   
-//   abbr:hover::after {
-//   position: absolute;
-//   display: block;
-//   padding: 1em;
-//   color: #f52079;
-//   font-family: 'Poppins';
-//   left:0.8em;
-//   top:0.2em;
-//   background:
-//   radial-gradient(100% 58% at top   ,white   99%,#f52079) calc(0*100%/3) 0,
-//       radial-gradient(100% 58% at bottom,#f52079 99%,white  ) calc(3*100%/3) 0,
-//       radial-gradient(100% 58% at top   ,white   99%,#f52079) calc(6*100%/3) 0,
-//       radial-gradient(100% 58% at bottom,#f52079 99%,white  ) calc(9*100%/3) 0;
-//       background-size:50% 100%;
-//       background-repeat:no-repeat;
-//       -webkit-background-clip:text;
-//       color:transparent;
-//       background-clip:text;
-//       // display:inline-block;
-//       animation: move 1s infinite linear;
-//       content: 'soon';
-//     }
+  abbr:hover::after {
+  position: absolute;
+  display: block;
+  padding: 1em;
+  color: #f52079;
+  font-family: 'Poppins';
+  left:0.8em;
+  top:0.2em;
+  background:
+  radial-gradient(100% 58% at top   ,white   99%,#f52079) calc(0*100%/3) 0,
+      radial-gradient(100% 58% at bottom,#f52079 99%,white  ) calc(3*100%/3) 0,
+      radial-gradient(100% 58% at top   ,white   99%,#f52079) calc(6*100%/3) 0,
+      radial-gradient(100% 58% at bottom,#f52079 99%,white  ) calc(9*100%/3) 0;
+      background-size:50% 100%;
+      background-repeat:no-repeat;
+      -webkit-background-clip:text;
+      color:transparent;
+      background-clip:text;
+      // display:inline-block;
+      animation: move 1s infinite linear;
+      content: 'soon';
+    }
   
-//   @keyframes move {
-//     to {
-//       background-position:
-//          calc(-6*100%/3) 0,
-//          calc(-3*100%/3) 0,
-//          calc(0*100%/3) 0,
-//          calc(3*100%/3) 0;
-//     }
-//   }
+  @keyframes move {
+    to {
+      background-position:
+         calc(-6*100%/3) 0,
+         calc(-3*100%/3) 0,
+         calc(0*100%/3) 0,
+         calc(3*100%/3) 0;
+    }
+  }
   // sk
 
 .phone {
