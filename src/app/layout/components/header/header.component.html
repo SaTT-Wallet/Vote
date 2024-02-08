@@ -211,6 +211,25 @@
               id="dropdown-menu-profil"
               aria-labelledby="dropdownMenuButton2"
             >
+            
+              <li class="deconnect_icon">
+                <!-- (click)="" -->
+                <a
+                (click)="voteService.showConnectDialog(infoWalletModal)"
+                  class="dropdown-item-profil profil-item"
+                  ><span class="bi bi-wallet icondrop"></span>
+                  Wallet</a
+                >
+              </li>
+              <li class="deconnect_icon">
+                <!-- (click)="" -->
+                <a
+                (click)="showTransactions(showAdressWallet())"
+                  class="dropdown-item-profil profil-item"
+                  ><span class="bi bi-cash-stack icondrop"></span>Tansactions
+                  </a
+                >
+              </li>
               <li class="deconnect_icon">
                 <a
                   class="dropdown-item-profil profil-item"
@@ -737,6 +756,86 @@
   (click)="connectMetaMask()"
     type="button"
     class="generator wallet-connect-button"><img src="./../../../../assets/Images/metamask.svg" class="wallet-connect-type" /> MetaMask 
+  </button>
+    </div>
+  </div>
+  
+  
+  </ng-template>
+
+<ng-template #infoWalletModal>
+  <div *ngIf="getScreenWidth > 767" class="d-flex infoWalletModal">
+    <div class="d-block col-4 block-primary">
+      <img src="./../../../../assets/Images/moonboy.svg" class="description-image" >
+      <h4 class="description-title">
+       
+     Your Wallet
+      </h4>
+      <!-- <p class="description-content">
+        Start by connecting with one of the following wallets
+      </p> -->
+    </div>
+   
+    <div class="d-block" style=" width: 100%;">
+      <div class="d-flex justify-content-between description-block" >
+        <h4 class="modal-title">
+
+         {{dynamicTitle}}
+        </h4>
+        <button (click)="voteService.hideConnectDialog(connectModal)" class="close-button" >
+          <img src="./../../../../assets/Images/icon-close.svg" />
+        </button>
+      </div>
+      <div class="d-block" >
+        <input #addressInput  (mouseenter)="dynamicTitle='Your Address'" (mouseleave)="''" type="text" class="input_adressWallet col-10 ml-1" value={{showAdressWallet()}} readonly/>
+      <abbr title="Copy">
+      <img
+      class="copy col-2"
+      src="assets/Images/copy.svg"
+      alt=""
+      (click)="copyAddressToClipboard()"
+      />
+      </abbr>
+      <button (click)="showTransactions(showAdressWallet())" class="wallet-connect-button2"(mouseenter)="dynamicTitle='Your Recent Transactions'" (mouseleave)="''">View Transactions</button>
+      </div>
+      <div>
+      <button
+      (mouseenter)="dynamicTitle='Disconnect'" (mouseleave)="''"
+      (click)="Disconnect();closeInfoWalletModal()"
+        type="button"
+        class="wallet-connect-button2"><img src="" /> Disconnect
+      </button>
+        </div>
+    </div>
+    </div>
+      
+  
+     
+      
+    <!-- </div> -->
+  <!-- </div> -->
+  
+  <div *ngIf="getScreenWidth <= 767" class="mobile-block">
+    <button (click)="voteService.hideConnectDialog(connectModal)" class="close-button">
+      <img src="./../../../../assets/Images/icon-close.svg" />
+    </button>
+    <img src="./../../../../assets/Images/connect-wallet-icon.svg" class="description-image" >
+    <h4 class="modal-title">
+      Available Wallets
+    </h4>
+    <div class="d-flex flex-column justify-content-center align-items-center buttons-block" >
+  
+      <button
+    type="button"
+    
+    (click)="sattConnect()"
+    class="generator wallet-connect-button"><img src="./../../../../assets/Images/Satt.svg" class="wallet-connect-type"/> SaTT Wallet
+  </button>
+  
+  <button
+  (click)="Disconnect()"
+    type="button"
+    class="generator wallet-connect-button"> Disconnect 
   </button>
     </div>
   </div>

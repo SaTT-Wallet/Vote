@@ -104,6 +104,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   account!: string[];
   isTransactionHashCopiedtron = false;
   private connectModal!: TemplateRef<any>;
+  private infoWalletModal!: TemplateRef<any>;
   existV2: any;
   public walletId: string = '';
 
@@ -168,6 +169,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   menuCampaign: boolean = false;
   menuTokenInfo: boolean = false;
   menuBuyToken: boolean = false;
+  dynamicTitle: string = "";
   
   // successPart: boolean = false;
   // errorPart: boolean = false;
@@ -176,7 +178,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('qrbtnERCM', { static: false }) qrbtnERCM?: ElementRef;
   @ViewChild('header', { static: false }) header?: ElementRef;
   @ViewChild('headerNav') headerNav?: ElementRef;
-
+  @ViewChild('addressInput') addressInput?: ElementRef;
   allnotification: BehaviorSubject<Array<any>> = new BehaviorSubject([null]);
   message: any;
 
@@ -444,6 +446,27 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
   }
+
+  showAdressWallet=()=>(
+   window.ethereum.selectedAddress
+  )
+  copyAddressToClipboard = async () =>{
+    console.log(this.addressInput,"adresssssssssssssssssssss")
+    const inputElement = this.addressInput?.nativeElement as HTMLInputElement;
+    this.renderer.selectRootElement(inputElement).select();
+    console.log(inputElement);
+    try {
+      await navigator.clipboard.writeText(inputElement.value);
+      console.log('Content copied to clipboard')
+    } catch (e) {
+      console.error('Failed to Copy Address :', e)
+      
+    }
+    // this.renderer.selectRootElement(inputElement).select();
+    // document.execCommand('copy');
+
+    alert('Copied the address to clipboard: ' + inputElement);
+  }
   ngAfterViewInit(): void {
     // if(this.route.url)
     this.route.url.subscribe((e) => {});
@@ -504,6 +527,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.controllingNetwork();
   
+      this.externalWalletService.detectAddId();
 
     // this.networkList = [
     //   {network:"BNB Smart Chain" , label: "bsc" ,logo: ""  },
@@ -982,8 +1006,18 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   closeModal() {
     this.modalService.dismissAll(this.connectModal);
   }
+
+  closeInfoWalletModal(){
+    this.modalService.dismissAll(this.infoWalletModal)
+  }
   connect(content:any) {
     this.modalService.open(content);
+  }
+
+  showTransactions(addressWallet:string){
+    const url = `https://bscscan.com/address/${addressWallet}`
+    // this.router.navigateByUrl(url);
+    window.open(url, '_blank');
   }
   sattConnect() {
     window.open(environment.domainName + '/auth/login', '_self')
