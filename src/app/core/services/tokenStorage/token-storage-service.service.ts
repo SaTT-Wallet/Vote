@@ -38,9 +38,6 @@ export class TokenStorageService {
     private localStorage: LocalStorageRefService,
     private http: HttpClient
   ) {
-    this.idWallet$.subscribe(() => {
-      console.log('Wallet ID changed in service');
-    });
   }
   headers: any;
   imgheader: any;
