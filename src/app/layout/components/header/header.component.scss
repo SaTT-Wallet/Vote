@@ -259,6 +259,10 @@ abbr {
   margin-right: 1vw;
 }
 
+.close-button.mobile{
+  margin-top: 1em;
+}
+
 .wallet-connect-button {
   display: flex;
   align-items: center;
@@ -279,6 +283,39 @@ abbr {
   margin-top: 1vh;
   font-size: medium;
 }
+.wallet-connect-button2 {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1;
+  opacity: 1;
+  outline: 0px;
+  white-space: nowrap;
+  position: relative;
+  height: 48px;
+  font-size: 16px;
+  padding: 0px 24px;
+  border-radius: 10px;
+  color: rgb(18, 99, 241);
+  background-color: transparent;
+  border: 1px solid rgba(18, 99, 241, 0.16);
+  width: 100%;
+  margin-top: 8px;
+}
+
+.wallet-connect-button2:hover{
+  background-color: rgb(18, 99, 241,0.5);
+  color: rgba(255, 255, 255, 1);
+  transition: background-color 0.3s ease-in-out 0s, opacity 0.3s ease-in-out 0s, color 0.3s ease-in-out 0s;
+
+}
+
+.infoWalletModal{
+  height: 16em;
+}
 
 .block-primary {
   background-color: rgb(238, 236, 236);  
@@ -289,11 +326,11 @@ abbr {
 
 .description-image {
   margin-top: 5vh; 
-  margin-bottom: 2.5vh;
+  // margin-bottom: 2.5vh;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+  // margin-left: auto;
+  // margin-right: auto;
+  width: 100%;
 }
 
 .description-title {
@@ -1486,7 +1523,7 @@ ul {
   height: fit-content;
 }
 .dropdown2.show {
-  transform: translate3d(0px, 20px, 0px) !important;
+  transform: translate3d(0px, 60px, 0px) !important;
 }
 
 .span-userName {
@@ -2170,6 +2207,48 @@ bottom: 77.54% ; */
   margin-top: 20px;
   border: 1px solid #ffffff;
 }
+
+.copy{
+  cursor: pointer;
+  // width: 10%;
+  // height:10%;
+  
+  margin: 0px;
+  width: 3.5em;
+}
+
+.copy.mobile{
+  padding:0;
+  width: 2.9em ;
+  font-size: 8px;
+  margin: 1.5em;
+}
+
+.input_adressWallet{
+  margin: 5% 0;
+  padding: 0;
+  border: none;
+  top: 0.1em;
+}
+.input_adressWallet.mobile{
+  border: solid;
+  border-width: 0.1px;
+  width: 100vw;
+  border-color: lightgray;
+  background-color: transparent;
+}
+
+.copy-message {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  position: fixed;
+  // top: 40px;
+  right: 20px;
+  z-index: 9999;
+}
+
 
 .navbar {
   background: linear-gradient(
