@@ -12,15 +12,26 @@ import {
   PLATFORM_ID,
   ViewChild,
   Input,
-  TemplateRef
+  TemplateRef,
 } from '@angular/core';
 // import { bscan, etherscan } from '@app/config/atn.config';
-import { Router, NavigationEnd, ActivatedRoute, ResolveStart } from '@angular/router';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  Router,
+  NavigationEnd,
+  ActivatedRoute,
+  ResolveStart,
+} from '@angular/router';
 import { NotificationService } from '@core/services/notification/notification.service';
 import { TokenStorageService } from '@core/services/tokenStorage/token-storage-service.service';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { walletUrl, ListTokens, sattUrl , networkList} from '@config/atn.config';
+import {
+  walletUrl,
+  ListTokens,
+  sattUrl,
+  networkList,
+} from '@config/atn.config';
 import { User } from '@app/models/User';
 import { SidebarService } from '@core/services/sidebar/sidebar.service';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -38,7 +49,7 @@ import {
   tap,
   startWith,
   take,
-  first
+  first,
 } from 'rxjs/operators';
 import Web3Provider from 'web3';
 
@@ -75,9 +86,10 @@ const bttscanAddr = environment.bttscanAddr;
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
+  adressWallet = new FormControl(window.ethereum.selectedAddress);
   currentScreenSize: string | undefined;
   query = '(max-width: 991.98px)';
   mediaQueryList?: MediaQueryList;
@@ -88,7 +100,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('myprofile') myprofile?: ElementRef;
   bnbGaz: any;
   ethGaz: any;
-  web3 !: Web3Provider;
+  web3!: Web3Provider;
 
   provider!: any;
   formattedCreator: string | undefined;
@@ -123,8 +135,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   bepGaz: any;
   showNotifications: boolean = false;
   newNotification: boolean = false;
-  networkLabel: any = "BNB Smart chain";
-  networkLogo: any = "bsc"
+  networkLabel: any = 'BNB Smart chain';
+  networkLogo: any = 'bsc';
   networkList: any = networkList;
   showNetwork: any = false;
   isSeen: number = 0;
@@ -149,8 +161,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   url5: any;
   url6: any;
 
-  
-
   picUserUpdated: boolean = false;
   oldHeight: any;
   newHeight: any;
@@ -169,8 +179,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   menuCampaign: boolean = false;
   menuTokenInfo: boolean = false;
   menuBuyToken: boolean = false;
-  dynamicTitle: string = "";
-  
+  dynamicTitle: string = '';
+
   // successPart: boolean = false;
   // errorPart: boolean = false;
   sucess: any = false;
@@ -202,6 +212,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   private isDestroyed$ = new Subject();
   isTransactionHashCopied = false;
   isTransactionHashCopiedbtc = false;
+  copyMessage: string = '';
   isLayoutDesktop = false;
   erc20V2: any;
   tronAddressV2: any;
@@ -212,13 +223,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   existV1: any;
   showConnectButton: boolean = false;
   @HostListener('window:resize', ['$event'])
-
   resize(event: any) {
     this.getScreenHeight = event.target.innerHeight;
     this.getScreenWidth = event.target.innerWidth;
   }
-
-
 
   constructor(
     breakpointObserver: BreakpointObserver,
@@ -250,26 +258,25 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute,
     private hostElement: ElementRef,
     private titleService: Title,
-    public modalService: NgbModal,
+    public modalService: NgbModal
   ) {
     this.router.events.subscribe((event) => {
-      if(event instanceof ResolveStart) {
-        if(this.tokenStorageService.getToken()) {
-            this.walletFacade.verifyUserToken().pipe(first()).subscribe((res:any) => {
-              if(res.message != "success") this.expiredSession();
-            }); 
+      if (event instanceof ResolveStart) {
+        if (this.tokenStorageService.getToken()) {
+          this.walletFacade
+            .verifyUserToken()
+            .pipe(first())
+            .subscribe((res: any) => {
+              if (res.message != 'success') this.expiredSession();
+            });
         }
       }
     });
 
-    if(window.ethereum) {
+    if (window.ethereum) {
       if (window.ethereum) {
-       
-  
         // Listen for network changes
         window.ethereum.on('chainChanged', (chainId: string) => {
-         
-        
           switch (chainId) {
             case '0x1':
               this.networkLabel = 'Ethereum';
@@ -287,46 +294,60 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               this.networkLabel = 'BitTorrent';
               this.networkLogo = 'btt';
               break;
-              case '0x61':
-                this.networkLabel = 'BNB Testnet';
-                this.networkLogo = 'bsc';
-                break;
-              case '0x2803':
-                this.networkLabel = 'Arthera';
-                this.networkLogo = 'arthera';
+            case '0x61':
+              this.networkLabel = 'BNB Testnet';
+              this.networkLogo = 'bsc';
+              break;
+            case '0x2803':
+              this.networkLabel = 'Arthera';
+              this.networkLogo = 'arthera';
               break;
             default:
               // ChainId not in the supported list
-              alert('Unsupported network. Please connect to a supported network.');
+              alert(
+                'Unsupported network. Please connect to a supported network.'
+              );
               const network = {
-                label: "bsc",
-                logo: "assets/Images/bsc.svg",
-                network: "BNB Smart Chain"
-              }
+                label: 'bsc',
+                logo: 'assets/Images/bsc.svg',
+                network: 'BNB Smart Chain',
+              };
               detectEthereumProvider().then((provider) => {
-                this.externalWalletService.changeNetwork(provider, network.label).then((val) => {
-                  this.networkLabel = network.network;
-                  this.networkLogo = network.label;
-                  Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
-                  Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
-                })
+                this.externalWalletService
+                  .changeNetwork(provider, network.label)
+                  .then((val) => {
+                    this.networkLabel = network.network;
+                    this.networkLogo = network.label;
+                    Cookies.set('networkSelected', this.networkLabel, {
+                      secure: true,
+                      sameSite: 'Lax',
+                    });
+                    Cookies.set('networkSelectedLogo', this.networkLogo, {
+                      secure: true,
+                      sameSite: 'Lax',
+                    });
+                  });
               });
-              // Optionally, you can disconnect the user or take other actions
-              
+            // Optionally, you can disconnect the user or take other actions
           }
-        
+
           //this.networkLabel = networkLabel;
           //this.networkLogo = networkLogo;
-        
-          Cookies.set('networkSelected', this.networkLabel, { secure: true, sameSite: 'Lax' });
-          Cookies.set('networkSelectedLogo', this.networkLogo, { secure: true, sameSite: 'Lax' });
+
+          Cookies.set('networkSelected', this.networkLabel, {
+            secure: true,
+            sameSite: 'Lax',
+          });
+          Cookies.set('networkSelectedLogo', this.networkLogo, {
+            secure: true,
+            sameSite: 'Lax',
+          });
         });
       } else {
         console.error('MetaMask not detected.');
       }
     }
-    
-    
+
     breakpointObserver
       .observe([Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
       .pipe(takeUntil(this.isDestroyed$))
@@ -358,12 +379,12 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       // @ts-ignore
       this.languageSelected = this.tokenStorageService.getLocale();
       translate.setDefaultLang(this.languageSelected);
-      this.fixMenuItemsWidth()
+      this.fixMenuItemsWidth();
     } else {
       this.tokenStorageService.setLocalLang('en');
       this.languageSelected = 'en';
       translate.setDefaultLang('en');
-        this.fixMenuItemsWidth()
+      this.fixMenuItemsWidth();
     }
     // translate.onLangChange
     //   .pipe(takeUntil(this.isDestroyed$))
@@ -377,10 +398,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //detect url changes to change the background of header
     this.router.events.pipe(takeUntil(this.isDestroyed$)).subscribe((event) => {
-      
-      
       if (event instanceof NavigationEnd) {
-        
         if (event.url.includes('welcome')) {
           this.isWelcomePage = true;
         } else {
@@ -413,14 +431,14 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
           this.checkMenuAdpool();
         }
 
-        if(this.router.url.includes('social-networks')){
+        if (this.router.url.includes('social-networks')) {
           this.checkSocialNetwork();
         }
 
-        if(this.router.url.includes('vote')){
+        if (this.router.url.includes('vote')) {
           this.checkMenuVote();
         }
-        
+
         if (
           this.router.url.includes('buy-token') ||
           this.router.url.includes('edit')
@@ -436,7 +454,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
           this.isWelcomePage = false;
           this.menuBuyToken = true;
         }
- /*if (!this.isWelcomePage) {
+        /*if (!this.isWelcomePage) {
           this.renderer?.setStyle(
             this.header?.nativeElement,
             'background',
@@ -447,26 +465,25 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  showAdressWallet=()=>(
-   window.ethereum.selectedAddress
-  )
-  copyAddressToClipboard = async () =>{
-    console.log(this.addressInput,"adresssssssssssssssssssss")
-    const inputElement = this.addressInput?.nativeElement as HTMLInputElement;
-    this.renderer.selectRootElement(inputElement).select();
-    console.log(inputElement);
-    try {
-      await navigator.clipboard.writeText(inputElement.value);
-      console.log('Content copied to clipboard')
-    } catch (e) {
-      console.error('Failed to Copy Address :', e)
-      
+  showAdressWallet = () => window.ethereum.selectedAddress;
+  copyAddressToClipboard() {
+    let elementToCopy = this.adressWallet.value
+    if (elementToCopy) {
+      navigator.clipboard
+        .writeText(elementToCopy)
+        .then(() => {
+          console.log('Content copied to clipboard');
+          this.copyMessage = 'Copied!';
+          setTimeout(() => {
+            this.copyMessage = '';
+          }, 2000)
+    })
+          .catch((error) =>
+          console.error('Failed to copy content to clipboard:', error)
+        );
     }
-    // this.renderer.selectRootElement(inputElement).select();
-    // document.execCommand('copy');
-
-    alert('Copied the address to clipboard: ' + inputElement);
   }
+
   ngAfterViewInit(): void {
     // if(this.route.url)
     this.route.url.subscribe((e) => {});
@@ -496,38 +513,39 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showNetwork = !this.showNetwork;
   }
 
-   displayNetwork(e: any){
-    
-    if(this.networkLogo != e.label) {
+  displayNetwork(e: any) {
+    if (this.networkLogo != e.label) {
       detectEthereumProvider().then((provider) => {
-        this.externalWalletService.changeNetwork(provider, e.label).then((val) => {
-          this.networkLabel = e.network;
-          this.networkLogo = e.label;
-          Cookies.set('networkSelected', this.networkLabel ,  { secure: true, sameSite: 'Lax' });
-          Cookies.set('networkSelectedLogo', this.networkLogo ,  { secure: true, sameSite: 'Lax' });
-        })
+        this.externalWalletService
+          .changeNetwork(provider, e.label)
+          .then((val) => {
+            this.networkLabel = e.network;
+            this.networkLogo = e.label;
+            Cookies.set('networkSelected', this.networkLabel, {
+              secure: true,
+              sameSite: 'Lax',
+            });
+            Cookies.set('networkSelectedLogo', this.networkLogo, {
+              secure: true,
+              sameSite: 'Lax',
+            });
+          });
       });
-    } 
-     
-    
-    
+    }
   }
 
-  controllingNetwork(){
-      try {
-        
-        this.networkLabel = Cookies.get('networkSelected')  || 'BNB SMART CHAIN' ;
-        this.networkLogo = Cookies.get('networkSelectedLogo') || 'bsc'
-      } catch (error) {
-        console.error('Error retrieving or setting cookie:', error);
-        this.networkLabel = 'bnb smart chain';
-      }
+  controllingNetwork() {
+    try {
+      this.networkLabel = Cookies.get('networkSelected') || 'BNB SMART CHAIN';
+      this.networkLogo = Cookies.get('networkSelectedLogo') || 'bsc';
+    } catch (error) {
+      console.error('Error retrieving or setting cookie:', error);
+      this.networkLabel = 'bnb smart chain';
+    }
   }
 
   ngOnInit(): void {
     this.controllingNetwork();
-  
-      this.externalWalletService.detectAddId();
 
     // this.networkList = [
     //   {network:"BNB Smart Chain" , label: "bsc" ,logo: ""  },
@@ -536,13 +554,14 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     //   {network:"BitTorrent" , label: "btt" ,logo: ""  }
     // ]
 
-    this.networkList.forEach((item: { network: string, label: string, logo: string }) => {
-      item.logo = `assets/Images/${item.label}.svg`;
-    });
-    
+    this.networkList.forEach(
+      (item: { network: string; label: string; logo: string }) => {
+        item.logo = `assets/Images/${item.label}.svg`;
+      }
+    );
+
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
-
 
     if (isPlatformBrowser(this.platformId)) {
       /*this.authService.isAuthenticated$
@@ -550,7 +569,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         .subscribe((isAuth: boolean) => {
           this.isConnected = isAuth;
         });*/
-      
+
       this.fixMenuItemsWidth();
       if (this.router.url.includes('welcome')) {
         this.isWelcomePage = true;
@@ -578,14 +597,12 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         this.oldHeight = window.innerHeight;
         this.newHeight = this.oldHeight;
       }
-
     }
 
     this.isConnected = true;
     setInterval(async () => {
       await this.voteService.checkWalletConnected();
     }, 700);
-  
   }
 
   show() {
@@ -604,9 +621,11 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async changeNetwork() {
     // if (this.externalWalletService.networkHasChanged) {
-    await this.externalWalletService.changeToBinance(window.ethereum).then(() => {
-      this.voteService.hideNetworkHasChanged();
-    })
+    await this.externalWalletService
+      .changeToBinance(window.ethereum)
+      .then(() => {
+        this.voteService.hideNetworkHasChanged();
+      })
       .catch(() => {
         // this.hide();
       });
@@ -615,8 +634,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isDisplayNew() {
     this.displayNew = localStorage.getItem('display')?.toString();
-    
-    if (this.existV1 && this.existV2)  {
+
+    if (this.existV1 && this.existV2) {
       if (this.displayNew === 'none') {
         this.displayNew = 'block';
         this.displayOld = 'none';
@@ -654,7 +673,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               this.tokenStorageService.setShowPopUp('true');
             }
             this.user = new User(data);
-            this.tokenStorageService.saveUserId(data.idUser);    
+            this.tokenStorageService.saveUserId(data.idUser);
             this.tokenStorageService.saveLastLogin(data.lastLogin);
             this.tokenStorageService.saveIdSn(data.idSn);
             return this.walletFacade.wallet$;
@@ -902,7 +921,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
             this.getNotifications();
             if (notif?.label?.cmp_hash) {
               this.router.navigate(['campaign', notif.label.cmp_hash], {
-                queryParams: { type: 'earnings' }
+                queryParams: { type: 'earnings' },
               });
             } //if the notification has cmp_has it will redirect to campaign detail component
 
@@ -916,8 +935,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
                     network: notif?.label?.network,
                     amount: notif?.label?.amount,
                     currency: notif?.label?.currency,
-                    owner
-                  }
+                    owner,
+                  },
                 });
               } else {
                 this.router.navigate(['home/TransactionsHistory']);
@@ -925,12 +944,12 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             if (notif?.type === 'send_demande_satt_event') {
               this.router.navigate(['home'], {
-                queryParams: { showReceive: true }
+                queryParams: { showReceive: true },
               });
             }
             if (notif?.type === 'demande_satt_event') {
               this.router.navigate(['home'], {
-                queryParams: { showSend: true }
+                queryParams: { showSend: true },
               });
             }
             if (notif?.type === 'save_legal_file_event') {
@@ -938,7 +957,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             if (notif?.label?.promHash) {
               this.router.navigate(['farm-posts'], {
-                queryParams: { promHash: notif?.label?.promHash }
+                queryParams: { promHash: notif?.label?.promHash },
               });
             }
             if (notif?.label?.cmp_hash && notif?.label?.linkHash) {
@@ -946,8 +965,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               this.router.navigate(['campaign', notif.label.cmp_hash], {
                 queryParams: {
                   linkHash: notif?.label?.linkHash,
-                  type: 'earnings'
-                }
+                  type: 'earnings',
+                },
               });
             }
           }
@@ -958,7 +977,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       this.getNotifications();
       if (notif?.label?.cmp_hash) {
         this.router.navigate(['campaign', notif.label.cmp_hash], {
-          queryParams: { type: 'earnings' }
+          queryParams: { type: 'earnings' },
         });
       } //if the notification has cmp_has it will redirect to campaign detail component
 
@@ -972,8 +991,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               network: notif?.label?.network,
               amount: notif?.label?.amount,
               currency: notif?.label?.currency,
-              owner
-            }
+              owner,
+            },
           });
         } else {
           this.router.navigate(['home/notification']);
@@ -981,7 +1000,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       if (notif?.type === 'send_demande_satt_event') {
         this.router.navigate(['home'], {
-          queryParams: { showReceive: true }
+          queryParams: { showReceive: true },
         });
       }
       if (notif?.type === 'demande_satt_event') {
@@ -992,13 +1011,13 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       if (notif?.label?.promHash) {
         this.router.navigate(['home/farm-posts'], {
-          queryParams: { promHash: notif?.label?.promHash }
+          queryParams: { promHash: notif?.label?.promHash },
         });
       }
       if (notif?.label?.cmp_hash && notif?.label?.linkHash) {
         // console.log(notif?.label?.promHash)
         this.router.navigate(['campaign', notif.label.cmp_hash], {
-          queryParams: { linkHash: notif?.label?.linkHash, type: 'earnings' }
+          queryParams: { linkHash: notif?.label?.linkHash, type: 'earnings' },
         });
       }
     }
@@ -1007,20 +1026,41 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.modalService.dismissAll(this.connectModal);
   }
 
-  closeInfoWalletModal(){
-    this.modalService.dismissAll(this.infoWalletModal)
+  closeInfoWalletModal() {
+    this.modalService.dismissAll(this.infoWalletModal);
   }
-  connect(content:any) {
+  connect(content: any) {
     this.modalService.open(content);
   }
 
-  showTransactions(addressWallet:string){
-    const url = `https://bscscan.com/address/${addressWallet}`
-    // this.router.navigateByUrl(url);
-    window.open(url, '_blank');
+  showTransactions(addressWallet: string) {
+    let network = Cookies.get('networkSelected');
+    let url: string;
+  
+    switch (network) {
+      case 'BinanceSmartChain':
+        url = `https://bscscan.com/address/${addressWallet}`;
+        break;
+      case 'Ethereum':
+        url = `https://etherscan.io/address/${addressWallet}`;
+        break;
+      case 'BTC':
+        url = `https://bttcscan.com/address/${addressWallet}`;
+        break;
+      case 'BitTorrent':
+        url = `https://polygonscan.com/address/${addressWallet}`;
+        break;
+      case 'Arthera':
+        url = `https://explorer.arthera.net/address/${addressWallet}`;
+        break;
+      default:
+        url = `https://bscscan.com/address/${addressWallet}`;
+        break;
+    }
+    (url) ? window.open(url, '_blank') : console.error('Invalid network:', network);
   }
   sattConnect() {
-    window.open(environment.domainName + '/auth/login', '_self')
+    window.open(environment.domainName + '/auth/login', '_self');
   }
   Disconnect() {
     this.voteService.Disconnect();
@@ -1076,7 +1116,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               ? 'SATT'
               : item._label['currency'],
           // crypto: item._label['currency'],
-          name: item._label['name']
+          name: item._label['name'],
         };
         item._label = 'asked_to_acquire';
         item.img = receive_satt_pic;
@@ -1100,7 +1140,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
                     item._label['currency'] === 'SATTTRON'))
               ? 'SATT'
               : item._label['currency'],
-          name: item._label['name']
+          name: item._label['name'],
         };
         item._label = 'asked_cryptoCurrency';
         item.img = receive_satt_pic;
@@ -1119,7 +1159,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         item._params = {
           name: item._label['cmp_name'],
           link: item._label['cmp_link'],
-          hash: item._label['cmp_hash']
+          hash: item._label['cmp_hash'],
         };
         item._label = 'campaign_notification.candidate_accept_link';
         item.img = './assets/Images/notifIcons/lienAccepte.svg';
@@ -1142,14 +1182,14 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
                 : item.label['currency'],
             nbr: Big(item._label['amount']).div(decimal),
             //  currency: item._label["currency"],
-            to: item._label['to']
+            to: item._label['to'],
           };
           item._label = 'transfer_event_currency';
         } else if (item._label['network']) {
           item._params = {
             nbr: Big(item._label['amount']).div(etherInWei),
             network: item._label['network'],
-            to: item._label['to']
+            to: item._label['to'],
           };
           item._label = 'transfer_event_network';
         }
@@ -1179,14 +1219,14 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               item._label['currency'] === 'SATTTRON'
                 ? 'SATT'
                 : item.label['currency'],
-            from: item._label['from']
+            from: item._label['from'],
           };
           item._label = 'receive_transfer_event_currency';
         } else if (item._label['network']) {
           item._params = {
             nbr: Big(item._label['amount']).div(etherInWei),
             network: item._label['network'],
-            from: item._label['from']
+            from: item._label['from'],
           };
           item._label = 'receive_transfer_event_network';
         }
@@ -1196,7 +1236,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'convert_event':
         item._params = {
           amount: Big(item._label['amount']).div(etherInWei),
-          Direction: item._label['Direction']
+          Direction: item._label['Direction'],
         };
         item._label =
           item._label['Direction'] === 'ETB'
@@ -1210,7 +1250,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         item._params = {
           title: item._label['cmp_name'],
           owner: item._label['cmp_owner'],
-          hash: item._label['hash']
+          hash: item._label['hash'],
         };
         item._label = 'apply_campaign';
         item.img = './assets/Images/notifIcons/CandidValid.svg';
@@ -1221,7 +1261,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         item._params = {
           name: item._label['cmp_name'],
           link: item._label['cmp_link'],
-          hash: item._label['cmp_hash']
+          hash: item._label['cmp_hash'],
         };
         item._label = 'campaign_notification.candidate_reject_link';
         item.img = './assets/Images/notifIcons/lienRefuse.svg';
@@ -1231,7 +1271,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         item._params = {
           name: item._label['cmp_name'],
           link: item._label['cmp_link'],
-          hash: item._label['hash']
+          hash: item._label['hash'],
         };
         item._label = 'campaign_notification.candidate_accept_link';
         item.img = './assets/Images/notifIcons/lienAccepte.svg';
@@ -1241,7 +1281,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         item._params = {
           name: item._label['cmp_name'],
           link: item._label['cmp_link'],
-          hash: item._label['cmp_hash']
+          hash: item._label['cmp_hash'],
         };
         item._label = 'campaign_notification.candidate_reject_link';
         item.img = './assets/Images/notifIcons/lienRefuse.svg';
@@ -1251,7 +1291,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'cmp_candidate_insert_link':
         item._params = {
           name: item._label['cmp_name'],
-          hash: item._label['cmp_hash']
+          hash: item._label['cmp_hash'],
         };
         item._label = 'campaign_notification.candidate_insert_link';
         item.img = './assets/Images/notifIcons/ajoutLien.svg';
@@ -1260,7 +1300,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'cmp_candidate_accepted':
         item._params = {
           name: item._label['cmp_name'],
-          hash: item._label['cmp_hash']
+          hash: item._label['cmp_hash'],
         };
         item._label = 'campaign_notification.candidate_insert_link';
         item.img = './assets/Images/notifIcons/lienAccepte.svg';
@@ -1269,7 +1309,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'cmp_candidate_rejected':
         item._params = {
           name: item._label['cmp_name'],
-          editorCmpUrl: walletUrl + 'campaigns'
+          editorCmpUrl: walletUrl + 'campaigns',
         };
         item._label = 'campaign_notification.editor_cmp_rejected';
         item.img = './assets/Images/notifIcons/lienRefuse.svg';
@@ -1311,7 +1351,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'save_buy_satt_event':
         item._params = {
           amount: item._label['amount'],
-          quantity: item._label['quantity']
+          quantity: item._label['quantity'],
         };
         item._label = 'buy_satt_notify';
         item.img = receive_satt_pic;
@@ -1327,7 +1367,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
             item._label['currency'] === 'SATTTRON'
               ? 'SATT'
               : item.label['currency'],
-          email: item._label[2]
+          email: item._label[2],
         };
         item._label = 'transfer_money';
         item.img = './assets/Images/notifIcons/envoi.svg';
@@ -1343,7 +1383,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
             item._label['currency'] === 'SATTTRON'
               ? 'SATT'
               : item.label['currency'],
-          email: item._label[2]
+          email: item._label[2],
         };
         item._label = 'received_satt';
         item.img = receive_satt_pic;
@@ -1386,7 +1426,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'buy_satt_event':
         item._params = {
           amount: item._label['amount'],
-          quantity: item._label['quantity']
+          quantity: item._label['quantity'],
         };
         item._label = 'buy_satt_notify';
         item.img = receive_satt_pic;
@@ -1428,13 +1468,12 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   toggleWallet() {
-    
     setTimeout(() => {
       let elem = this.document.getElementById('ercQrCode');
       elem?.scrollIntoView({
         behavior: 'auto',
         block: 'center',
-        inline: 'center'
+        inline: 'center',
       });
     }, 100);
     this.sidebarService.toggleFooterMobile.next(false);
@@ -1442,9 +1481,12 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.sidebarService.toggleWalletMobile.value) {
       this.sidebarService.toggleWalletMobile.next(false);
     } else {
-      this.walletFacade.verifyUserToken().pipe(first()).subscribe((res:any) => {
-        if(res.message != "success") this.expiredSession();
-      }); 
+      this.walletFacade
+        .verifyUserToken()
+        .pipe(first())
+        .subscribe((res: any) => {
+          if (res.message != 'success') this.expiredSession();
+        });
       this.sidebarService.toggleWalletMobile.next(true);
     }
   }
@@ -1524,15 +1566,14 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           this.existV2 = true;
         }
-  
-        if(this.existV1 && this.existV2 ) {
+
+        if (this.existV1 && this.existV2) {
           this.titleWallet = 'Your wallet ID';
-          this.title = 'Go to old wallet';;
-        } else{
+          this.title = 'Go to old wallet';
+        } else {
           this.titleWallet = 'Your old wallet';
           this.title = 'Go to new wallet ';
         }
-
 
         if (!!data) {
           this.btcCodeV2 = data.data.btcAddressV2;
@@ -1556,7 +1597,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
             { type: 'tron', code: this.tronAddress },
             { type: 'ERC20/BEP20V2', code: this.erc20V2 },
             { type: 'BTCV2', code: this.btcCodeV2 },
-            { type: 'tronv2', code: this.tronAddressV2 }
+            { type: 'tronv2', code: this.tronAddressV2 },
           ];
         }
       });
@@ -1655,9 +1696,9 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.menuAbout = false;
     this.menuBlog = false;
   }
-   openTokenInfoInNewTab() {
+  openTokenInfoInNewTab() {
     if (isPlatformBrowser(this.platformId))
-      window.open( environment.domainName + '/wallet/token-info', '_self');
+      window.open(environment.domainName + '/wallet/token-info', '_self');
   }
   checkMenuAbout() {
     this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
@@ -1670,7 +1711,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       window.open('https://satt-token.com/blog/', '_blank');
   }
 
-  checkSocialNetwork(){
+  checkSocialNetwork() {
     this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
     this.menuWallet = false;
     this.menuAdpool = false;
@@ -1685,7 +1726,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.menuBlog = false;
   }
 
-  checkMenuVote(){
+  checkMenuVote() {
     this.titleService.setTitle('SaTT - Smart advertising Transaction Token');
     this.menuWallet = false;
     this.menuAdpool = false;
@@ -1818,24 +1859,21 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   signOut() {
     this.authStoreService.clearStore();
-    this.tokenStorageService.clear();  
-    this.tokenStorageService.logout().subscribe(
-      () => {
-        this.campaignFacade.clearLinksListStore();
-        this.campaignDataStore.clearDataStore(); // clear globale state before logging out user.
-        this.ParticipationListStoreService.clearDataFarming();
-        this.walletFacade.dispatchLogout(); //clear totalBalance and cryptoList
-        this.accountFacadeService.dispatchLogoutAccount(); //clear account user
-        this.socialAccountFacadeService.dispatchLogoutSocialAccounts(); // clear social accounts
-        this.ParticipationListStoreService.nextPage.pageNumber = 0;
-        this.profileSettingsFacade.clearProfilePicStore();
-        this.kycFacadeService.dispatchLogoutKyc();
-        this.isConnected = false;
-        this.showConnectButton = true;
-        this.authService.setIsAuthenticated(false);
-      }
-      
-    );
+    this.tokenStorageService.clear();
+    this.tokenStorageService.logout().subscribe(() => {
+      this.campaignFacade.clearLinksListStore();
+      this.campaignDataStore.clearDataStore(); // clear globale state before logging out user.
+      this.ParticipationListStoreService.clearDataFarming();
+      this.walletFacade.dispatchLogout(); //clear totalBalance and cryptoList
+      this.accountFacadeService.dispatchLogoutAccount(); //clear account user
+      this.socialAccountFacadeService.dispatchLogoutSocialAccounts(); // clear social accounts
+      this.ParticipationListStoreService.nextPage.pageNumber = 0;
+      this.profileSettingsFacade.clearProfilePicStore();
+      this.kycFacadeService.dispatchLogoutKyc();
+      this.isConnected = false;
+      this.showConnectButton = true;
+      this.authService.setIsAuthenticated(false);
+    });
   }
 
   connectWallet = async (walletType: string) => {
@@ -1861,7 +1899,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     // if (dialog) {
     //   dialog.close();
     // }
-  }
+  };
 
   checkWalletConnected = async () => {
     // console.log("body", this.createProposalForm.value.body)
@@ -1871,20 +1909,20 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       if (accounts.length > 0) {
         this.walletConnected = true;
         this.walletId = accounts[0];
-        this.formattedCreator = `${this.walletId.substring(0, 6)}...${this.walletId.substring(this.walletId.length - 3)}`;
+        this.formattedCreator = `${this.walletId.substring(
+          0,
+          6
+        )}...${this.walletId.substring(this.walletId.length - 3)}`;
         // this.vp = await this.snapshotService.getVotingPower(this.walletId);
       }
-
     }
-  }
+  };
   connectMetaMask() {
     this.voteService.hideConnectDialog(this.connectModal);
-    this.voteService.connectWallet('metamask')
+    this.voteService.connectWallet('metamask');
   }
 
-
   ngOnDestroy(): void {
-    
     if (!!this.isDestroyed$) {
       this.isDestroyed$.next('');
       this.isDestroyed$.complete();
@@ -1892,7 +1930,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     //this.translate.onLangChange.unsubscribe();
   }
-
 
   logout() {
     this.tokenStorageService.clear();

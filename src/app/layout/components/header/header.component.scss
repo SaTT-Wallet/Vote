@@ -219,6 +219,10 @@ padding: 0 1em;
   margin-right: 1vw;
 }
 
+.close-button.mobile{
+  margin-top: 1em;
+}
+
 .wallet-connect-button {
   display: flex;
   align-items: center;
@@ -259,7 +263,7 @@ padding: 0 1em;
   background-color: transparent;
   border: 1px solid rgba(18, 99, 241, 0.16);
   width: 100%;
-  margin-top: 12px;
+  margin-top: 8px;
 }
 
 .wallet-connect-button2:hover{
@@ -2173,10 +2177,36 @@ bottom: 77.54% ; */
   width: 3.5em;
 }
 
+.copy.mobile{
+  padding:0;
+  width: 2.9em ;
+  font-size: 8px;
+  margin: 1.5em;
+}
+
 .input_adressWallet{
   margin: 5% 0;
   padding: 0;
   border: none;
+  top: 0.1em;
+}
+.input_adressWallet.mobile{
+  border: solid;
+  border-width: 0.1px;
+  width: 100vw;
+  border-color: lightgray;
+  background-color: transparent;
+}
+
+.copy-message {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  position: fixed;
+  // top: 40px;
+  right: 20px;
+  z-index: 9999;
 }
 
 
