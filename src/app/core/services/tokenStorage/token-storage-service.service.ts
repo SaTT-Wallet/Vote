@@ -39,7 +39,7 @@ export class TokenStorageService {
     private http: HttpClient
   ) {
     this.idWallet$.subscribe(() => {
-      console.log('Wallet ID changed in service');
+      // console.log('Wallet ID changed in service');
     });
   }
   headers: any;

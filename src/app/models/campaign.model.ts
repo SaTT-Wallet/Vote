@@ -46,7 +46,7 @@ export class Campaign {
   budgetUsd: string;
   selectedNetwork =(!!Cookies.get('networkSelected') ? (Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : ( Cookies.get('networkSelected') === 'Arthera' ? 'arthera':'polygon')))) :'bep20')
   constructor(data?: ICampaignResponse) {
-    console.log({selectedNetwork: this.selectedNetwork});
+    // console.log({selectedNetwork: this.selectedNetwork});
     this.id = data?._id || '';
     this.hash = data?.hash || null;
     this.walletId = data?.walletId || '';
