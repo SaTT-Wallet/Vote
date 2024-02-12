@@ -92,7 +92,7 @@
     <span class="span-text"> {{ 'Sidebar.PostFarm' | translate }}</span>
   </div>
 
-  <div class="div-help" [routerLink]="['/vote']" (click)="toggleMobile()">
+  <div style="pointer-events: none !important;" class="div-help" [routerLink]="['/vote']" (click)="toggleMobile()">
     <div class="div-pic">
       <img src="assets/Images/vote2.png" />
     </div>
