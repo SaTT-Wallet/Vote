@@ -1617,8 +1617,8 @@ a.btn.dropdown-toggle.dropdown-toggle-content {
 
 .deconnect_icon :hover,
 .deconnect_icon :focus {
-  border-bottom-right-radius: 30px;
-  border-bottom-left-radius: 30px;
+  // border-bottom-right-radius: 30px;
+  // border-bottom-left-radius: 30px;
   background-color: #ffff;
   color: #323754;
 }
@@ -2233,7 +2233,6 @@ bottom: 77.54% ; */
 }
 
 .input_adressWallet{
-  // cursor: grab;
   height: 3em;
   left: 2.5em;
   border-radius: 16px;
