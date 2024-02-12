@@ -340,9 +340,9 @@ private async addChain(provider: any, network: any) {
       this.isWalletConnected = true;
       this.acc = accounts;
       if (this.latest_acc !== this.acc[0]) {
-        this.vp = await this.snapshotService.getVotingPower(
-          this.acc[0].toString()
-        );
+        // this.vp = await this.snapshotService.getVotingPower(
+        //   this.acc[0].toString()
+        // );
         this.latest_acc = this.acc[0];
       }
     }
