@@ -1044,17 +1044,17 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'Ethereum':
         url = `https://etherscan.io/address/${addressWallet}`;
         break;
-      case 'BTC':
-        url = `https://bttcscan.com/address/${addressWallet}`;
-        break;
-      case 'BitTorrent':
+      case 'Polygon':
         url = `https://polygonscan.com/address/${addressWallet}`;
+        break;
+      case 'BitTorrent': 
+      url = `https://bttcscan.com/address/${addressWallet}`;
         break;
       case 'Arthera':
         url = `https://explorer.arthera.net/address/${addressWallet}`;
         break;
       default:
-        url = `https://bscscan.com/address/${addressWallet}`;
+         url = `https://bscscan.com/address/${addressWallet}`;
         break;
     }
     (url) ? window.open(url, '_blank') : console.error('Invalid network:', network);

@@ -297,12 +297,14 @@ abbr {
   position: relative;
   height: 48px;
   font-size: 16px;
-  padding: 0px 24px;
-  border-radius: 10px;
+  // padding: 0px 24px;
+  border-radius: 16px;
   color: rgb(18, 99, 241);
   background-color: transparent;
   border: 1px solid rgba(18, 99, 241, 0.16);
-  width: 100%;
+  width: 83%;
+  left:9%;
+  margin:auto;
   margin-top: 8px;
 }
 
@@ -325,6 +327,15 @@ abbr {
 }
 
 .description-image {
+  margin-top: 5vh; 
+  // margin-bottom: 2.5vh;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  // width: 100%;
+}
+
+.description-image2 {
   margin-top: 5vh; 
   // margin-bottom: 2.5vh;
   display: block;
@@ -370,10 +381,9 @@ abbr {
   margin-top: 0 !important; 
    
  }
-/* // .modal-header {
-//   padding: none !important;
-// } */
+
 .modal-title {
+  margin:auto;
   font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
@@ -381,8 +391,6 @@ abbr {
   line-height: 28px;
   letter-spacing: 1px;
   letter-spacing: 1px;
-  /* // padding-top: 15px;
-  // padding-bottom: 30px; */
 }
 
 .modal-body {
@@ -2210,9 +2218,9 @@ bottom: 77.54% ; */
 
 .copy{
   cursor: pointer;
-  // width: 10%;
-  // height:10%;
-  
+  font-size: 15px;
+  position: relative;
+  right:0.5em;
   margin: 0px;
   width: 3.5em;
 }
@@ -2225,11 +2233,17 @@ bottom: 77.54% ; */
 }
 
 .input_adressWallet{
-  margin: 5% 0;
-  padding: 0;
-  border: none;
-  top: 0.1em;
+  // cursor: grab;
+  height: 3em;
+  left: 2.5em;
+  border-radius: 16px;
+  padding-right: 3em;
+  margin: auto;
+  position: relative;
+  background-color: #f6f6f6;
+  border:none;
 }
+
 .input_adressWallet.mobile{
   border: solid;
   border-width: 0.1px;
