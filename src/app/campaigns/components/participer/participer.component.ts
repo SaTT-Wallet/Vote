@@ -301,35 +301,35 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
       '/profile/addChannel/facebook/' +
       userId+
       '?redirect=' +
-      this.router.url;
+      this.router.url + '?frontendApp=metamask';
 
     var linkGoogle: string =
       sattUrl +
       '/profile/addChannel/youtube/' +
       userId +
       '?redirect=' +
-      this.router.url;
+      this.router.url + '?frontendApp=metamask';
 
     var linkTwitter: string =
       sattUrl +
       '/profile/addChannel/twitter/' +
       userId+
       '?redirect=' +
-      this.router.url;
+      this.router.url + '?frontendApp=metamask';
 
     var linkLinkedin: string =
       sattUrl +
       '/profile/addChannel/linkedin/' +
       userId+
       '?redirect=' +
-      this.router.url;
+      this.router.url + '?frontendApp=metamask';
 
     var linkTiktok: string =
       sattUrl +
       '/profile/addChannel/tiktok/' +
       userId +
       '?redirect=' +
-      this.router.url;
+      this.router.url + '?frontendApp=metamask';
 
     if (isPlatformBrowser(this.platformId)) {
       if (social === 'facebook') {
