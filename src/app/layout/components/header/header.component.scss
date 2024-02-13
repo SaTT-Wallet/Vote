@@ -165,7 +165,7 @@ abbr {
   color: #f52079;
   font-family: 'Poppins';
   left:0.8em;
-  top:0.2em;
+  top:0.4em;
   background:
   radial-gradient(100% 58% at top   ,white   99%,#f52079) calc(0*100%/3) 0,
       radial-gradient(100% 58% at bottom,#f52079 99%,white  ) calc(3*100%/3) 0,
@@ -2540,8 +2540,15 @@ bottom: 77.54% ; */
 .li-menu-vote {
   border-radius: 19px;
   padding: 0.5em 1em;
+  pointer-events: none;
   /* margin-right: 20px; */
 }
+
+.vote-btn-container:hover{
+  pointer-events: all;
+}
+
+
 
 .li-menu a {
   display: block;

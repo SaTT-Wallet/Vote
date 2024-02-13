@@ -173,10 +173,13 @@
         <li [ngClass]="{ 'is-visited': menuProfile }" class="li-menu" id="intro11">
           <a class="vote" [routerLink]="['/social-networks']"><span>Profile</span> </a>
         </li>
-
-        <li class="li-menu-vote" id="intro11">
-          <a class="vote" [routerLink]="['/vote']"><span><abbr>Vote</abbr></span> </a>       
-         </li>
+        <div class="vote-btn-container">
+          <abbr>
+            <li class="li-menu-vote" id="intro11">
+              <a class="vote" [routerLink]="['/vote']"><span>Vote</span> </a>       
+            </li>
+          </abbr>
+        </div>
       </ul>
 
       <ul
