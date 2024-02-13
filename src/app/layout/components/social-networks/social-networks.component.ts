@@ -404,20 +404,19 @@ export class SocialNetworksComponent implements OnInit {
     };
   
    
-  
-    switch (p['message']) {
-      case 'access-denied':
+    switch (p['frontendApp']) {
+      case 'metamask?message=access-denied':
         showMessage('access-cancel', 'error');
         break;
   
-      case 'channel obligatoire':
-      case 'required_page':
+      case 'metamask?message=channel obligatoire':
+      case 'metamask?message=required_page':
         showMessage('no_page_selected', 'error');
         break;
   
-      case 'account_linked_with_success':
-      case 'account_linked_with_success_facebook':
-      case 'account_linked_with_success_instagram_facebook':
+      case 'metamask?message=account_linked_with_success':
+      case 'metamask?message=account_linked_with_success_facebook':
+      case 'metamask?message=account_linked_with_success_instagram_facebook':
         if (p['sn'] === 'fb' && data.facebook.length === 0) {
           showMessage('no_page_selected', 'error', false);
         } else {
@@ -425,15 +424,15 @@ export class SocialNetworksComponent implements OnInit {
         }
         break;
   
-      case 'account exist':
+      case 'metamask?message=account exist':
         showMessage('account_linked_other_account', 'error');
         break;
   
-      case 'external_account':
+      case 'metamask?message=external_account':
         showMessage('Your facebook page', 'error', false);
         break;
   
-      case 'page already exists':
+      case 'metamask?message=page already exists':
         showMessage('page already exists', 'error');
         break;
   
