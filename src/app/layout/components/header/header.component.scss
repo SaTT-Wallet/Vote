@@ -134,6 +134,28 @@ padding: 0 1em;
   border-bottom: 0px;
 }
 
+
+.disabled {
+  background-color: rgba(91, 91, 96, 0.892);
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius:30px;
+  border-bottom: 0px;
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.8; 
+}
+
+.abbrSoon{
+  color: darkred;
+  font-weight: 600;
+  position: relative;
+  top: 1em;
+  text-decoration: none;
+}
+.abbrSoon::after {
+  content:'SOON';
+}
+
 .network_list_label{
   font-family: 'Poppins';
   letter-spacing: 0.03em;
