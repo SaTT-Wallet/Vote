@@ -26,7 +26,7 @@ export const reducer = createReducer(
     SocialAccountActionsUnion.loadSocialAccountssSuccess,
     (state, payload): socialAccountState => ({
       ...state,
-      accounts: { ...payload.data.data },
+      accounts: payload.data ? { ...payload.data.data } : null,
       loading: true,
       error: ''
     })
