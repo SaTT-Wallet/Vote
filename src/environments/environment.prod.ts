@@ -86,10 +86,10 @@ export const environment = {
     currencySymbol:'BTT'
   },
   artheraNetwork: {
-    chainIDHex:'0x2803',
+    chainIDHex:'0x2802',
     chainName: 'Arthera',
-    rpcURL:'https://rpc-test.arthera.net',
-    blockExplorerURL:'https://explorer-test.arthera.net/',
+    rpcURL:'https://rpc.arthera.net',
+    blockExplorerURL:'https://explorer.arthera.net/',
     currencySymbol:'AA'
   },
   core : [

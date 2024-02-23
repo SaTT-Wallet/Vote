@@ -298,7 +298,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               this.networkLabel = 'BNB Testnet';
               this.networkLogo = 'bsc';
               break;
-            case '0x2803':
+            case '0x2802':
               this.networkLabel = 'Arthera';
               this.networkLogo = 'arthera';
               break;
