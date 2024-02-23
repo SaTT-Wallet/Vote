@@ -293,12 +293,16 @@
             <i style="color: white; position: relative; top:0.2em;" class="bi bi-chevron-up"></i>
           </ng-template>
             <ul class="network_list" [ngClass] = "{'show': showNetwork}">
-              <li [class.disabled]="isLast" (click)="isLast ? null : displayNetwork(el)" *ngFor="let el of networkList; last as isLast first as isFirst">
+              <!-- <span [ngClass]="{'abbrSoon': isLast}"></span> -->
+              <!-- [class.disabled]="isLast"  -->
+              <li (click)="displayNetwork(el)" *ngFor="let el of networkList; first as isFirst ; last as isLast">
                 <!-- *ngIf="showNetwork" -->
                 <ng-container>
-                  <div class="network_list_container" [class.is_first]="isFirst" [class.is_last]="isLast">
+                  <!-- [class.is_last]="isLast" -->
+                  <div class="network_list_container" [class.is_last]="isLast" [class.is_first]="isFirst">
                     <img class="network_list_logo" [src]="el.logo" alt="">
-                    <p class="network_list_label">{{el.network}} <span [ngClass]="{'abbrSoon': isLast}"></span>
+                    <!-- <span [ngClass]="{'abbrSoon': isLast}"></span> -->
+                    <p class="network_list_label">{{el.network}} 
                       <!-- <p [ngClass]="'bold'" class="network_list_label" (click)="toggleAddressVisibility(el)">&nbsp;Adress: {{el.adress}}</p> -->
                     </div>
                     </ng-container>
