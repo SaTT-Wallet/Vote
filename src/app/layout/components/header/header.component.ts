@@ -465,6 +465,15 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  getAccountsAndSetAddress = async() => {
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+        params: []
+      });
+      console.log(accounts)
+    } catch (error) { console.error("User denied account access")}  
+  }
   showAdressWallet = () => window.ethereum.selectedAddress;
   copyAddressToClipboard() {
     let elementToCopy = this.adressWallet.value
@@ -545,7 +554,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    
+    this.getAccountsAndSetAddress();
     this.controllingNetwork();
 
     // this.networkList = [
