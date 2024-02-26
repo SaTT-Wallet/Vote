@@ -89,7 +89,7 @@ const bttscanAddr = environment.bttscanAddr;
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
-  adressWallet = new FormControl(window.ethereum.selectedAddress);
+  adressWallet = new FormControl('');
   currentScreenSize: string | undefined;
   query = '(max-width: 991.98px)';
   mediaQueryList?: MediaQueryList;
@@ -545,6 +545,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    
     this.controllingNetwork();
 
     // this.networkList = [
