@@ -776,27 +776,25 @@
       <div class="d-flex justify-content-between description-block" >
         <h4 class="modal-title">
 
-         {{dynamicTitle || 'Your Wallet'}}
+         Your Wallet
         </h4>
         <button style="visibility: hidden;" (click)="voteService.hideConnectDialog(connectModal)" class="close-button" >
           <img src="./../../../../assets/Images/icon-close.svg" />
         </button>
       </div>
       <div class="d-block" >
-        <input [formControl]="adressWallet"  (mouseenter)="dynamicTitle='Your Address'" (mouseleave)="''" type="text" class="input_adressWallet col-10 ml-1"  readonly/>
+        <input [formControl]="adressWallet"  type="text" class="input_adressWallet col-10 ml-1"  readonly/>
       <img
-      (mouseenter)="dynamicTitle='Copy Your Address'" (mouseleave)="''"
       class="copy col-2"
       src="assets/Images/copy.svg"
       alt=""
       (click)="copyAddressToClipboard()"
       />
       <div *ngIf="copyMessage" class="copy-message">{{ copyMessage }}</div>
-      <button (click)="showTransactions(showAdressWallet())" class="wallet-connect-button2"(mouseenter)="dynamicTitle='Your Recent Transactions'" (mouseleave)="''">View Transactions</button>
+      <button (click)="showTransactions(showAdressWallet())" class="wallet-connect-button2">View Transactions</button>
       </div>
       <div>
       <button
-      (mouseenter)="dynamicTitle='Disconnect'" (mouseleave)="''"
       (click)="Disconnect();closeInfoWalletModal()"
         type="button"
         class="wallet-connect-button2"><img src="" /> Disconnect
