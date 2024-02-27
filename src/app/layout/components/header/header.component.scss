@@ -405,6 +405,8 @@ abbr {
  }
 
 .modal-title {
+  position: relative;
+  left: 1.3em;
   margin:auto;
   font-family: "Poppins";
   font-style: normal;
@@ -412,7 +414,7 @@ abbr {
   font-size: 22px;
   line-height: 28px;
   letter-spacing: 1px;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
 
 .modal-body {

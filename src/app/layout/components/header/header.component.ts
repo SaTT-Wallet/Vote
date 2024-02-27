@@ -89,7 +89,7 @@ const bttscanAddr = environment.bttscanAddr;
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
-  adressWallet = new FormControl(window.ethereum.selectedAddress);
+  adressWallet = new FormControl('');
   currentScreenSize: string | undefined;
   query = '(max-width: 991.98px)';
   mediaQueryList?: MediaQueryList;
@@ -465,6 +465,24 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  getAccountsAndSetAddress = async() => {
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+        params: []
+      });
+      if (accounts.length > 0) {
+        const address = accounts[0];
+        this.adressWallet = new FormControl(address);
+        // Use adressWallet as needed
+      } else {
+        console.error("No Ethereum accounts found");
+      }
+    } catch (error) {
+      console.error("Error requesting accounts:", error);
+      // Handle errors appropriately
+    }
+  }
   showAdressWallet = () => window.ethereum.selectedAddress;
   copyAddressToClipboard() {
     let elementToCopy = this.adressWallet.value
@@ -545,6 +563,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.getAccountsAndSetAddress();
     this.controllingNetwork();
 
     // this.networkList = [
