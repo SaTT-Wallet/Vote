@@ -471,8 +471,17 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         method: "eth_requestAccounts",
         params: []
       });
-      console.log(accounts)
-    } catch (error) { console.error("User denied account access")}  
+      if (accounts.length > 0) {
+        const address = accounts[0];
+        this.adressWallet = new FormControl(address);
+        // Use adressWallet as needed
+      } else {
+        console.error("No Ethereum accounts found");
+      }
+    } catch (error) {
+      console.error("Error requesting accounts:", error);
+      // Handle errors appropriately
+    }
   }
   showAdressWallet = () => window.ethereum.selectedAddress;
   copyAddressToClipboard() {
