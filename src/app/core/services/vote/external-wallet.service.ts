@@ -54,7 +54,7 @@ export class ExternalWalletService {
       try {
         // Generate a unique nonce for each connection
 
-        const timestamp = Date.now().toString();
+        
 
         // Construct the message
 
@@ -62,25 +62,9 @@ export class ExternalWalletService {
           method: 'eth_requestAccounts',
         });
         this.tokenStorageService.saveIdWallet(accounts[0]);
-        const message = `authentication=true&address=${accounts[0]}&ts=${timestamp}`;
-        const signature = await this.ethereum.request({
-          method: 'personal_sign',
-          params: [message, accounts[0]],
-        });
-
+       
         // Save the signature and address to local storage
-        Cookies.set('metamaskSignature', signature, {
-          secure: true,
-          sameSite: 'Lax',
-        });
-        Cookies.set('metamaskAddress', accounts[0], {
-          secure: true,
-          sameSite: 'Lax',
-        });
-        Cookies.set('metamaskNonce', message, {
-          secure: true,
-          sameSite: 'Lax',
-        });
+        
 
         // Rest of your code
         await this.ethereum.request({

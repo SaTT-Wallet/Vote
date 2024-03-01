@@ -95,7 +95,20 @@ export class VoteService {
  createAccount(wallet:any):void {
   this.apiprofilService.createUser(wallet.toLowerCase()).subscribe(
     (res:any) => {
-     Cookies.set('userId', res.data.UserId)
+      console.log({res});
+      Cookies.set('jwt', res.data.token, {
+        secure: true,
+        sameSite: 'Lax',
+      });
+      Cookies.set('metamaskAddress', res.data.user.walletId, {
+        secure: true,
+        sameSite: 'Lax',
+      });
+      Cookies.set('UserId', res.data.user.UserId, {
+        secure: true,
+        sameSite: 'Lax',
+      });
+     
     }, (err:any) => {
       console.error(err)
     }

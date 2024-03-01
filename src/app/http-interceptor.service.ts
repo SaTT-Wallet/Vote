@@ -42,13 +42,15 @@ export class HttpInterceptorService implements HttpInterceptor {
     const shouldAddHeaders = apiUrlsWithHeaders.some(url => req.url.includes(url));
 
     if (shouldAddHeaders) {
-      const headers = new HttpHeaders()
-        .set('Content-Type', 'application/json')
-        .set('X-Signature', Cookies.get('metamaskSignature') || '')
-        .set('X-Address', Cookies.get('metamaskAddress') || '')
-        .set('X-Message', Cookies.get('metamaskNonce') || '');
-
-      const cloned = req.clone({ headers });
+      
+      const token = !!Cookies.get('jwt') ? Cookies.get('jwt') : '';
+      let headers: { [header: string]: string } = {
+        'Cache-Control': 'no-store'
+      };
+      if(token != '') {
+        headers['Authorization'] = 'Bearer ' + token;
+      }
+      const cloned = req.clone({ setHeaders: headers });
 
       return next.handle(cloned);
     }
