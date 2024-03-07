@@ -12,6 +12,10 @@ export class ApiprofilService {
   createUser(wallet: string) {
     return this.http.post(`${sattUrl}/external/create-user`, {wallet});
   }
+
+  verifyToken() {
+    return this.http.get(`${sattUrl}/external/verify-token`)
+  }
   
 
 }

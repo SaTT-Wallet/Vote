@@ -260,21 +260,28 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     private titleService: Title,
     public modalService: NgbModal
   ) {
+    
     this.router.events.subscribe((event) => {
       if (event instanceof ResolveStart) {
-        if (this.tokenStorageService.getToken()) {
-          this.walletFacade
-            .verifyUserToken()
-            .pipe(first())
-            .subscribe((res: any) => {
-              if (res.message != 'success') this.expiredSession();
-            });
+        const token = !!Cookies.get('jwt') ? Cookies.get('jwt') : '';
+        const selectedAddress = !!Cookies.get('metamaskAddress') ? Cookies.get('metamaskAddress') : '';
+        if(!!window.ethereum) {
+          if(token != '' && selectedAddress === window.ethereum.selectedAddress) this.voteService.verifyToken();
+          else {
+            this.externalWalletService.connect = false;
+            this.externalWalletService.isWalletConnected = false; 
+          } 
         }
+        
       }
     });
 
-    if (window.ethereum) {
-      if (window.ethereum) {
+    
+      if (!!window.ethereum) {
+        // Listen for account changes
+        window.ethereum.on('accountsChanged', (accounts:any) => {
+          this.voteService.createAccount(window.ethereum.selectedAddress);
+        })
         // Listen for network changes
         window.ethereum.on('chainChanged', (chainId: string) => {
           switch (chainId) {
@@ -346,7 +353,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       } else {
         console.error('MetaMask not detected.');
       }
-    }
+    
 
     breakpointObserver
       .observe([Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
@@ -1919,10 +1926,19 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     //   dialog.close();
     // }
   };
-
-  checkWalletConnected = async () => {
+  
+  checkWalletConnected () {
+    const token = !!Cookies.get('jwt') ? Cookies.get('jwt') : '';
+        const selectedAddress = !!Cookies.get('metamaskAddress') ? Cookies.get('metamaskAddress') : '';
+        if(!!window.ethereum) {
+          if(token != '' && selectedAddress === window.ethereum.selectedAddress) this.voteService.verifyToken();
+          else {
+            this.externalWalletService.connect = false;
+            this.externalWalletService.isWalletConnected = false; 
+          } 
+        }
     // console.log("body", this.createProposalForm.value.body)
-    if (typeof window.ethereum !== 'undefined') {
+    /*if (typeof window.ethereum !== 'undefined') {
       const accounts = await this.externalWalletService.checkConnectedWallet();
 
       if (accounts.length > 0) {
@@ -1934,7 +1950,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         )}...${this.walletId.substring(this.walletId.length - 3)}`;
         // this.vp = await this.snapshotService.getVotingPower(this.walletId);
       }
-    }
+    }*/
   };
   connectMetaMask() {
     this.voteService.hideConnectDialog(this.connectModal);
@@ -1947,6 +1963,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       this.isDestroyed$.complete();
       this.isDestroyed$.unsubscribe();
     }
+   
     //this.translate.onLangChange.unsubscribe();
   }
 

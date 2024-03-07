@@ -9,6 +9,7 @@ import { ApiprofilService } from '@app/apiprofil.service';
 import { ExternalWalletService } from './external-wallet.service';
 import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
 import { DOCUMENT } from '@angular/common';
+import { CookieService } from 'ngx-cookie-service';
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +26,7 @@ export class VoteService {
 
   private previousWalletId!: string;
 
-  constructor(public externalWalletService: ExternalWalletService,private router: Router, @Inject(DOCUMENT) private document: Document,public apiprofilService:ApiprofilService, public modalService: NgbModal, public tokenStorageService: TokenStorageService) { }
+  constructor(private cookieService: CookieService,public externalWalletService: ExternalWalletService,private router: Router, @Inject(DOCUMENT) private document: Document,public apiprofilService:ApiprofilService, public modalService: NgbModal, public tokenStorageService: TokenStorageService) { }
 
   showConnectDialog(content?: any) {
     this.modalService.open(content)
@@ -91,26 +92,52 @@ export class VoteService {
 
     //this.hideConnectDialog();
   }
+  verifyToken() {
+    this.apiprofilService.verifyToken().subscribe(
+      (res:any) => {
+        if(!!res.data) {
+          this.walletConnected = true;
+        } else {
+          this.cookieService.delete('UserId');
+          this.cookieService.delete('jwt');
+          this.cookieService.delete('metamaskAddress');
+          this.externalWalletService.connect = false;
+          this.externalWalletService.isWalletConnected = false; 
+        }
+      }, (err:any) => {
+        console.error(err);
+        this.cookieService.delete('UserId');
+        this.cookieService.delete('jwt');
+        this.cookieService.delete('metamaskAddress');
+        this.externalWalletService.connect = false;
+        this.externalWalletService.isWalletConnected = false; 
+      }
 
- createAccount(wallet:any):void {
-  this.apiprofilService.createUser(wallet.toLowerCase()).subscribe(
-    (res:any) => {
-      console.log({res});
-      Cookies.set('jwt', res.data.token, {
-        secure: true,
-        sameSite: 'Lax',
-      });
-      Cookies.set('metamaskAddress', res.data.user.walletId, {
-        secure: true,
-        sameSite: 'Lax',
-      });
-      Cookies.set('UserId', res.data.user.UserId, {
-        secure: true,
-        sameSite: 'Lax',
-      });
+    )
+  }
+
+  createAccount(wallet:any):void {
+    this.apiprofilService.createUser(wallet.toLowerCase()).subscribe(
+      (res:any) => {
+        console.log({res});
+        Cookies.set('jwt', res.data.token, {
+          secure: true,
+          sameSite: 'Lax',
+        });
+        Cookies.set('metamaskAddress', res.data.user.walletId, {
+          secure: true,
+          sameSite: 'Lax',
+        });
+        Cookies.set('UserId', res.data.user.UserId, {
+          secure: true,
+          sameSite: 'Lax',
+        });
      
     }, (err:any) => {
-      console.error(err)
+        console.error(err);
+        this.cookieService.delete('UserId');
+        this.cookieService.delete('jwt');
+        this.cookieService.delete('metamaskAddress');
     }
   );
   

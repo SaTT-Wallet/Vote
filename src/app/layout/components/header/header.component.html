@@ -59,7 +59,7 @@
     <div class="phone">
       <div
         class="d-md-block d-xl-none d-lg-none d-sm-block navbar-nav"
-        *ngIf="!externalWalletService.connect"
+        *ngIf="!externalWalletService.isWalletConnected && !externalWalletService.connect"
       >
         <button class="button-connect" (click)="voteService.showConnectDialog(connectModal)">
           <img src="assets/Images/connected-wallet.png" />
@@ -165,7 +165,7 @@
           <a
             *ngIf="!isConnected"
             class="farmPost"
-            [routerLink]="['/auth/login']"
+           
             ><span>{{ 'faq_farmming' | translate }}</span></a
           >
         </li>

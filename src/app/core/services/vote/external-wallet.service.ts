@@ -7,6 +7,7 @@ import { abi } from '../../../../environments/abi';
 import Cookies from 'js-cookie';
 import { SnapshotService } from '@app/vote/snapshot.service';
 import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
+import { CookieService } from 'ngx-cookie-service';
 declare let window: any;
 
 @Injectable({
@@ -25,7 +26,8 @@ export class ExternalWalletService {
 
   constructor(
     private snapshotService: SnapshotService,
-    private tokenStorageService: TokenStorageService
+    private tokenStorageService: TokenStorageService,
+    private cookieService: CookieService
   ) {
     this.detectMetaMask();
     const { ethereum } = <any>window;
@@ -57,7 +59,7 @@ export class ExternalWalletService {
         
 
         // Construct the message
-
+        
         const accounts = await this.ethereum.request({
           method: 'eth_requestAccounts',
         });
@@ -85,6 +87,7 @@ export class ExternalWalletService {
       // throw new Error('Please install MetaMask!');
     }
   }
+
   async changeNetwork(provider: any, network: any) {
     await (provider as any).request({
       method: 'wallet_addEthereumChain',
@@ -171,6 +174,8 @@ export class ExternalWalletService {
       ],
     });
   }
+
+  
   async changeToBinance(provider: any) {
     const chainId = await this.ethereum.request({ method: 'eth_chainId' });
 
@@ -362,6 +367,9 @@ private async addChain(provider: any, network: any) {
     // window.ethereum.on('disconnect', (error: any) => {
     //   console.log('Metamask disconnected:', error);
     // });
+    this.cookieService.delete('UserId');
+    this.cookieService.delete('jwt');
+    this.cookieService.delete('metamaskAddress');
     this.connect = false;
     this.isWalletConnected = false;
     this.acc = [];

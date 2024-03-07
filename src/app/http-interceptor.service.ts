@@ -35,7 +35,8 @@ export class HttpInterceptorService implements HttpInterceptor {
       '/external/externalAnswer',
       '/external/externalGains',
       '/external/externalUploadPictureToIPFS',
-      '/external/deleteDraft'
+      '/external/deleteDraft',
+      '/external/verify-token'
     ];
 
     // Check if the request URL matches any of the specified URLs
