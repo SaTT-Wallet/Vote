@@ -27,6 +27,7 @@ import { Location } from '@angular/common';
 import * as _ from 'lodash';
 import { Console } from 'console';
 import { TranslateService } from '@ngx-translate/core';
+import Cookies from 'js-cookie';
 
 enum EBlockchainNetwork {
   ERC20 = 'ERC20',
@@ -117,8 +118,8 @@ export class BuyTokenComponent implements OnInit, OnChanges {
   isDestroyedObs = this.isDestroyed.asObservable();
 
   position: any;
-  walletId: any = this.tokenStorageService.getIdWallet()
-    ? this.tokenStorageService.getIdWallet()
+  walletId: any = Cookies.get('metamaskAddress')
+    ? Cookies.get('metamaskAddress')
     : '';
   walletBtc: any;
 

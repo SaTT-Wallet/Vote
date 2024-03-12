@@ -50,44 +50,23 @@ export class ExternalWalletService {
   }
 
   async connectMetamask(): Promise<void> {
-    const provider = await detectEthereumProvider();
-
-    if (provider && provider.isMetaMask) {
       try {
-        // Generate a unique nonce for each connection
-
-        
-
-        // Construct the message
-        
         const accounts = await this.ethereum.request({
           method: 'eth_requestAccounts',
         });
-        this.tokenStorageService.saveIdWallet(accounts[0]);
-       
-        // Save the signature and address to local storage
-        
-
-        // Rest of your code
-        await this.ethereum.request({
-          method: 'wallet_requestPermissions',
-          params: [{ eth_accounts: {} }],
-        });
-        await this.changeToBinance(provider);
-       
-        this.connect = true;
-        this.isWalletConnected = true;
-        this.tokenStorageService.setIsAuth('true');
+        if(accounts.length) {
+          this.connect = true;
+          this.isWalletConnected = true;
+        } else {
+          this.connect = false;
+          this.isWalletConnected = false;
+        }
       } catch (error) {
         console.error('Error connecting with MetaMask:', error);
-        // Handle errors as needed
       }
-    } else {
-      // Handle the case where MetaMask is not available
-      // throw new Error('Please install MetaMask!');
-    }
   }
 
+  
   async changeNetwork(provider: any, network: any) {
     await (provider as any).request({
       method: 'wallet_addEthereumChain',

@@ -84,7 +84,7 @@ export class CampaignsStoreService {
       )
       .subscribe((c) => {
         let campaign = new Campaign(c);
-       const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+       const userId = !!Cookies.get('UserId') ? Cookies.get('UserId'): '0';
             campaign.ownedByUser = campaign.ownerId === userId;
         this.setCampaign(campaign);
       });
@@ -98,7 +98,7 @@ export class CampaignsStoreService {
       .subscribe((res: IApiResponse<ICampaignResponse> | null) => {
         let campaign = new Campaign(res?.data);
 
-       const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+       const userId = !!Cookies.get('UserId') ? Cookies.get('UserId'): '0';
             campaign.ownedByUser = campaign.ownerId === userId;
         this.setCampaign(campaign);
 
@@ -140,7 +140,7 @@ export class CampaignsStoreService {
   addDraftCampaign(draftCampaign: any) {
     let campaignsList: any = this.campaignsListByWalletIdSubject.getValue();
 
-    this.campaignService
+    /*this.campaignService
       .getCampaignCover(draftCampaign._id || draftCampaign.id, '')
       .pipe(takeUntil(this.isDestroyed))
       .subscribe((data: any) => {
@@ -152,7 +152,7 @@ export class CampaignsStoreService {
 
         // let objectURL = URL.createObjectURL(data);
         draftCampaign.img = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-      });
+      });*/
     campaignsList.push(draftCampaign);
     this.setCampaignsByUserWalletId(campaignsList);
   }

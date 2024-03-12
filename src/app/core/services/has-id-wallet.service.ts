@@ -32,7 +32,7 @@ export class HasIdWalletService implements CanActivate {
   //         });
   //         return false;
   //       } else if (
-  //         !this.tokenStorageService.getIdWallet() &&
+  //         !Cookies.get('metamaskAddress') &&
   //         this.tokenStorageService.getIsAuth() === 'true'
   //       ) {
   //         return true;
@@ -73,7 +73,7 @@ export class HasIdWalletService implements CanActivate {
           });
           return false;
         } else if (
-          !this.tokenStorageService.getIdWallet() &&
+          !Cookies.get('metamaskAddress') &&
           this.tokenStorageService.getIsAuth() === 'true'
         ) {
           return true;

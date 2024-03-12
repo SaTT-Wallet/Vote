@@ -71,7 +71,7 @@ export class SocialNetworksComponent implements OnInit {
   isLoading: any = false;
   threadIdToDelete: any = '';
   private isDestroyed = new Subject();
-  userId = Cookies.get('userId');
+  userId = Cookies.get('UserId');
   showSpinner: boolean = true;
   checkThreadsExist: boolean = false;
   private socialAccount$ = this.socialAccountFacadeService.socialAccount$;
@@ -444,7 +444,7 @@ export class SocialNetworksComponent implements OnInit {
 
   onReditectSocial(social: string) {
     //let url = this.router.url.split('?')[0];
-    const userId = Cookies.get('userId');
+    const userId = Cookies.get('UserId');
     if (isPlatformBrowser(this.platformId))
       window.location.href =
         sattUrl +

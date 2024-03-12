@@ -220,7 +220,7 @@ export class CampaignsService {
               if (events.length > 0) {
                 data.hash = events[0].args[0];
                 console.log('Campaign ID:', data.hash);
-                data.userId = Cookies.get('userId');
+                data.userId = Cookies.get('UserId');
                 data.hash = this.campaignHttpApiService
                   .createCompaign(data, createPriceFundPromise)
                   .subscribe((res) => console.log(res));
@@ -278,7 +278,7 @@ export class CampaignsService {
       console.log(response1);
 
       const transactionPromise = await ctr.updatePromStats(data.hash, {
-        from: this.tokenStorageService.getIdWallet(),
+        from: Cookies.get('metamaskAddress'),
         gasLimit: gas,
         gasPrice: gasPrice,
       });
@@ -292,7 +292,7 @@ export class CampaignsService {
       console.log(response2);
 
       const receiptgain1 = await ctr.getGains(data.hash, {
-        from: this.tokenStorageService.getIdWallet(),
+        from: Cookies.get('metamaskAddress'),
         gasLimit: gas,
         gasPrice: gasPrice,
       });

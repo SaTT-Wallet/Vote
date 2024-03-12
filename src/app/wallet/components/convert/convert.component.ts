@@ -34,6 +34,7 @@ import { WalletFacadeService } from '@core/facades/wallet-facade.service';
 import { AccountFacadeService } from '@app/core/facades/account-facade/account-facade.service';
 import { Big } from 'big.js';
 import { HttpErrorResponse } from '@angular/common/http';
+import Cookies from 'js-cookie';
 
 @Component({
   selector: 'app-convert',
@@ -41,7 +42,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./convert.component.scss']
 })
 export class ConvertComponent implements OnInit, OnDestroy {
-  idWallet = this.tokenStorageService.getIdWallet();
+  idWallet = Cookies.get('metamaskAddress');
   cryptoData: any = [];
   dropDownSection: any = [];
   arrow: string = '';

@@ -68,7 +68,7 @@ export class CampaignDetailGainsComponent implements OnInit {
   idProm: any;
   walletPassword: any;
   validationAttempt = false;
-  influencerWallet: any = this.tokenStorageService.getIdWallet();
+  influencerWallet: any = Cookies.get('metamaskAddress');
   influencerProms: any = new Observable<any>();
   etherInWei: any;
   isGainsDisabled = new Observable<boolean>();
@@ -110,6 +110,7 @@ export class CampaignDetailGainsComponent implements OnInit {
     //  this.calcGains();
 
     this.ParticipationListService.isEarnings = true;
+    console.log({cmp: this.campaign, addr: Cookies.get('metamaskAddress')})
     this.isOwnedByUser =(this.campaign.walletId === Cookies.get('metamaskAddress'))  
     console.log("this.campaignthis.campaignthis.campaign",this.campaign)
     this.setQuery();

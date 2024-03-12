@@ -62,6 +62,7 @@ import { ProfileService } from '@app/core/services/profile/profile.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatchPasswordValidator } from '@app/helpers/form-validators';
 import { environment as env } from './../../environments/environment';
+import Cookies from 'js-cookie';
 
 @Component({
   selector: 'app-wallet',
@@ -1145,7 +1146,7 @@ export class WalletComponent implements OnInit, OnDestroy {
       });
   }
   verifyOnBoarding() {
-    let address = this.tokenStorageService.getIdWallet();
+    let address = Cookies.get('metamaskAddress');
 
   }
 

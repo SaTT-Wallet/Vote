@@ -39,6 +39,7 @@ import { pattContact } from '@config/atn.config';
 import { environment } from '@environments/environment';
 import { FilterBynamePipe } from '@shared/pipes/filter-byname.pipe';
 import { ITransferTokensRequestBody } from '@app/core/services/wallet/wallet.service';
+import Cookies from 'js-cookie';
 // import { data } from 'jquery';
 declare var $: any;
 @Component({
@@ -47,7 +48,7 @@ declare var $: any;
   styleUrls: ['./crypto-list.component.css']
 })
 export class CryptoListComponent implements OnInit, OnDestroy {
-  idWallet = this.tokenStorageService.getIdWallet();
+  idWallet = Cookies.get('metamaskAddress');
   buyIframSrc: SafeResourceUrl;
   arrow: string = '';
   arrowColor: string = '';

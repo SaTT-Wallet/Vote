@@ -147,15 +147,15 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
 
   createNewDraftCampaign() {
     //this.draftStore.init();
-    if(this.externalWalletService.isWalletConnected &&
-    this.externalWalletService.connect) {
+    if(!!window.ethereum && typeof window.ethereum.selectedAddress === 'string') {
       this.draftStore
       .addNewDraft(new Campaign())
       .pipe(takeUntil(this.onDestoy$))
       .subscribe((draft: Campaign) => {
+        console.log({draft});
         this.idcamp = draft.id || '';
         this.router.navigate(['campaign', this.idcamp, 'edit']);
-      });
+      }, (err) => console.log({err}));
     } else {
       this.voteService.connectWallet('metamask')
     }
@@ -225,6 +225,7 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
             if (campaigns.length === 0) {
               this.isLoading = false;
             }
+            console.log({campaigns});
             //const selectedNetwork = Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : 'polygon'))
             //const isMatchingNetwork = (campaign: any) => campaign.currency.type.toString().toLowerCase() === selectedNetwork;
             this.campaignsList = campaigns;

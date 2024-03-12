@@ -51,7 +51,7 @@ export class CampaignHttpApiService {
 
   upload(file: File, id: any) {
     const formData: FormData = new FormData();
-    const userId = Cookies.get('userId');
+    const userId = Cookies.get('UserId');
 
     formData.append('cover', file);
     if (userId !== undefined) 
@@ -340,7 +340,7 @@ export class CampaignHttpApiService {
     return this.http
       .put<IApiResponse<ICampaignResponse>>(
         `${sattUrl}/campaign/extUpdate/${campaignId}`,
-        { values, userId: Number(Cookies.get('userId')), walletId : Cookies.get('metamaskAddress') } 
+        { values, userId: Number(Cookies.get('UserId')), walletId : Cookies.get('metamaskAddress') } 
       )
       .pipe(
         catchError(() => of(null)),
@@ -523,7 +523,7 @@ export class CampaignHttpApiService {
           '/campaign/campaignPrompAllExt/' +
           campaignId +
           '?influencer=' +
-          this.tokenStorageService.getIdWallet()
+          Cookies.get('metamaskAddress')
       );
     } else {
       return this.http.get(
@@ -545,7 +545,7 @@ export class CampaignHttpApiService {
       .set('state', state)
       .set('page', '' + page)
       .set('limit', '' + size);
-    let wallet_id = this.tokenStorageService.getIdWallet();
+    let wallet_id = Cookies.get('metamaskAddress');
   
     // Create an object to represent the request body
     const requestBody = {

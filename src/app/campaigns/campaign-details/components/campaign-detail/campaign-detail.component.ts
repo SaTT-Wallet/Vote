@@ -117,7 +117,7 @@ export class CampaignDetailComponent implements OnInit {
   acceptedEproms: any = [];
   applyPassword: boolean = false;
   exactDate = new Date().getTime() / 1000;
-  idWallet = this.tokenStorageService.getIdWallet();
+  idWallet = Cookies.get('metamaskAddress');
   selectedProm: any;
   displayRejectReason: boolean = false; //delete this later
   rejectReason: any = ''; //delete this later
@@ -230,26 +230,9 @@ export class CampaignDetailComponent implements OnInit {
     }
   }
 
-  loadData() {
-    this.CampaignService.getOneById('65b0e22fbeac9a5b04b96681').subscribe(
-      (res: any) => {
-        this.campaign = res.data;
-        this.isOwnedByUser =
-          this.campaign.walletId === Cookies.get('metamaskAddress');
-        this.isActive = this.campaign.type === 'apply'; // Fix the comparison operator here
-
-        // Now that you have the data, you can perform additional operations or update the UI.
-        console.log('Data loaded successfully:', this.campaign);
-        console.log('isOwnedByUser:', this.isOwnedByUser);
-        console.log('isActive:', this.isActive);
-      },
-      (error) => {
-        console.error('Error loading data:', error);
-      }
-    );
-  }
+  
   ngOnInit(): void {
-    this.loadData();
+    
 
 
     this.getScreenWidth = window.innerWidth;

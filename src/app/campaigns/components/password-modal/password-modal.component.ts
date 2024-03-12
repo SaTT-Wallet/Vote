@@ -29,6 +29,7 @@ import { CampaignsStoreService } from '@campaigns/services/campaigns-store.servi
 import { WalletFacadeService } from '@core/facades/wallet-facade.service';
 import { DraftCampaignStoreService } from '@core/services/draft-campaign-store.service';
 import { environment } from '@environments/environment';
+import Cookies from 'js-cookie';
 
 enum EOraclesID {
   'facebook' = 1,
@@ -309,7 +310,7 @@ let dateInSeconds = Math.floor(date.getTime() / 1000);
     this.loadingButton = true;
     let tokenSymbol = this.campaign.currency.name;
     TokenOBj.pass = campaign_info.pass;
-    TokenOBj.walletaddr = this.tokenStorageService.getIdWallet();
+    TokenOBj.walletaddr = Cookies.get('metamaskAddress');
     TokenOBj.addr = ListTokens[tokenSymbol].contract;
     campaign_info.currency = tokenSymbol;
     let LaunchCampaignObs: Observable<any>;

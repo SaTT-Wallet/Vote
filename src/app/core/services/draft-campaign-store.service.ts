@@ -60,7 +60,7 @@ export class DraftCampaignStoreService {
       .pipe(
         map((data: any) => {
           const campaign = new Campaign(data.data);
-         const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+         const userId = !!Cookies.get('UserId') ? Cookies.get('UserId'): '0';
             campaign.ownedByUser = campaign.ownerId === userId;
           return campaign;
         }),

@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { LoadTotalBalance } from '@app/wallet/store/actions/wallet.actions';
 import { loadCryptoLists } from '@app/wallet/store/actions/crypto-list.actions';
 import { IResponseWallet } from '../iresponse-wallet';
+import Cookies from 'js-cookie';
 
 @Injectable({
   providedIn: 'root'
@@ -83,7 +84,7 @@ export class WalletStoreService {
   }
 
   getTotalBalance() {
-    let address = this.tokenStorageService.getIdWallet();
+    let address = Cookies.get('metamaskAddress');
     if (address) {
       this.store.dispatch(new LoadTotalBalance({ address: address }));
     }
