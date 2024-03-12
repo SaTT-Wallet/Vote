@@ -40,6 +40,7 @@ import { CampaignsStoreService } from '@campaigns/services/campaigns-store.servi
 import { BehaviorSubject, of, Subject, Subscription, timer } from 'rxjs';
 import { ParticipationListStoreService } from '@campaigns/services/participation-list-store.service';
 import { ToastrService } from 'ngx-toastr';
+import { CookieService } from 'ngx-cookie-service';
 import {
   concatMap,
   filter,
@@ -259,7 +260,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute,
     private hostElement: ElementRef,
     private titleService: Title,
-    public modalService: NgbModal
+    public modalService: NgbModal,
+    private cookieService: CookieService
   ) {
     
     this.router.events.subscribe((event) => {
@@ -267,10 +269,11 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         const token = !!Cookies.get('jwt') ? Cookies.get('jwt') : '';
         const selectedAddress = !!Cookies.get('metamaskAddress') ? Cookies.get('metamaskAddress') : '';
         if(!!window.ethereum) {
-          if(token != '' && selectedAddress === window.ethereum.selectedAddress) this.voteService.verifyToken();
+          if(token != '' && selectedAddress != '') this.voteService.verifyToken();
           else {
             this.externalWalletService.connect = false;
-            this.externalWalletService.isWalletConnected = false; 
+            this.externalWalletService.isWalletConnected = false;
+            this.tokenStorageService.setIsAuth('false');
           } 
         }
         
@@ -280,10 +283,19 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     
       if (!!window.ethereum) {
         // Listen for account changes
-        const selectedAddress = !!Cookies.get('metamaskAddress') ? Cookies.get('metamaskAddress') : '';
-        if(selectedAddress != window.ethereum.selectedAddress) 
+        //const selectedAddress = !!Cookies.get('metamaskAddress') ? Cookies.get('metamaskAddress') : '';
+       
         window.ethereum.on('accountsChanged', (accounts:any) => {
+        console.log({accounts});
+        if(accounts.length > 0) {
           this.voteService.createAccount(window.ethereum.selectedAddress);
+        } else {
+          this.tokenStorageService.setIsAuth('false');
+          this.cookieService.delete('UserId');
+          this.cookieService.delete('jwt');
+          this.cookieService.delete('metamaskAddress');
+        }
+          
         })
         // Listen for network changes
         window.ethereum.on('chainChanged', (chainId: string) => {
@@ -335,12 +347,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
                     });
                   });
               });
-            // Optionally, you can disconnect the user or take other actions
+            
           }
 
-          //this.networkLabel = networkLabel;
-          //this.networkLogo = networkLogo;
-
+          
           Cookies.set('networkSelected', this.networkLabel, {
             secure: true,
             sameSite: 'Lax',
@@ -371,15 +381,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         // }
       });
 
-    /*if (isPlatformBrowser(this.platformId)) {
-      this.mediaQueryList = window.matchMedia(this.query);
-      this.mediaQueryList2 = window.matchMedia(this.query2);
-
-      window.addEventListener('resize', () => {
-        let vh = window.innerHeight * 0.01;
-        this.document.documentElement.style.setProperty('--vh', `${vh}px`);
-      });
-    }*/
+    
 
     translate.addLangs(['en', 'fr']);
     if (this.tokenStorageService.getLocale()) {
@@ -445,11 +447,12 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   isUserConnected() {
-    if(!!window.ethereum && typeof window.ethereum.selectedAddress === 'string') {
-      this.formattedCreator = `${window.ethereum.selectedAddress.substring(
+    
+      if(!!window.ethereum && !!Cookies.get('metamaskAddress') && !!Cookies.get('jwt')) {
+      this.formattedCreator = `${Cookies.get('metamaskAddress')?.toString().substring(
         0,
         6
-      )}...${window.ethereum.selectedAddress.substring(window.ethereum.selectedAddress.length - 3)}`;
+      )}...${Cookies.get('metamaskAddress')?.toString().substring((Cookies.get('metamaskAddress')?.toString()?.length ?? 0) - 3)}`;
       const isAuth = this.tokenStorageService.getIsAuth();
       isAuth === 'false' && this.tokenStorageService.setIsAuth('true');
       
@@ -549,6 +552,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    console.log('test');
     this.getAccountsAndSetAddress();
     this.controllingNetwork();
     this.networkList.forEach(

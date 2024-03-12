@@ -35,7 +35,7 @@
         class="d-md-block d-xl-none d-lg-none d-sm-block navbar-nav"
         *ngIf="!isUserConnected()"
       >
-        <button class="button-connect" (click)="voteService.showConnectDialog(connectModal)">
+        <button class="button-connect" (click)="voteService.connectWallet('metamask')">
           <img src="assets/Images/connected-wallet.png" />
           Connect Wallet
         </button>
@@ -216,7 +216,7 @@
         </div>
         
         <div *ngIf="!isUserConnected()">
-          <button class="button-connect" (click)="voteService.showConnectDialog(connectModal)">
+          <button class="button-connect" (click)="voteService.connectWallet('metamask')">
             <img src="assets/Images/connected-wallet.png" />
             Connect Wallet
           </button>

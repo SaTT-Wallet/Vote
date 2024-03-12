@@ -147,12 +147,11 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
 
   createNewDraftCampaign() {
     //this.draftStore.init();
-    if(!!window.ethereum && typeof window.ethereum.selectedAddress === 'string') {
+    if(this.tokenStorageService.getIsAuth() === 'true') {
       this.draftStore
       .addNewDraft(new Campaign())
       .pipe(takeUntil(this.onDestoy$))
       .subscribe((draft: Campaign) => {
-        console.log({draft});
         this.idcamp = draft.id || '';
         this.router.navigate(['campaign', this.idcamp, 'edit']);
       }, (err) => console.log({err}));
@@ -225,7 +224,7 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
             if (campaigns.length === 0) {
               this.isLoading = false;
             }
-            console.log({campaigns});
+            
             //const selectedNetwork = Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : 'polygon'))
             //const isMatchingNetwork = (campaign: any) => campaign.currency.type.toString().toLowerCase() === selectedNetwork;
             this.campaignsList = campaigns;
@@ -271,7 +270,18 @@ export class AdPoolsComponent implements OnInit, OnDestroy {
   filterCampaigns(): Campaign[] {
     const selectedNetwork =(!!Cookies.get('networkSelected') ? (Cookies.get('networkSelected')?.includes('BNB')  ? 'bep20' : (Cookies.get('networkSelected') === 'Ethereum' ? 'erc20' : (Cookies.get('networkSelected') === 'BitTorrent' ? 'bttc' : ( Cookies.get('networkSelected') === 'Arthera' ? 'arthera':'polygon')))) :'bep20') 
     this.filteredCampaigns = this.campaignsList.filter(
-      (campaign) => campaign.currency.type.toLowerCase() === selectedNetwork
+      (campaign) => {
+        const isAuth = this.tokenStorageService.getIsAuth() === 'true';
+        const isDraft = campaign.type === 'draft';
+        const allowedTypes = ['draft', 'apply', 'finished', 'pending'];
+
+        return (
+            campaign.currency.type.toLowerCase() === selectedNetwork &&
+              (isAuth ? allowedTypes.includes(campaign.type) : !isDraft)
+        );
+      }
+      
+      //campaign.currency.type.toLowerCase() === selectedNetwork && (this.tokenStorageService.getIsAuth() != 'true' ? campaign.type != 'draft' : (campaign.type == 'draft' && campaign.type == 'apply' && campaign.type == 'finished' )) 
     );
     return this.filteredCampaigns;
   }

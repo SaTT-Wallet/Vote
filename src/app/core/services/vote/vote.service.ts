@@ -64,8 +64,10 @@ export class VoteService {
 
   Disconnect() {
     this.externalWalletService.disconnectMetamask();
-    this.hideNetworkHasChanged();
   }
+
+
+
   connectWallet = async (walletType: string) => {
     if (walletType === 'metamask') {
       if (this.externalWalletService.isMetaMaskInstalled) {
@@ -95,12 +97,14 @@ export class VoteService {
   verifyToken() {
     this.apiprofilService.verifyToken().subscribe(
       (res:any) => {
+        console.log({res})
         if(!!res.data) {
           this.walletConnected = true;
         } else {
           this.cookieService.delete('UserId');
           this.cookieService.delete('jwt');
           this.cookieService.delete('metamaskAddress');
+          this.tokenStorageService.setIsAuth('false');
           this.externalWalletService.connect = false;
           this.externalWalletService.isWalletConnected = false; 
         }
@@ -109,6 +113,7 @@ export class VoteService {
         this.cookieService.delete('UserId');
         this.cookieService.delete('jwt');
         this.cookieService.delete('metamaskAddress');
+        this.tokenStorageService.setIsAuth('false');
         this.externalWalletService.connect = false;
         this.externalWalletService.isWalletConnected = false; 
       }
