@@ -1,7 +1,7 @@
 <div
   class="container-fluid page-content"
   [style]="'margin-top: 4%!important; '"
-  *ngIf="!showSpinner && externalWalletService.isWalletConnected && externalWalletService.connect"
+  *ngIf="!showSpinner && getUserConnectedStatus()"
 >
   
 
