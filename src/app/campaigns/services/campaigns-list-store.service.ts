@@ -121,7 +121,7 @@ export class CampaignsListStoreService {
                 campaigns: !!res.data.campaigns
                   ? res.data.campaigns.map((c: any) => {
                       let campaign = new Campaign(c);
-                     const userId = !!Cookies.get('userId') ? Cookies.get('userId'): '0';
+                      const userId = !!Cookies.get('UserId') ? Cookies.get('UserId'): '0';
                       campaign.ownedByUser = campaign.ownerId === userId;
                       return campaign;
                     })

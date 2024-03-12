@@ -9,41 +9,7 @@
         class="d-flex justify-content-start align-items-center"
         *ngIf="campaign.type !== 'draft'"
       >
-        <!-- <div
-          *ngIf="campaign.remuneration === 'performance'"
-          class="renumeration d-flex justify-content-center align-items-center"
-        >
-          <img
-            style="width: 20px !important; height: 24px !important"
-            src="assets/Images/performance.svg"
-          />
-        </div> -->
-        <!-- <div
-          class="renumeration d-flex justify-content-center align-items-center"
-          *ngIf="campaign.remuneration === 'publication'"
-        >
-          <img
-            src="assets/Images/publication.svg"
-            style="width: 20px !important; height: 24px !important"
-          />
-        </div> -->
       </span>
-      <!-- <span class="ml-1">
-        <img
-          *ngIf="campaign.type !== 'draft'"
-          class="cryptoIcon"
-          [ngClass]="{
-            cryptoIcon:
-              getCurrencyName(campaign) !== 'SATT' &&
-              getCurrencyName(campaign) !== 'SATTBEP20',
-            cryptoIconSatt:
-              getCurrencyName(campaign) === 'SATT' ||
-              getCurrencyName(campaign) === 'SATTBEP20'
-          }"
-          src="/assets/Images/icons-crypto/black/{{
-            getCurrencyName(campaign)
-          }}.svg"
-      /></span> -->
     </div>
     <div class="badge" *ngIf="campaign.type !== 'draft'">
       <div class="new-badge" *ngIf="isNewCampaign">New</div>
@@ -51,29 +17,6 @@
       <div class="earning-type" *ngIf="isPublication">Publication</div>
       <div class="earning-type" *ngIf="isPerformance">Performance</div>
     </div>
-    <!-- <div class="logo-badge d-flex justify-content-start">
-      <span
-        class="d-flex justify-content-start align-items-center"
-        *ngIf="campaign.type !== 'draft'"
-      >
-        <img
-          [src]="
-            !!campaign.logo ? campaign.logo : 'assets/Images/wlcm-moon-boy.png'
-          "
-          class="logo"
-          alt=""
-        />
-      </span>
-    </div> -->
-    <!-- <app-user-picture [isHeaderPic]="false" *ngIf="campaign.isOwnedByUser"></app-user-picture> -->
-    <!--  <img
-      [src]="campaign.urlPicUser"
-      *ngIf="campaign.isOwnedByUser"
-      (error)="onImgError($event)"
-      class="avatar"
-      alt=""
-    />-->
-
     <img
       *ngIf="!!campaign.cover && !campaign.coverSrcMobile"
       class="img-campaign ng-isolate-scope"

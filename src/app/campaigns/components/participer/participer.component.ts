@@ -295,7 +295,7 @@ export class ParticiperComponent implements OnInit, AfterContentChecked {
     if(social === 'threads') {
       this.router.navigate(['/social-networks']);
     } else {
-      const userId = Cookies.get('userId');
+      const userId = Cookies.get('UserId');
       var linkFacebook: string =
       sattUrl +
       '/profile/addChannel/facebook/' +
