@@ -5,6 +5,7 @@ import { filter, tap } from 'rxjs/operators';
 import { TokenStorageService } from '../tokenStorage/token-storage-service.service';
 import { CryptofetchServiceService } from '../wallet/cryptofetch-service.service';
 import { WalletFacadeService } from '@app/core/facades/wallet-facade.service';
+import Cookies from 'js-cookie';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +55,7 @@ export class AuthStoreService {
  
 
   public getAccount() {
-    this.setAccount(this.tokenStorageService.getIdWallet());
+    this.setAccount(Cookies.get('metamaskAddress'));
     
   }
 

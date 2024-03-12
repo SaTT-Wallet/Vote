@@ -65,7 +65,7 @@ export class WalletService {
 
   
   public getAllWallet(): Observable<IResponseWallet> {
-const walletData: string = this.tokenStorageService.getIdWallet();
+const walletData: any = Cookies.get('metamaskAddress');
 
 const responseWallet: IResponseWallet = {
   code: 200, 

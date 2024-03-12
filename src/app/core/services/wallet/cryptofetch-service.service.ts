@@ -8,6 +8,7 @@ import {
   IApiResponse,
   IPaymentRequestResponse
 } from '@app/core/types/rest-api-responses';
+import Cookies from 'js-cookie';
 @Injectable({
   providedIn: 'root'
 })
@@ -66,13 +67,13 @@ export class CryptofetchServiceService {
     return this.http.get(
       sattUrl +
         '/wallet/transaction_history/' +
-        this.tokenStorageService.getIdWallet(),
+        Cookies.get('metamaskAddress'),
     );
   }
 
   getTotalBalance(id_wallet?: any) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    var idwallet = id_wallet || this.tokenStorageService.getIdWallet();
+    var idwallet = id_wallet || Cookies.get('metamaskAddress');
     return this.http.post(sattUrl + '/wallet/totalBalance', {
       version: this.tokenStorageService?.getWalletVersion()
     });
