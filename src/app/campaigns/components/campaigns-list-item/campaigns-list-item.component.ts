@@ -139,7 +139,8 @@ truncateTitle(title: string): string {
         this.router.navigate(['campaign', id]);
       } 
     } else {
-      this.modalService.open(this.connectModal);
+      //this.modalService.open(this.connectModal);
+      this.voteService.connectWallet('metamask');
     }
     
   }

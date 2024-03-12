@@ -197,50 +197,8 @@ private async addChain(provider: any, network: any) {
     });
 }
 
-  async addTokenToBinance(provider: any) {
-    const token = {
-      type: 'ERC20',
-      options: {
-        address: env.sattContractAdress,
-        symbol: 'SATT',
-        decimals: 18,
-        image: 'https://s2.coinmarketcap.com/static/img/coins/200x200/7244.png',
-      },
-    };
-    try {
-      const accounts = await this.ethereum.request({ method: 'eth_accounts' });
-      const tokenBalance = await this.getTokenBalance(
-        token.options.address,
-        accounts[0]
-      );
-      // console.log(tokenBalance)
-      if (tokenBalance > 0) {
-        // console.log('SATT already exists in wallet');
-      } else {
-        const added = await (provider as any).request({
-          method: 'wallet_watchAsset',
-          params: {
-            type: 'ERC20',
-            options: token.options,
-          },
-        });
-        if (added) {
-          // console.log('SATT added to wallet');
-        } else {
-          // console.error('Failed to add SATT to wallet');
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
-  async getTokenBalance(tokenAddress: string, account: string) {
-    const web3 = new Web3(this.ethereum);
-    const contract = new web3.eth.Contract(abi.SATT as any, tokenAddress);
-    const balance = await (contract.methods.balanceOf as any)(account).call();
-    return Number(balance) / 1e18;
-  }
+ 
 
   async checkChangedNetworkOrChainID() {
     if (this.isMetaMaskInstalled) {
@@ -343,15 +301,13 @@ private async addChain(provider: any, network: any) {
   };
 
   async disconnectMetamask(): Promise<void> {
-    // window.ethereum.on('disconnect', (error: any) => {
-    //   console.log('Metamask disconnected:', error);
-    // });
+    this.tokenStorageService.setIsAuth('false');
     this.cookieService.delete('UserId');
     this.cookieService.delete('jwt');
     this.cookieService.delete('metamaskAddress');
     this.connect = false;
     this.isWalletConnected = false;
     this.acc = [];
-    this.tokenStorageService.setIsAuth('false');
   }
+  
 }
