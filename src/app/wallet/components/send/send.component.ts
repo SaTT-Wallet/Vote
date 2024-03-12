@@ -42,6 +42,7 @@ import { BarcodeFormat } from '@zxing/library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ITransferTokensRequestBody } from '@app/core/services/wallet/wallet.service';
 import { environment } from '@environments/environment';
+import Cookies from 'js-cookie';
 
 @Component({
   selector: 'app-send',
@@ -209,7 +210,7 @@ export class SendComponent implements OnInit, OnDestroy, AfterViewChecked {
   //get list of crypto for user
   getusercrypto() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let address = this.tokenStorageService.getIdWallet();
+    let address = Cookies.get('metamaskAddress');
     this.showWalletSpinner = true;
     this.parentFunction()
       .pipe(
@@ -498,7 +499,7 @@ export class SendComponent implements OnInit, OnDestroy, AfterViewChecked {
         network = 'ERC20';
       }
       const send: ITransferTokensRequestBody = {
-        from: this.tokenStorageService.getIdWallet() as string,
+        from: Cookies.get('metamaskAddress') as string,
         tokenAddress,
         to,
         amount,

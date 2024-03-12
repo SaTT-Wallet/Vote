@@ -26,6 +26,7 @@ import { environment } from '@environments/environment';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Big } from 'big.js';
 import { Location } from '@angular/common';
+import Cookies from 'js-cookie';
 
 @Component({
   selector: 'app-receive',
@@ -339,7 +340,7 @@ export class ReceiveComponent implements OnInit, OnDestroy, AfterViewChecked {
   receiveMoney() {
     if (this.receiveform.valid) {
       this.loadingButton = true;
-      const wallet = this.tokenStorageService.getIdWallet();
+      const wallet = Cookies.get('metamaskAddress');
       var name = '';
       if (this.currentUser.firstName && this.currentUser.lastName)
         name = this.currentUser.firstName + ' ' + this.currentUser.lastName;
