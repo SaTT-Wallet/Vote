@@ -182,6 +182,12 @@ export class SocialNetworksComponent implements OnInit {
     this.percentSocial = stat.toFixed(0);
     return this.percentSocial
   }
+
+  getUserConnectedStatus() {
+    if(this.tokenStorageService.getIsAuth() != 'true') return false;
+    else return true;
+  }
+
   getSocialNetwork(): void {
     this.showSpinner = true;
     this.profileService.getSocialNetworks().pipe(
