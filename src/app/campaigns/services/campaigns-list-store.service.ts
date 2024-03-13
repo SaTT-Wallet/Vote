@@ -64,7 +64,7 @@ export class CampaignsListStoreService {
     merge(
       this.onFilterChanges$.pipe(mapTo(true)),
       this.onPageScroll$.pipe(mapTo(false)) // false means load next page
-    )
+      )
       .pipe(takeUntil(this.isDestroyed))
       .subscribe((isFirstPageRequested: boolean) => {
         this.loadNextPage(
@@ -72,6 +72,7 @@ export class CampaignsListStoreService {
           isFirstPageRequested
         );
       });
+      
   }
 
   setListCampaign(list: Page<Campaign>[]): void {
