@@ -467,17 +467,20 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getAccountsAndSetAddress = async() => {
     try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-        params: []
-      });
-      if (accounts.length > 0) {
-        const address = accounts[0];
-        this.adressWallet = new FormControl(address);
-        // Use adressWallet as needed
-      } else {
-        console.error("No Ethereum accounts found");
+      if(!!window.ethereum) {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+          params: []
+        });
+        if (accounts.length > 0) {
+          const address = accounts[0];
+          this.adressWallet = new FormControl(address);
+          // Use adressWallet as needed
+        } else {
+          console.error("No Ethereum accounts found");
+        }
       }
+      
     } catch (error) {
       console.error("Error requesting accounts:", error);
       // Handle errors appropriately
@@ -552,7 +555,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    console.log('test');
     this.getAccountsAndSetAddress();
     this.controllingNetwork();
     this.networkList.forEach(
