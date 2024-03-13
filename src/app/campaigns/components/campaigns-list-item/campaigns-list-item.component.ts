@@ -186,15 +186,19 @@ truncateTitle(title: string): string {
           //     .navigateByUrl('home/ad-pools');
           //   return this.translate.get('campaign_details.deleted');
           // }),
-          this.router
-            .navigateByUrl('', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate(['home/ad-pools']);
-            });
+          // this.router
+          //   .navigateByUrl('', { skipLocationChange: true })
+          //   .then(() => {
+          //     this.router.navigate(['home/ad-pools']);
+          //   });
+            window.location.reload();
+         
           return this.translate.get('campaign_details.deleted');
         })
       )
       .subscribe((data1: any) => {
+        this.campaignListStoreService.clearStore();
+        this.campaignListStoreService.loadCampaigns();
         this.toastr.success(data1);
       });
   }
