@@ -573,9 +573,9 @@ export class CampaignHttpApiService {
     size = 1,
     queryParams: HttpParams = new HttpParams()
   ): Observable<ICampaignsListResponse> {
-    const walletId = !!window.ethereum.selectedAddress ? window.ethereum.selectedAddress : '';
+    const walletId = Cookies.get('metamaskAddress');
     let queryParams2 = queryParams
-      .set('idWallet', walletId)
+      .set('idWallet', walletId ?? '')
       .set('page', '' + page)
       .set('limit', '' + size);
     return this.http

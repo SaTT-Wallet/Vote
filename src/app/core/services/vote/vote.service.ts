@@ -70,12 +70,12 @@ export class VoteService {
 
   connectWallet = async (walletType: string) => {
     if (walletType === 'metamask') {
-      if (this.externalWalletService.isMetaMaskInstalled) {
+      if (!!window.ethereum) {
         this.provider = await this.externalWalletService.connectMetamask();
 
 
       } else {
-        this.showInstall();
+        window.open('https://metamask.io/', '_blank');
       }
       if (this.externalWalletService.connect === true) {
 
