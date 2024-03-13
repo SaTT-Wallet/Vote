@@ -258,7 +258,8 @@ export class CampaignsService {
       const ethersProvider = new ethers.providers.Web3Provider(provider);
       const signer = ethersProvider.getSigner();
 
-      let networkSelected = !!Cookies.get('networkSelected') ? Cookies.get('networkSelected') : 'bsc';
+      let networkSelected = !!Cookies.get('networkSelected') ? Cookies.get('networkSelected') : 'BNB Smart Chain';
+      console.log(networkSelected);
       
       if (!networkSelected || !contractAddresses[networkSelected]) {
         throw new Error('Invalid or missing network selection.');
