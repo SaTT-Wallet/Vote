@@ -1014,36 +1014,36 @@ export class CampaignInfoComponent implements OnInit, OnChanges, AfterViewInit {
   }*/
 
   // sk to implement in futur for linking directly the social media
-  // onReditectSocial(social: string) {
-  //   const userId = Cookies.get('userId');
-  //   if (isPlatformBrowser(this.platformId))
-  //     window.location.href =
-  //       sattUrl +
-  //       `/profile/addChannel/${social}/${userId}` +
-  //       '?redirect=' +
-  //       this.router.url + '?frontendApp=metamask';
-  // }
-
-  // onReditectLinkedin() {
-  //  const userId = Cookies.get('userId');
-
-  //   if (isPlatformBrowser(this.platformId))
-  //     window.location.href =
-  //       sattUrl +
-  //       '/profile/addChannel/linkedin/' +
-  //       userId +
-  //       '?redirect=' +
-  //       this.router.url;
-  // }
-
-  // linkAccount(social:string){
-  //   social === 'linkedin' ? this.onReditectLinkedin() : this.onReditectSocial(social)
-
-  // }
-// sk to implement in futur for linking directly the social media
-  linkAccount() {
-    this.router.navigate(['/social-networks']);
+  onReditectSocial(social: string) {
+    const userId = Cookies.get('userId');
+    if (isPlatformBrowser(this.platformId))
+      window.location.href =
+        sattUrl +
+        `/profile/addChannel/${social}/${userId}` +
+        '?redirect=' +
+        this.router.url + '?frontendApp=metamask';
   }
+
+  onReditectLinkedin() {
+   const userId = Cookies.get('userId');
+
+    if (isPlatformBrowser(this.platformId))
+      window.location.href =
+        sattUrl +
+        '/profile/addChannel/linkedin/' +
+        userId +
+        '?redirect=' +
+        this.router.url;
+  }
+
+  linkAccount(social:string){
+    social === 'linkedin' ? this.onReditectLinkedin() : this.onReditectSocial(social)
+
+  }
+// sk to implement in futur for linking directly the social media
+  // linkAccount() {
+  //   this.router.navigate(['/social-networks']);
+  // }
 
   campaignMissions(oracle: any) {
     if (
