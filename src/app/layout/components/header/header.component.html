@@ -204,7 +204,7 @@
                 <ng-container>
                   <!-- [class.is_last]="isLast" -->
                   <div class="network_list_container" [class.is_last]="isLast" [class.is_first]="isFirst">
-                    <img class="network_list_logo" [src]="el.logo" alt="">
+                    <img  class="network_list_logo" [class._last]="isLast" [src]="el.logo" alt="">
                     <!-- <span [ngClass]="{'abbrSoon': isLast}"></span> -->
                     <p class="network_list_label">{{el.network}} 
                       <!-- <p [ngClass]="'bold'" class="network_list_label" (click)="toggleAddressVisibility(el)">&nbsp;Adress: {{el.adress}}</p> -->
