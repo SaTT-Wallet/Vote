@@ -533,6 +533,12 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
+            const index = this.channelTwitter.findIndex((ch: {
+              _id: string; 
+}) => ch._id === id);
+            if (index !== -1) {
+              this.channelTwitter.splice(index, 1);
+            }
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             //this.getSocialNetwork();
             this.closeModal(id);
@@ -544,6 +550,12 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
+            const index = this.channelFacebook.findIndex((ch: {
+              _id: string; 
+}) => ch._id === id);
+            if (index !== -1) {
+              this.channelFacebook.splice(index, 1);
+            }
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             //this.getSocialNetwork();
             this.closeModal(id);
@@ -555,6 +567,12 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
+            const index = this.channelLinkedin.findIndex((ch: {
+              _id: string; 
+}) => ch._id === id);
+            if (index !== -1) {
+              this.channelLinkedin.splice(index, 1);
+            }
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             //this.getSocialNetwork();
             this.closeModal(id);
@@ -566,12 +584,19 @@ goToAccount(oracle: string, userName: string) {
         .pipe(takeUntil(this.isDestroyed))
         .subscribe((response: any) => {
           if (response.message === 'deleted successfully') {
+            const index = this.channelTiktok.findIndex((ch: {
+              _id: string; 
+}) => ch._id === id);
+            if (index !== -1) {
+              this.channelTiktok.splice(index, 1);
+            }
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             //this.getSocialNetwork();
             this.closeModal(id);
           }
         });
-    } 
+    }
+    
   }
 
   deleteList(modalName: any, network: string) {
