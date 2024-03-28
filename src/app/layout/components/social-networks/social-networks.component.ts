@@ -516,7 +516,6 @@ goToAccount(oracle: string, userName: string) {
   }
 
   deleteAccount(id: string, network: string,linkedinId : string ="") {
-    console.log(id,"id");
     if (network === 'google') {
       this.socialAccountFacadeService
         .deleteOneSocialNetworksGoogle(id)
@@ -543,7 +542,6 @@ goToAccount(oracle: string, userName: string) {
             this.socialAccountFacadeService.dispatchUpdatedSocailAccount();
             //this.getSocialNetwork();
             this.closeModal(id);
-            console.log('done');
           }
         });
     } else if (network === 'facebook') {
